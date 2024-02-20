@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "640720317034",
+    "firebase_url": "https://scraps-15da3-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "scraps-15da3",
+    "storage_bucket": "scraps-15da3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640720317034:android:0d23f94807d15dfa62f813",
+        "android_client_info": {
+          "package_name": "com.example.scraps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu7H0UoXHYqLYpTWmKOy4RfXlIfCSW4z0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
