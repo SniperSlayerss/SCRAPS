@@ -22,6 +22,15 @@
             android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
+            android:name=".Notifications"
+            android:exported="false" />
+        <activity
+            android:name=".Household"
+            android:exported="false" />
+        <activity
+            android:name=".Privacy"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="true"
             android:label="@string/title_activity_home"
