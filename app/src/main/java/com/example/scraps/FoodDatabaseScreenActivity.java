@@ -62,8 +62,8 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity {
                     // Loop through each child under "Food" node
                     for (DataSnapshot itemSnapshot : foodSnapshot.getChildren()) {
                         // Loop through each child under each food item node
-                        String itemName = itemSnapshot.child("name").getValue(String.class);
-                        String itemExpiry = itemSnapshot.child("expiry").getValue(String.class);
+                        String itemName = itemSnapshot.child("foodName").getValue(String.class);
+                        String itemExpiry = itemSnapshot.child("expiryDate").getValue(String.class);
 
                         FoodItem foodItem = new FoodItem();
                         foodItem.setFoodName(itemName);
