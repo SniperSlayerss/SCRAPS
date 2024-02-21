@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.scraps.DBModels.FoodItem;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +35,16 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity {
 
     private void updateFoodList(){
         LinearLayout buttonContainer = findViewById(R.id.button_container);
+        TextView noItemsTextView = findViewById(R.id.no_items_textView);
+        // Check if any buttons are added to the LinearLayout
+        if (buttonContainer.getChildCount() == 0) {
+            // No buttons are added, show the "No items available" text
+            noItemsTextView.setVisibility(View.VISIBLE);
+        } else {
+            // Buttons are added, hide the "No items available" text
+            noItemsTextView.setVisibility(View.GONE);
+        }
+
         for (FoodItem foodItem : foodItems) {
             Button button = new Button(this);
             button.setText(foodItem.getFoodName());
@@ -48,6 +59,13 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity {
                 }
             });
             buttonContainer.addView(button);
+            if (buttonContainer.getChildCount() == 0) {
+                // No buttons are added, show the "No items available" text
+                noItemsTextView.setVisibility(View.VISIBLE);
+            } else {
+                // Buttons are added, hide the "No items available" text
+                noItemsTextView.setVisibility(View.GONE);
+            }
         }
     }
 
