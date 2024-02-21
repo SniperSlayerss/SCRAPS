@@ -1,37 +1,12 @@
 package com.example.scraps.DBModels;
-
-
-import java.io.Serializable;
-
-public class FoodItem implements Serializable {
-    private String name;
-    private String expiry;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getExpiry() {
-        return expiry;
-    }
-
-    public void setExpiry(String description) {
-        this.expiry = description;
-    }
-
-    // Constructor, getters, and setters
-=======
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FoodItem {
+public class FoodItem implements Serializable {
     public String foodName;
     public String expiryDate;
     public double price;

@@ -25,7 +25,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Example usage
-                registration.addHouseholdWithUser("Jack", "jack123@gmail.com", "urmom");
+                registration.createHousehold("Jack", "jack123@gmail.com", "urmom");
             }
         });
     }
