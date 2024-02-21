@@ -30,6 +30,9 @@ public class FoodItem implements Serializable {
         result.put("expiryDate", expiryDate);
         result.put("price", price);
         result.put("type", type);
+        result.put("isShareable", isShareable);
+        result.put("purchaseDate", purchaseDate);
+        result.put("username", username);
         return result;
     }
 

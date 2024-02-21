@@ -24,13 +24,13 @@ public class Users {
         this.foodItems = new HashMap<>();
     }
 
-    private void addFoodItemToUser(FoodItem foodItem) {
+    public void addFoodItemToUser(FoodItem foodItem, String firebaseId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        String key = databaseReference.child("households").child(houseID).child("users").child(username).child("foodItems").push().getKey();
+        String key = databaseReference.child("households").child(houseID).child("users").child(firebaseId).child("foodItems").push().getKey();
         Map<String, Object> foodItemValues = foodItem.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/households/" + houseID + "/users/" + username + "/foodItems/" + key, foodItemValues);
+        childUpdates.put("/households/" + houseID + "/users/" + firebaseId + "/foodItems/" + key, foodItemValues);
 
         databaseReference.updateChildren(childUpdates);
     }
