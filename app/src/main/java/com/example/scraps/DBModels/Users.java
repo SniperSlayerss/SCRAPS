@@ -13,7 +13,6 @@ public class Users {
         this.houseID = houseID;
         this.password = password;
         this.foodItems = new HashMap<>();
-
     }
 
     public String getUsername() {
