@@ -30,8 +30,16 @@ public class FoodItemScreen extends AppCompatActivity {
         Item.setText(String.format("Item: %s", ItemName));
 
         TextView User = findViewById(R.id.user);
-        String UserName = "item name";
+        String UserName = "user name";
         User.setText(String.format("User: %s", UserName));
+
+        TextView Purchased = findViewById(R.id.purchased);
+        String PurchaseDate = "date";
+        Purchased.setText(String.format("Purchased: %s", PurchaseDate));
+
+        TextView UseBy = findViewById(R.id.useBy);
+        String UseByDate = "date";
+        UseBy.setText(String.format("Use By: %s", UseByDate));
     }
 
 
