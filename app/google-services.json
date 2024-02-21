@@ -1,15 +1,16 @@
 {
   "project_info": {
     "project_number": "692905736016",
+    "firebase_url": "https://scraps-dbdd1-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "scraps-dbdd1",
     "storage_bucket": "scraps-dbdd1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:692905736016:android:3c0cf73adea37a21071e55",
+        "mobilesdk_app_id": "1:692905736016:android:c585704463ada6db071e55",
         "android_client_info": {
-          "package_name": "com.group11.scraps"
+          "package_name": "com.example.scraps"
         }
       },
       "oauth_client": [],
