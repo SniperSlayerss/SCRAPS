@@ -1,20 +1,32 @@
 package com.example.scraps.DBModels;
 
 public class Users {
-    private String name, email;
+    private String username, password, email;
+    private int houseID;
 
-    public Users(String name, String email) {
-        this.name = name;
+    public Users() {}
+
+    public Users(String username, String email, String password, int houseID) {
+        this.username = username;
         this.email = email;
+        this.houseID = houseID;
+        this.password = password;
+
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String username) {
+        this.username = username;
     }
+
+    public int getHouseID() {return houseID;}
+    public void setHouseID(int houseID) {this.houseID = houseID;}
+
+    public String getPassword() {return password;}
+    public void setPassword(String password) {this.password = password;}
 
     public String getEmail() {
         return email;
