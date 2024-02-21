@@ -23,12 +23,17 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        setSupportActionBar(findViewById(R.id.my_toolbar));
+      //  setSupportActionBar(findViewById(R.id.my_toolbar));
     }
 
     // Method to handle button click and open the settings activity
     public void openSettingsActivity(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void openFoodDatabaseScreenActivity(View view) {
+        Intent intent = new Intent(this, FoodDatabaseScreenActivity.class);
         startActivity(intent);
     }
 
