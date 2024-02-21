@@ -17,10 +17,10 @@
             android:name=".FoodInputActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.SCRAPS">
@@ -31,7 +31,7 @@
         </activity>/>
         <activity
             android:name=".HomeActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".FoodDatabaseScreenActivity"
             android:exported="false" />

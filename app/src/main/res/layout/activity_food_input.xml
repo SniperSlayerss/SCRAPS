@@ -8,45 +8,60 @@
         android:id="@+id/food_name_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Food Name"
-        android:layout_margin="16dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Food Name" />
 
     <!-- Expiry Date EditText -->
     <EditText
         android:id="@+id/expiry_date_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Expiry Date (YYYY-MM-DD)"
         android:layout_below="@id/food_name_editText"
-        android:layout_margin="16dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Expiry Date (YYYY-MM-DD)" />
 
     <!-- Purchase Date EditText -->
     <EditText
         android:id="@+id/purchase_date_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Purchase Date (YYYY-MM-DD)"
         android:layout_below="@id/expiry_date_editText"
-        android:layout_margin="16dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Purchase Date (YYYY-MM-DD)" />
 
     <!-- Price EditText -->
     <EditText
         android:id="@+id/price_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Price"
-        android:inputType="numberDecimal"
         android:layout_below="@id/purchase_date_editText"
-        android:layout_margin="16dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Price"
+        android:inputType="numberDecimal" />
 
     <!-- Type EditText -->
     <EditText
         android:id="@+id/type_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Type"
         android:layout_below="@id/price_editText"
-        android:layout_margin="16dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Type" />
 
     <!-- Submit Button -->
     <Button
