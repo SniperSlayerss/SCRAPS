@@ -11,4 +11,8 @@ public class FoodInputActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_input);
     }
+
+
+
+
 }
