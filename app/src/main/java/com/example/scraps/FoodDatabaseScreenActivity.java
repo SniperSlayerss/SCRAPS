@@ -34,16 +34,16 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity {
 
     private void updateFoodList(){
         LinearLayout buttonContainer = findViewById(R.id.button_container);
-        for (FoodItem buttonName : foodItems) {
+        for (FoodItem foodItem : foodItems) {
             Button button = new Button(this);
-            button.setText(buttonName.getName());
+            button.setText(foodItem.getName());
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // Intent to navigate to another activity based on the button clicked
                     Intent intent = new Intent(FoodDatabaseScreenActivity.this, FoodItemScreen.class);
                     // Pass any relevant data to the next activity if needed
-                    intent.putExtra("buttonName", buttonName.getName());
+                    intent.putExtra("foodItem", foodItem);
                     startActivity(intent);
                 }
             });

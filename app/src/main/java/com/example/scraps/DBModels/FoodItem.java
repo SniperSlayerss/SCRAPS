@@ -1,6 +1,8 @@
 package com.example.scraps.DBModels;
 
-public class FoodItem {
+import java.io.Serializable;
+
+public class FoodItem implements Serializable {
     private String name;
     private String expiry;
 
