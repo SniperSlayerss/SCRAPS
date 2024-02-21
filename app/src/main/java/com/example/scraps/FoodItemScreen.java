@@ -31,7 +31,10 @@ public class FoodItemScreen extends AppCompatActivity {
 
         //Loads correct text for each section of UI
         TextView Item = findViewById(R.id.item);
-        String ItemName = foodItem.getFoodName();
+        String ItemName = "NO NAME";
+        if (foodItem != null) {
+            ItemName = foodItem.getFoodName();
+        }
         Item.setText(String.format("Item: %s", ItemName));
 
         TextView User = findViewById(R.id.user);
