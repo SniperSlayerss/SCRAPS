@@ -15,9 +15,14 @@ public class Users {
         this.username = username;
         this.email = email;
         this.houseID = houseID;
-        this.password = password;
+        try {
+            this.password = getSHA(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         this.foodItems = new HashMap<>();
     }
+
 
     public static String getSHA(String input) throws NoSuchAlgorithmException
     {
@@ -41,7 +46,6 @@ public class Users {
         {
             hexString.insert(0, '0');
         }
-
         return hexString.toString();
     }
 
