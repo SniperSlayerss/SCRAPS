@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toolbar;
 
 import com.example.scraps.DBModels.Users;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        setSupportActionBar(findViewById(R.id.my_toolbar));
     }
 
     // Method to handle button click and open the settings activity
