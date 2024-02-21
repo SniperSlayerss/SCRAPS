@@ -13,21 +13,21 @@
         android:gravity="center"
         android:text="SCRAPS"
         android:textAlignment="center"
-        tools:layout_editor_absoluteX="176dp"
-        tools:layout_editor_absoluteY="356dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintVertical_bias="0.133" />
 
     <Button
         android:id="@+id/newButtonId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="616dp"
         android:onClick="openSettingsActivity"
         android:text="Settings"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.841"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,10 +35,11 @@
         android:id="@+id/fooddbscreenButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="268dp"
+        android:layout_marginTop="616dp"
         android:onClick="openFoodDatabaseScreenActivity"
         android:text="Food DB Screen"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.194"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
