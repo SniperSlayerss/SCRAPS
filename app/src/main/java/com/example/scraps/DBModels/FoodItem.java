@@ -7,19 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FoodItem implements Serializable {
-    private String foodName, expiryDate, type, purchaseDate;
+    private String foodName, expiryDate, type, purchaseDate, username;
     private double price;
     private boolean isShareable;
 
     public FoodItem() {}
 
-    public FoodItem(String foodName, String expiryDate, String purchaseDate, double price, String type, boolean isShareable) {
+    public FoodItem(String foodName, String expiryDate, String purchaseDate, double price, String type, boolean isShareable, String username) {
         this.foodName = foodName;
         this.expiryDate = expiryDate;
         this.price = price;
         this.type = type;
         this.isShareable = false;
         this.purchaseDate = purchaseDate;
+        this.username = username;
     }
 
     public Map<String, Object> toMap() {
@@ -77,6 +78,10 @@ public class FoodItem implements Serializable {
 
     public void setPurchaseDate(String purchaseDate) {
         this.purchaseDate = purchaseDate;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
 
