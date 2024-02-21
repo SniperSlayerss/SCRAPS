@@ -1,4 +1,8 @@
 package com.example.scraps.DBModels;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.security.MessageDigest;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +22,32 @@ public class Users {
         this.password = password;
         this.foodItems = new HashMap<>();
     }
+
+    public boolean removeFoodItem(String foodItemId) {
+        if (this.foodItems.containsKey(foodItemId)) {
+            this.foodItems.remove(foodItemId);
+            removeFoodItemFromDatabase(foodItemId);
+            return true; // Item was found and removed.
+        }
+        return false; // Item was not found.
+    }
+    public void removeFoodItemFromDatabase(String foodItemId) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference foodItemsRef = database.child("users").child(this.username)
+                .child("foodItems")
+                .child(foodItemId);
+        foodItemsRef.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    System.out.println("Food item successfully removed from database.");
+                } else {
+                    System.out.println("Failed to remove food item from database: " + databaseError.getMessage());
+                }
+            }
+        });
+    }
+
 
     public static String getSHA(String input) throws NoSuchAlgorithmException
     {
