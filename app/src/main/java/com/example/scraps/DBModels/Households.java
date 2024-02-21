@@ -4,6 +4,7 @@ import java.util.HashMap;
 public class Households {
     public String houseID;
     public HashMap<String, Users> users;
+    private Users adminUser;
 
     public Households() {}
 
@@ -26,5 +27,12 @@ public class Households {
 
     public void setUsers(HashMap<String, Users> users) {
         this.users = users;
+    }
+
+    public Users getAdminUser() {
+        return adminUser;
+    }
+    public void setAdminUser(Users adminUser) {
+        this.adminUser = adminUser;
     }
 }
