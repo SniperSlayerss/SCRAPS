@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".FoodItemScreen">
 
+    <!--
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -16,12 +17,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    -->
 
     <TextView
         android:id="@+id/user"
         android:layout_width="280sp"
         android:layout_height="30sp"
-        android:text="User: USER"
+        android:text="User: "
         android:textAlignment="textStart"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/item"
