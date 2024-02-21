@@ -22,17 +22,6 @@ public class FoodItem implements Serializable {
         this.purchaseDate = purchaseDate;
     }
 
-    private void addFoodItemToUser(String houseID, String userID, FoodItem foodItem) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        String key = databaseReference.child("households").child(houseID).child("users").child(userID).child("foodItems").push().getKey();
-        Map<String, Object> foodItemValues = foodItem.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/households/" + houseID + "/users/" + userID + "/foodItems/" + key, foodItemValues);
-
-        databaseReference.updateChildren(childUpdates);
-    }
-
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("foodName", foodName);

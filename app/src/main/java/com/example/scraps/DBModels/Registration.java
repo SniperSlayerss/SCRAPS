@@ -1,16 +1,12 @@
 package com.example.scraps.DBModels;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DatabaseError;
-
+import com.google.firebase.database.ValueEventListener;
 
 public class Registration {
-
-    public interface DatabaseOperationCallback {
-        void onSuccess();
-        void onFailure();
-    }
 
     private FirebaseDatabase database;
 
@@ -19,56 +15,75 @@ public class Registration {
         database = FirebaseDatabase.getInstance("https://scraps-dbdd1-default-rtdb.europe-west1.firebasedatabase.app");
     }
 
-    public void createHousehold(String userName, String userEmail, String userPassword) {
-        DatabaseReference myRef = database.getReference("households");
-
-        // Create a new Household
-        String houseID = myRef.push().getKey(); // Automatically generate a unique ID for the household
-        Households newHousehold = new Households(houseID);
-
-        // Save the household
-        myRef.child(houseID).setValue(newHousehold);
-
-        // Add a user to this household
-        Users newUser = new Users(userName, userEmail, userPassword, houseID);
-        newHousehold.setAdminUser(newUser);
-        String userID = myRef.child(houseID).child("users").push().getKey(); // Automatically generate a unique ID for the user
-        myRef.child(houseID).child("users").child(userID).setValue(newUser);
+    public interface DatabaseOperationCallback {
+        void onSuccess(String houseID);
+        void onFailure(String message);
     }
 
-    public void addUserToHousehold(String userName, String userEmail, String userPassword, String houseID, DatabaseOperationCallback callback)
-    {
-        DatabaseReference usersRef = database.getReference("households").child(houseID).child("users");
+    public void registerUserAndCreateHousehold(String userName, String userEmail, String userPassword, final DatabaseOperationCallback callback) {
+        DatabaseReference usersRef = database.getReference("usernames");
+
+        // Check if the username already exists
+        usersRef.child(userName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Username already exists
+                    callback.onFailure("Username already exists.");
+                } else {
+                    // Username does not exist, proceed with user and household creation
+                    createUserAndHousehold(userName, userEmail, userPassword, callback);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible database errors
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+    private void createUserAndHousehold(String userName, String userEmail, String userPassword, final DatabaseOperationCallback callback) {
+        DatabaseReference myRef = database.getReference("households");
+        String houseID = myRef.push().getKey(); // Automatically generate a unique ID for the household
+
+        // Assuming Households and Users classes are correctly defined elsewhere
+        Households newHousehold = new Households(houseID);
         Users newUser = new Users(userName, userEmail, userPassword, houseID);
 
-        // Attempt to add a new user to the household
-        usersRef.push().setValue(newUser, new DatabaseReference.CompletionListener() {
+        // Save the new household
+        myRef.child(houseID).setValue(newHousehold, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError != null) {
-                    // If there's an error, invoke onFailure on the callback
-                    callback.onFailure();
+                if (databaseError == null) {
+                    // Household creation was successful, now add the user
+                    DatabaseReference usersRef = database.getReference("households").child(houseID).child("users");
+                    usersRef.child(userName).setValue(newUser, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                // User addition was successful, also update the usernames reference
+                                DatabaseReference usernamesRef = database.getReference("usernames");
+                                usernamesRef.child(userName).setValue(true, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                        if (databaseError == null) {
+                                            callback.onSuccess(houseID);
+                                        } else {
+                                            callback.onFailure("Failed to register username.");
+                                        }
+                                    }
+                                });
+                            } else {
+                                callback.onFailure("Failed to add user to household.");
+                            }
+                        }
+                    });
                 } else {
-                    // If the data was saved successfully, invoke onSuccess on the callback
-                    callback.onSuccess();
+                    callback.onFailure("Failed to create household.");
                 }
             }
         });
     }
 }
-
-
-// Registration registration = new Registration();
-//registration.addUserToHousehold("Jane Doe", "janedoe@example.com", "securePassword", "houseID456", new Registration.DatabaseOperationCallback() {
-//    @Override
-//    public void onSuccess() {
-//        // Code to execute on successful addition of the user
-//        System.out.println("User successfully added.");
-//    }
-//
-//    @Override
-//    public void onFailure() {
-//        // Code to execute if adding the user fails
-//        System.out.println("Failed to add user.");
-//    }
-//});

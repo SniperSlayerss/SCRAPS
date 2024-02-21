@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Users {
     private String username, password, email, houseID;
@@ -21,6 +22,17 @@ public class Users {
         this.houseID = houseID;
         this.password = password;
         this.foodItems = new HashMap<>();
+    }
+
+    private void addFoodItemToUser(FoodItem foodItem) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        String key = databaseReference.child("households").child(houseID).child("users").child(username).child("foodItems").push().getKey();
+        Map<String, Object> foodItemValues = foodItem.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/households/" + houseID + "/users/" + username + "/foodItems/" + key, foodItemValues);
+
+        databaseReference.updateChildren(childUpdates);
     }
 
     public boolean removeFoodItem(String foodItemId) {
