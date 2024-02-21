@@ -6,6 +6,15 @@ public class FoodItem implements Serializable {
     private String name;
     private String expiry;
 
+    public FoodItem(String foodName, String expiryDate) {
+        this.name = foodName;
+        this.expiry = expiryDate;
+    }
+
+    public FoodItem() {
+
+    }
+
     public String getName() {
         return name;
     }
