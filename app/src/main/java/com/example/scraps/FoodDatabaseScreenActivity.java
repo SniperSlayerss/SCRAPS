@@ -36,7 +36,7 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity {
         LinearLayout buttonContainer = findViewById(R.id.button_container);
         for (FoodItem foodItem : foodItems) {
             Button button = new Button(this);
-            button.setText(foodItem.getName());
+            button.setText(foodItem.getFoodName());
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -66,8 +66,8 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity {
                         String itemExpiry = itemSnapshot.child("expiry").getValue(String.class);
 
                         FoodItem foodItem = new FoodItem();
-                        foodItem.setName(itemName);
-                        foodItem.setExpiry(itemExpiry);
+                        foodItem.setFoodName(itemName);
+                        foodItem.setExpiryDate(itemExpiry);
 
                         foodItems.add(foodItem);
                         updateFoodList();
