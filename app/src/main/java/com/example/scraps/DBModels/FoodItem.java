@@ -2,10 +2,11 @@ package com.example.scraps.DBModels;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FoodItem {
+public class FoodItem implements Serializable {
     public String foodName;
     public String expiryDate;
     public double price;
