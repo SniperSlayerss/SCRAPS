@@ -32,10 +32,12 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /*
     public void openFoodItemScreen(View view) {
         Intent intent = new Intent(this, FoodItemScreen.class);
         startActivity(intent);
     }
+    */
 
 
     // EXAMPLE METHODS TO INTERACT WITH FIREBASE REALTIME DATABASE

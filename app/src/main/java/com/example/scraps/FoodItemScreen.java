@@ -18,15 +18,15 @@ public class FoodItemScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_item_screen);
 
-        /*
         Intent intent = getIntent();
         FoodItem foodItem = (FoodItem) intent.getSerializableExtra("foodItem");
-        // e.g.
-        String foodName = foodItem.getName();
-        */
+
+        //ADD IMAGE OF FOOD
+
+        //ADD PROFILE IMAGE
 
         TextView Item = findViewById(R.id.item);
-        String ItemName = "item name";
+        String ItemName = foodItem.getFoodName();
         Item.setText(String.format("Item: %s", ItemName));
 
         TextView User = findViewById(R.id.user);
@@ -34,11 +34,11 @@ public class FoodItemScreen extends AppCompatActivity {
         User.setText(String.format("User: %s", UserName));
 
         TextView Purchased = findViewById(R.id.purchased);
-        String PurchaseDate = "date";
+        String PurchaseDate = foodItem.getPurchaseDate();
         Purchased.setText(String.format("Purchased: %s", PurchaseDate));
 
         TextView UseBy = findViewById(R.id.useBy);
-        String UseByDate = "date";
+        String UseByDate = foodItem.getExpiryDate();
         UseBy.setText(String.format("Use By: %s", UseByDate));
     }
 
