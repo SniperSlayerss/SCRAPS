@@ -26,8 +26,12 @@ public class FoodItemScreen extends AppCompatActivity {
         */
 
         TextView Item = findViewById(R.id.item);
-        Item.setText("New String Value");
+        String ItemName = "item name";
+        Item.setText(String.format("Item: %s", ItemName));
 
+        TextView User = findViewById(R.id.user);
+        String UserName = "item name";
+        User.setText(String.format("User: %s", UserName));
     }
 
 
