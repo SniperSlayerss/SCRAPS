@@ -1,9 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".FoodInputActivity">
+    android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Food Name EditText -->
+    <EditText
+        android:id="@+id/food_name_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Food Name"
+        android:layout_margin="16dp"/>
+
+    <!-- Expiry Date EditText -->
+    <EditText
+        android:id="@+id/expiry_date_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Expiry Date (YYYY-MM-DD)"
+        android:layout_below="@id/food_name_editText"
+        android:layout_margin="16dp"/>
+
+    <!-- Purchase Date EditText -->
+    <EditText
+        android:id="@+id/purchase_date_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Purchase Date (YYYY-MM-DD)"
+        android:layout_below="@id/expiry_date_editText"
+        android:layout_margin="16dp"/>
+
+    <!-- Price EditText -->
+    <EditText
+        android:id="@+id/price_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Price"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/purchase_date_editText"
+        android:layout_margin="16dp"/>
+
+    <!-- Type EditText -->
+    <EditText
+        android:id="@+id/type_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type"
+        android:layout_below="@id/price_editText"
+        android:layout_margin="16dp"/>
+
+    <!-- Submit Button -->
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_below="@id/type_editText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"/>
+
+</RelativeLayout>
