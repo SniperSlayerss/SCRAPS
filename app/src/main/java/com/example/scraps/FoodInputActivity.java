@@ -37,9 +37,10 @@ public class FoodInputActivity extends AppCompatActivity {
                 String purchaseDate = purchaseDateEditText.getText().toString().trim();
                 double price = Double.parseDouble(priceEditText.getText().toString().trim());
                 String type = typeEditText.getText().toString().trim();
+                String username = "";
 
                 // Create FoodItem object
-                FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, price, type, false);
+                FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, price, type, false, username);
 
                 // TODO: CHANGE THIS CODE TO PUT DATA IN CORRECT PLACE IN DB
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();

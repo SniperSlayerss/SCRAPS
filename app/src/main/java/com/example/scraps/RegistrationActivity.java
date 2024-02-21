@@ -24,8 +24,23 @@ public class RegistrationActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Example usage
-                registration.createHousehold("Jack", "jack123@gmail.com", "urmom");
+                // Assuming you have an instance of the Registration class
+                Registration registration = new Registration();
+
+// Now, call registerUserAndCreateHousehold with a callback implementation
+                registration.registerUserAndCreateHousehold("Jack", "jack123@gmail.com", "urmom", new Registration.DatabaseOperationCallback() {
+                    @Override
+                    public void onSuccess(String houseID) {
+                        // This block is executed if the registration and household creation are successful
+                        System.out.println("Registration and household creation successful. House ID: " + houseID);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        // This block is executed if there was a failure during the registration or household creation
+                        System.out.println("Registration or household creation failed: " + message);
+                    }
+                });
             }
         });
     }
