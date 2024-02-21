@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <!-- Title -->
     <TextView
         android:id="@+id/title_textView"
@@ -14,8 +15,11 @@
         android:layout_marginTop="20dp"/>
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_textView"
+        android:layout_marginTop="20dp">
 
         <LinearLayout
             android:id="@+id/button_container"
@@ -28,5 +32,15 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <!-- No items available text -->
+    <TextView
+        android:id="@+id/no_items_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No items available"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>
