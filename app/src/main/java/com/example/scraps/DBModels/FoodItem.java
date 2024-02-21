@@ -1,4 +1,5 @@
 package com.example.scraps.DBModels;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,6 +31,23 @@ public class FoodItem implements Serializable {
         result.put("price", price);
         result.put("type", type);
         return result;
+    }
+
+    public void removeFoodItem() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference foodItemsRef = database.child("users").child(this.username)
+                .child("foodItems")
+                .child(foodName);
+        foodItemsRef.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    System.out.println("Food item successfully removed from database.");
+                } else {
+                    System.out.println("Failed to remove food item from database: " + databaseError.getMessage());
+                }
+            }
+        });
     }
 
     public String getFoodName() {
