@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:id="@+id/app_name"
+            android:id="@+id/title"
             android:layout_toEndOf="@id/left_icon"
             android:layout_centerVertical="true"
             android:textColor="@color/white"
