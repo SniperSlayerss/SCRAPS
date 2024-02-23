@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import com.example.scraps.DBModels.FoodItem;
@@ -20,23 +19,26 @@ import com.google.android.material.navigation.NavigationView;
 
 public class FoodItemScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
-    private LinearLayout navigationMenuLayout;
     NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_food_item_screen);
+
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
-        TextView title = findViewById(R.id.title);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.menu_home);
+        if (navigationView != null) {
+            navigationView.setNavigationItemSelectedListener(this);
+            navigationView.setCheckedItem(R.id.menu_home);
+        }
 
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +56,6 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
                 drawerLayout.openDrawer(GravityCompat.END);
             }
         });
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_food_item_screen);
 
         Intent intent = getIntent();
         FoodItem foodItem = (FoodItem) intent.getSerializableExtra("foodItem");
@@ -120,15 +119,16 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         });
     }
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
 
-        if (itemID == R.id.menu_home) {
+        if (itemID == R.id.menu_food_item) {
             //since we are already on home page, do nothing and let window close
         }
-        else if (itemID == R.id.menu_food_item) {
-            Intent intent = new Intent(this, FoodItemScreen.class); //v.context() lets you access current class
+        else if (itemID == R.id.menu_home) {
+            Intent intent = new Intent(this, HomeActivity.class); //v.context() lets you access current class
             startActivity(intent);
         }
         else if (itemID == R.id.menu_settings) {
@@ -138,6 +138,4 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         drawerLayout.closeDrawer(GravityCompat.END);
         return true;
     }
-
-
 }
