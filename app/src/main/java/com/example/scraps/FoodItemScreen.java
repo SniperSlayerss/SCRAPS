@@ -37,7 +37,7 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         navigationView = findViewById(R.id.nav_view);
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
-            navigationView.setCheckedItem(R.id.menu_home);
+            navigationView.setCheckedItem(R.id.menu_food_item);
         }
 
         leftIcon.setOnClickListener(new View.OnClickListener() {
