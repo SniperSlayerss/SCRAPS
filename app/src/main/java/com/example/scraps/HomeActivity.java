@@ -118,8 +118,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int itemID = item.getItemId();
 
         if (itemID == R.id.menu_home) {
-            Intent intent = new Intent(this, HomeActivity.class); //v.context() lets you access current class
-            startActivity(intent);
+            //since we are already on home page, do nothing and let window close
         }
         else if (itemID == R.id.menu_food_item) {
             Intent intent = new Intent(this, FoodItemScreen.class); //v.context() lets you access current class
