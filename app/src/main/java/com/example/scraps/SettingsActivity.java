@@ -19,7 +19,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         //setSupportActionBar(findViewById(R.id.my_toolbar));
 
-
+        //COPY LINES 23-40 AND PASTE INTO onCreate FUNCTION TO USE TOOLBAR
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
         TextView title = findViewById(R.id.title);
@@ -27,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SettingsActivity.this, HomeActivity.class);
+                Intent intent = new Intent(v.getContext(), HomeActivity.class); //v.context() lets you access current class
                 startActivity(intent);
             }
         });
