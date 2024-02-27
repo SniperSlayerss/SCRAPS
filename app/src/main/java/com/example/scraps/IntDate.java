@@ -97,5 +97,79 @@ public class IntDate {
             dateArray[2] = Year()+1;
         }
     }
+
+    /**
+     * Basically a <= operand since Java doesn't have operator overload functionality.
+     * @param firstDate
+     * @param secondDate
+     * @return True if firstDate <= secondDate, False if firstDate > secondDate
+     */
+    public static Boolean LessThanEqualTo(IntDate firstDate, IntDate secondDate){
+        if (firstDate.Year() == secondDate.Year()){
+            if (firstDate.Month() == secondDate.Month()){
+                if (firstDate.Day() <= secondDate.Day()){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                if (firstDate.Month() <= secondDate.Month()){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+        else{
+            if (firstDate.Year() <= secondDate.Year()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Basically a >= operand since Java doesn't have operator overload functionality.
+     * @param firstDate
+     * @param secondDate
+     * @return True if firstDate >= secondDate, False if firstDate < secondDate
+     */
+    public static Boolean GreaterThanEqualTo(IntDate firstDate, IntDate secondDate){
+        if (firstDate.Year() == secondDate.Year()){
+            if (firstDate.Month() == secondDate.Month()){
+                if (firstDate.Day() >= secondDate.Day()){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                if (firstDate.Month() >= secondDate.Month()){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+        else{
+            if (firstDate.Year() >= secondDate.Year()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+
+    public static IntDate CurrentDate(){
+        return new IntDate();
+    }
 }
 
