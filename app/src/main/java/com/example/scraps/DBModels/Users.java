@@ -24,16 +24,42 @@ public class Users {
         this.foodItems = new HashMap<>();
     }
 
-    private void addFoodItemToUser(FoodItem foodItem) {
+    public void addFoodItemToUser(FoodItem foodItem, String firebaseId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        String key = databaseReference.child("households").child(houseID).child("users").child(username).child("foodItems").push().getKey();
+        String key = databaseReference.child("households").child(houseID).child("users").child(firebaseId).child("foodItems").push().getKey();
         Map<String, Object> foodItemValues = foodItem.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/households/" + houseID + "/users/" + username + "/foodItems/" + key, foodItemValues);
+        childUpdates.put("/households/" + houseID + "/users/" + firebaseId + "/foodItems/" + key, foodItemValues);
 
         databaseReference.updateChildren(childUpdates);
     }
+
+    public boolean removeFoodItem(String foodItemId) {
+        if (this.foodItems.containsKey(foodItemId)) {
+            this.foodItems.remove(foodItemId);
+            removeFoodItemFromDatabase(foodItemId);
+            return true; // Item was found and removed.
+        }
+        return false; // Item was not found.
+    }
+    public void removeFoodItemFromDatabase(String foodItemId) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference foodItemsRef = database.child("users").child(this.username)
+                .child("foodItems")
+                .child(foodItemId);
+        foodItemsRef.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    System.out.println("Food item successfully removed from database.");
+                } else {
+                    System.out.println("Failed to remove food item from database: " + databaseError.getMessage());
+                }
+            }
+        });
+    }
+
 
     public static String getSHA(String input) throws NoSuchAlgorithmException
     {

@@ -1,5 +1,7 @@
 package com.example.scraps.DBModels;
 
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -9,10 +11,12 @@ import com.google.firebase.database.ValueEventListener;
 public class Registration {
 
     private FirebaseDatabase database;
+    private FirebaseAuth mAuth;
 
     public Registration() {
-        // Initialize Firebase Database
+        // Initialize Firebase Database and Auth
         database = FirebaseDatabase.getInstance("https://scraps-dbdd1-default-rtdb.europe-west1.firebasedatabase.app");
+        mAuth = FirebaseAuth.getInstance();
     }
 
     public interface DatabaseOperationCallback {
@@ -31,8 +35,17 @@ public class Registration {
                     // Username already exists
                     callback.onFailure("Username already exists.");
                 } else {
-                    // Username does not exist, proceed with user and household creation
-                    createUserAndHousehold(userName, userEmail, userPassword, callback);
+                    // Username does not exist, proceed with Firebase Auth user registration
+                    mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    // Authentication successful, proceed with user and household creation
+                                    createUserAndHousehold(userName, userEmail, userPassword, callback);
+                                } else {
+                                    // Authentication failed, handle error
+                                    callback.onFailure("Authentication failed: " + task.getException().getMessage());
+                                }
+                            });
                 }
             }
 
@@ -45,44 +58,27 @@ public class Registration {
     }
 
     private void createUserAndHousehold(String userName, String userEmail, String userPassword, final DatabaseOperationCallback callback) {
-        DatabaseReference myRef = database.getReference("households");
-        String houseID = myRef.push().getKey(); // Automatically generate a unique ID for the household
-
-        // Assuming Households and Users classes are correctly defined elsewhere
+        // Assume the user is successfully created in Firebase Auth, now create the household
+        String houseID = database.getReference("households").push().getKey();
         Households newHousehold = new Households(houseID);
         Users newUser = new Users(userName, userEmail, userPassword, houseID);
 
-        // Save the new household
-        myRef.child(houseID).setValue(newHousehold, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError == null) {
-                    // Household creation was successful, now add the user
-                    DatabaseReference usersRef = database.getReference("households").child(houseID).child("users");
-                    usersRef.child(userName).setValue(newUser, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            if (databaseError == null) {
-                                // User addition was successful, also update the usernames reference
-                                DatabaseReference usernamesRef = database.getReference("usernames");
-                                usernamesRef.child(userName).setValue(true, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                        if (databaseError == null) {
-                                            callback.onSuccess(houseID);
-                                        } else {
-                                            callback.onFailure("Failed to register username.");
-                                        }
-                                    }
-                                });
+        DatabaseReference myRef = database.getReference("households").child(houseID);
+        myRef.setValue(newHousehold).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                myRef.child("users").child(mAuth.getCurrentUser().getUid()).setValue(newUser)
+                        .addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                // Update the usernames reference to prevent duplicate usernames
+                                database.getReference("usernames").child(userName).setValue(mAuth.getCurrentUser().getUid())
+                                        .addOnSuccessListener(aVoid -> callback.onSuccess(houseID))
+                                        .addOnFailureListener(e -> callback.onFailure("Failed to register username."));
                             } else {
                                 callback.onFailure("Failed to add user to household.");
                             }
-                        }
-                    });
-                } else {
-                    callback.onFailure("Failed to create household.");
-                }
+                        });
+            } else {
+                callback.onFailure("Failed to create household.");
             }
         });
     }
