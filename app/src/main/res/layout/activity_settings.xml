@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsActivity">
+    <include layout="@layout/toolbar"/>
 
     <!-- Button for Notifications -->
 
@@ -15,6 +16,7 @@
         android:layout_marginStart="140dp"
         android:layout_marginTop="216dp"
         android:text="Notifications"
+        android:onClick="openNotificationsActivity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +29,7 @@
         android:layout_marginStart="144dp"
         android:layout_marginTop="296dp"
         android:text="Household"
+        android:onClick="openHouseholdActivity"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,9 +40,9 @@
         android:layout_marginStart="156dp"
         android:layout_marginTop="380dp"
         android:text="Privacy"
+        android:onClick="openPrivacyActivity"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Add more UI elements for other settings as needed -->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+ </androidx.constraintlayout.widget.ConstraintLayout>
