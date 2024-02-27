@@ -24,6 +24,10 @@ public class Users {
         this.foodItems = new HashMap<>();
     }
 
+    public void TESTMETHOD(FoodItem food){ // TEST METHOD TO POPULATE A USER WITH FOOD ITEMS, PLEASE IGNORE
+        foodItems.put(food.getFoodName(), food);
+    }
+
     public void addFoodItemToUser(FoodItem foodItem, String firebaseId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String key = databaseReference.child("households").child(houseID).child("users").child(firebaseId).child("foodItems").push().getKey();
