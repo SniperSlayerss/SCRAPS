@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -94,17 +95,32 @@ public class HomeActivity extends AppCompatActivity {
             return new ArrayList<FoodItem>();
         }
         else{
+            DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
             ArrayList<FoodItem> foodItems = new ArrayList((currentUser.getFoodItems()).values());
             ArrayList<FoodItem> output = new ArrayList<>();
-            IntDate desiredDate = new IntDate();
-            desiredDate.AddDays(numberOfDays);
+            Date desiredDate = new Date();
+            int newDay = desiredDate.getDate() + numberOfDays.intValue();
+            desiredDate.setDate(newDay);
+            Date currentDate = new Date();
+            Boolean exceptionCaught = false;
             for (FoodItem f : foodItems){
-                IntDate expiryDate = new IntDate(f.getExpiryDate());
-                if (IntDate.LessThanEqualTo(expiryDate, desiredDate) && IntDate.GreaterThanEqualTo(expiryDate, IntDate.CurrentDate())){
-                    output.add(f);
+                try{
+                    Date expiryDate = dateFormatter.parse(f.getExpiryDate());
+                    if (expiryDate.compareTo(desiredDate) <= 0 && expiryDate.compareTo(currentDate) >= 0){
+                        output.add(f);
+                    }
+                }
+                catch (ParseException e){
+                    exceptionCaught = true;
+                    break;
                 }
             }
-            return output;
+            if (exceptionCaught){
+                return new ArrayList<FoodItem>();
+            }
+            else{
+                return output;
+            }
         }
 
     }
@@ -123,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
         testUser.TESTMETHOD(new FoodItem("Canned Tuna", "02/03/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
         // TEST CODE END
         TextView expiryReminder = findViewById(R.id.expiryReminder);
-        ArrayList<FoodItem> expiring = GetExpiringFoodItems(testUser, 3);
+        ArrayList<FoodItem> expiring = GetExpiringFoodItems(testUser, 2);
         if (expiring.isEmpty()){
             expiryReminder.setText("Nothing expiring soon");
         }
