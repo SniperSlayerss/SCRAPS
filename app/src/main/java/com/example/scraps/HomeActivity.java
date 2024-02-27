@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.example.scraps.DBModels.FoodItem;
@@ -79,13 +80,24 @@ public class HomeActivity extends AppCompatActivity {
         myRef.setValue("joe");
     }
 
-    private void GetExpiringFoodItems(Users currentUser){
+    /**
+     * Gets all food items attached to a user that are set to expire between the current day and a specified number of days in the future.
+     * NOTE: Encapsulate into Users?
+     * @param currentUser
+     * @param numberOfDays
+     * @return
+     */
+    private ArrayList<FoodItem> GetExpiringFoodItems(Users currentUser, Integer numberOfDays){
         ArrayList<FoodItem> foodItems = new ArrayList((currentUser.getFoodItems()).values());
-        IntDate currentDate = new IntDate();
+        IntDate desiredDate = new IntDate();
+        desiredDate.AddDays(numberOfDays);
         for (FoodItem f : foodItems){
             IntDate expiryDate = new IntDate(f.getExpiryDate());
-            // NOT FINISHED, NEED TO FINISH INTDATE CLASS
+            if (IntDate.LessThanEqualTo(expiryDate, desiredDate) && IntDate.GreaterThanEqualTo(expiryDate, IntDate.CurrentDate())){
+                foodItems.add(f);
+            }
         }
+        return foodItems;
     }
 
 
