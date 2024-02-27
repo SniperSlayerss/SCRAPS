@@ -1,7 +1,10 @@
 package com.example.scraps.DBModels;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
 import java.math.BigInteger;
@@ -11,38 +14,67 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Users {
-    private String username, password, email, houseID;
+    private String username, password, email, houseID, firebaseID;
     private HashMap<String, FoodItem> foodItems;
 
     public Users() {}
 
-    public Users(String username, String email, String password, String houseID) {
+    public Users(String username, String email, String houseID, String firebaseID) {
         this.username = username;
         this.email = email;
         this.houseID = houseID;
-        this.password = password;
         this.foodItems = new HashMap<>();
+        this.firebaseID = firebaseID;
     }
 
-    public void addFoodItemToUser(FoodItem foodItem, String firebaseId) {
+    public void fetchUserData(String firebaseId, final UserDataCallback callback) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
+                .child("users").child(firebaseId);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // The user data exists
+                    Users user = dataSnapshot.getValue(Users.class);
+                    if (user != null) {
+                        // Pass the user data to the callback
+                        callback.onUserDataReceived(user);
+                    } else {
+                        // Handle the case where user data could not be converted to Users class
+                        callback.onFailure("Could not convert data to Users class.");
+                    }
+                } else {
+                    // Handle the case where user data does not exist
+                    callback.onFailure("User data does not exist.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible database errors
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+    // Interface for callback after user data is retrieved or failed
+    public interface UserDataCallback {
+        void onUserDataReceived(Users user);
+        void onFailure(String message);
+    }
+
+    public void addFoodItemToUser(FoodItem foodItem) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        String key = databaseReference.child("households").child(houseID).child("users").child(firebaseId).child("foodItems").push().getKey();
+        String key = databaseReference.child("households").child(houseID).child("users").child(this.firebaseID).child("foodItems").push().getKey();
         Map<String, Object> foodItemValues = foodItem.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/households/" + houseID + "/users/" + firebaseId + "/foodItems/" + key, foodItemValues);
+        childUpdates.put("/households/" + houseID + "/users/" + this.firebaseID + "/foodItems/" + key, foodItemValues);
 
         databaseReference.updateChildren(childUpdates);
     }
 
-    public boolean removeFoodItem(String foodItemId) {
-        if (this.foodItems.containsKey(foodItemId)) {
-            this.foodItems.remove(foodItemId);
-            removeFoodItemFromDatabase(foodItemId);
-            return true; // Item was found and removed.
-        }
-        return false; // Item was not found.
-    }
     public void removeFoodItemFromDatabase(String foodItemId) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         DatabaseReference foodItemsRef = database.child("users").child(this.username)
@@ -59,7 +91,6 @@ public class Users {
             }
         });
     }
-
 
     public static String getSHA(String input) throws NoSuchAlgorithmException
     {
@@ -85,6 +116,13 @@ public class Users {
         }
 
         return hexString.toString();
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("houseID", houseID);
+        // Add other properties to the map if needed
+        return result;
     }
 
     public String getUsername() {
