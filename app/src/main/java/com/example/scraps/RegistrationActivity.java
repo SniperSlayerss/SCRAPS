@@ -7,30 +7,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.scraps.DBModels.FoodItem;
-import com.example.scraps.DBModels.Login;
 import com.example.scraps.DBModels.Registration;
-import com.example.scraps.DBModels.Users;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private Registration registration;
     private Button registerButton, loginButton;
-    private EditText emailInput, passwordInput, usernameInput;
+    private CheckBox checkBoxCreateOrJoin;
+    private EditText emailInput, passwordInput, usernameInput, householdIdInput;
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-        registration = new Registration();
 
         mAuth = FirebaseAuth.getInstance();
         registerButton = findViewById(R.id.register_button);
@@ -38,12 +32,16 @@ public class RegistrationActivity extends AppCompatActivity {
         emailInput = findViewById(R.id.email_input);
         passwordInput = findViewById(R.id.password_input);
         usernameInput = findViewById(R.id.username_input);
+        householdIdInput = findViewById(R.id.householdIdInput);
+        checkBoxCreateOrJoin = findViewById(R.id.checkbox_create_or_join);
+
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 registerUser();
             }
         });
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,30 +49,51 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
+
     private void registerUser() {
-        String username = usernameInput.getText().toString().trim();
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
+        String username = usernameInput.getText().toString().trim();
 
-        // Password, Email, and Username can't be empty
-        if(username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(RegistrationActivity.this, "Username, email, and password must not be empty", Toast.LENGTH_SHORT).show();
-            return;
+        if (!email.isEmpty() && !password.isEmpty() && !username.isEmpty()) {
+            Registration registration = new Registration();
+            registration.registerUser(email, password, username, new Registration.DatabaseOperationCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
+                    // Now handle the household operation
+                    handleHouseholdOperation();
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    Toast.makeText(RegistrationActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
         }
-        registration.registerUserAndCreateHousehold(username, email, password, new Registration.DatabaseOperationCallback() {
+    }
+
+    private void handleHouseholdOperation() {
+        String householdId = householdIdInput.getText().toString().trim();
+        boolean shouldCreateHousehold = checkBoxCreateOrJoin.isChecked();
+
+        Registration registration = new Registration();
+        registration.createOrJoinHousehold(householdId, shouldCreateHousehold, new Registration.DatabaseOperationCallback() {
             @Override
-            public void onSuccess(String houseID) {
-                // On success let user know
-                Toast.makeText(RegistrationActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+            public void onSuccess(String message) {
+                Toast.makeText(RegistrationActivity.this, message, Toast.LENGTH_SHORT).show();
+                // Redirect to another activity or update UI as needed
             }
 
             @Override
-            public void onFailure(String message) {
-                // Show error, invalid registration
-                Toast.makeText(RegistrationActivity.this, message, Toast.LENGTH_SHORT).show();
+            public void onFailure(String errorMessage) {
+                Toast.makeText(RegistrationActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
     public void openLoginScreenActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
