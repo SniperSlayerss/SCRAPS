@@ -22,7 +22,6 @@ import com.google.android.material.navigation.NavigationView;
 
 public class FoodItemScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
-    private LinearLayout navigationMenuLayout;
     NavigationView navigationView;
 
 
