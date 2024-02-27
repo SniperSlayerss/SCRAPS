@@ -20,7 +20,7 @@
         <!-- Include your toolbar layout -->
         <include android:id="@+id/include2" layout="@layout/toolbar" />
 
-        <Button
+        <!--<Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,21 +31,22 @@
             android:text="Okay"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" /> -->
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="410dp"
+            android:layout_height="558dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginTop="10dp"
             android:text="@string/Waka_waka_lyrics"
-            app:layout_constraintBottom_toTopOf="@+id/button"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include2" />
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
