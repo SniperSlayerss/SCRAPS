@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/main_green"
     android:layout_height="match_parent">
 
     <!-- Food Name EditText -->
@@ -10,6 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/button_green"
+        android:backgroundTint="@color/button_green"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:hint="Food Name" />
@@ -22,7 +26,9 @@
         android:layout_below="@id/food_name_editText"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/button_green"
+        android:backgroundTint="@color/button_green"        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:hint="Expiry Date (YYYY-MM-DD)" />
 
@@ -34,7 +40,9 @@
         android:layout_below="@id/expiry_date_editText"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/button_green"
+        android:backgroundTint="@color/button_green"        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:hint="Purchase Date (YYYY-MM-DD)" />
 
@@ -46,7 +54,9 @@
         android:layout_below="@id/purchase_date_editText"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/button_green"
+        android:backgroundTint="@color/button_green"        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:hint="Price"
         android:inputType="numberDecimal" />
@@ -58,7 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/price_editText"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/button_green"
+        android:backgroundTint="@color/button_green"        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:hint="Type" />
@@ -69,6 +81,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
+        android:textColor="@color/text_green"
+        android:backgroundTint="@color/button_green"
         android:layout_below="@id/type_editText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"/>

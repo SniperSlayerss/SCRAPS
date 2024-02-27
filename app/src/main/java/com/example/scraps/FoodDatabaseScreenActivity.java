@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -93,6 +94,8 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity implements Nav
         for (FoodItem foodItem : foodItems) {
             Button button = new Button(this);
             button.setText(foodItem.getFoodName());
+            button.setTextColor(getResources().getColor(R.color.text_green)); // Ensure you have defined text_green color in your resources
+            button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.button_green))); // Ensure you have defined button_green color in your resources
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
