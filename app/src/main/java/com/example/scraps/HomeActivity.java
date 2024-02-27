@@ -78,8 +78,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
-    public void openFoodItemScreen(View view) {
-        Intent intent = new Intent(this, FoodItemScreen.class);
+    public void openFoodItemDatabase(View view) {
+        Intent intent = new Intent(this, FoodDatabaseScreenActivity.class);
         startActivity(intent);
     }
 
