@@ -12,32 +12,37 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import com.example.scraps.DBModels.FoodItem;
 import com.google.android.material.navigation.NavigationView;
 
+
+
 public class FoodItemScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
+    private LinearLayout navigationMenuLayout;
     NavigationView navigationView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_item_screen);
 
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
+        TextView title = findViewById(R.id.title);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            navigationView.setNavigationItemSelectedListener(this);
-        }
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.menu_food_item);
 
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +60,8 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
                 drawerLayout.openDrawer(GravityCompat.END);
             }
         });
+
+
 
         Intent intent = getIntent();
         FoodItem foodItem = (FoodItem) intent.getSerializableExtra("foodItem");
@@ -76,14 +83,14 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         TextView User = findViewById(R.id.user);
         String UserName = "USERNAME ERROR";
         if (foodItem != null) {
-            UserName = foodItem.getUsername();
+            //UserName = foodItem.getUsername();
         }
         User.setText(String.format("User: %s", UserName));
 
         TextView Purchased = findViewById(R.id.purchased);
         String PurchaseDate = "PURCHASE DATE ERROR";
         if (foodItem != null) {
-            PurchaseDate = foodItem.getPurchaseDate();
+            //PurchaseDate = foodItem.getPurchaseDate();
         }
         Purchased.setText(String.format("Purchased: %s", PurchaseDate));
 
@@ -99,36 +106,34 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
             //Alert dialog to confirm the user wants to remove
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setTitle("Confirmation")
-                .setMessage("Are you sure you want to remove this item?")
-                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    .setMessage("Are you sure you want to remove this item?")
+                    .setPositiveButton("Yes", (dialogInterface, i) -> {
 
-                    if (foodItem != null) {
-                        foodItem.removeFoodItem();
-                    }
+                        if (foodItem != null) {
+                            //foodItem.removeFoodItem();
+                        }
 
-                    Intent intent1 = new Intent(view.getContext(), FoodDatabaseScreenActivity.class);
-                    startActivity(intent1);
-                })
-                .setNegativeButton("No", (dialogInterface, i) -> {
+                        Intent intent1 = new Intent(view.getContext(), FoodDatabaseScreenActivity.class);
+                        startActivity(intent1);
+                    })
+                    .setNegativeButton("No", (dialogInterface, i) -> {
 
-                });
+                    });
 
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         });
     }
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
 
-        if (itemID == R.id.menu_food_item) {
-            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class); //v.context() lets you access current class
-            startActivity(intent);
+        if (itemID == R.id.menu_home) {
+            //since we are already on home page, do nothing and let window close
         }
-        else if (itemID == R.id.menu_home) {
-            Intent intent = new Intent(this, HomeActivity.class); //v.context() lets you access current class
+        else if (itemID == R.id.menu_food_item) {
+            Intent intent = new Intent(this, FoodItemScreen.class); //v.context() lets you access current class
             startActivity(intent);
         }
         else if (itemID == R.id.menu_settings) {
@@ -138,4 +143,6 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         drawerLayout.closeDrawer(GravityCompat.END);
         return true;
     }
+
+
 }
