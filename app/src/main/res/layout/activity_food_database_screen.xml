@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
+    android:background="@color/main_green"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FoodDatabaseScreenActivity">
@@ -38,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="All Food Items"
-            android:textSize="24sp"
+            android:textColor="@color/button_green"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal"
             app:layout_constraintEnd_toEndOf="parent"

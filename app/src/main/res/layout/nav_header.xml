@@ -5,6 +5,7 @@
     android:background="@color/purple_200"
     android:gravity="bottom"
     android:padding="16dp"
+    android:backgroundTint="@color/menu_green"
     android:theme="@style/ThemeOverlay.AppCompat.Light"
     android:layout_height="176dp">
 
@@ -18,7 +19,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:text="SCRAPS"
-        android:textColor="@color/black"
+        android:textColor="@color/text_green"
         android:textSize="20dp" />
 
     <TextView
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="Sustainable Consumption and Resourceful Approach to Provision Surplus"
         android:textSize="10dp"
-        android:textColor="@color/black" />
+        android:textColor="@color/text_green" />
 
 
 </LinearLayout>
