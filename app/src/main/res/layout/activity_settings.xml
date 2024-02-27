@@ -20,8 +20,19 @@
         <!-- Include your toolbar layout -->
         <include layout="@layout/toolbar" />
 
-    <!-- Button for Notifications -->
 
+        <TextView
+            android:id="@+id/SettingsPageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="135dp"
+            android:text="App Settings"
+
+            android:textSize="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    <!-- Button for Notifications -->
     <Button
         android:id="@+id/notificationsButton"
         android:layout_width="wrap_content"
