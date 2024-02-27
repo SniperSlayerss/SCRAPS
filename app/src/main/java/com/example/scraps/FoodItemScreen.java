@@ -125,7 +125,8 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         int itemID = item.getItemId();
 
         if (itemID == R.id.menu_food_item) {
-            //since we are already on home page, do nothing and let window close
+            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class); //v.context() lets you access current class
+            startActivity(intent);
         }
         else if (itemID == R.id.menu_home) {
             Intent intent = new Intent(this, HomeActivity.class); //v.context() lets you access current class
