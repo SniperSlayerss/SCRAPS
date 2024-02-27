@@ -8,6 +8,7 @@
     tools:context=".SettingsActivity">
     <include layout="@layout/toolbar"/>
 
+
     <!-- Button for Notifications -->
 
     <Button
