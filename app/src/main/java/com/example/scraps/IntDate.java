@@ -105,9 +105,9 @@ public class IntDate {
      * @return True if firstDate <= secondDate, False if firstDate > secondDate
      */
     public static Boolean LessThanEqualTo(IntDate firstDate, IntDate secondDate){
-        if (firstDate.Year() == secondDate.Year()){
-            if (firstDate.Month() == secondDate.Month()){
-                if (firstDate.Day() <= secondDate.Day()){
+        if (firstDate.Year().equals(secondDate.Year())){
+            if (firstDate.Month().equals(secondDate.Month())){
+                if (firstDate.Day().intValue() <= secondDate.Day().intValue()){
                     return true;
                 }
                 else{
@@ -115,7 +115,7 @@ public class IntDate {
                 }
             }
             else{
-                if (firstDate.Month() <= secondDate.Month()){
+                if (firstDate.Month().intValue() <= secondDate.Month().intValue()){
                     return true;
                 }
                 else{
@@ -124,7 +124,7 @@ public class IntDate {
             }
         }
         else{
-            if (firstDate.Year() <= secondDate.Year()){
+            if (firstDate.Year().intValue() <= secondDate.Year().intValue()){
                 return true;
             }
             else{
@@ -140,9 +140,9 @@ public class IntDate {
      * @return True if firstDate >= secondDate, False if firstDate < secondDate
      */
     public static Boolean GreaterThanEqualTo(IntDate firstDate, IntDate secondDate){
-        if (firstDate.Year() == secondDate.Year()){
-            if (firstDate.Month() == secondDate.Month()){
-                if (firstDate.Day() >= secondDate.Day()){
+        if (firstDate.Year().equals(secondDate.Year())){
+            if (firstDate.Month().equals(secondDate.Month())){
+                if (firstDate.Day().intValue() >= secondDate.Day().intValue()){
                     return true;
                 }
                 else{
@@ -150,7 +150,7 @@ public class IntDate {
                 }
             }
             else{
-                if (firstDate.Month() >= secondDate.Month()){
+                if (firstDate.Month().intValue() >= secondDate.Month().intValue()){
                     return true;
                 }
                 else{
@@ -159,7 +159,7 @@ public class IntDate {
             }
         }
         else{
-            if (firstDate.Year() >= secondDate.Year()){
+            if (firstDate.Year().intValue() >= secondDate.Year().intValue()){
                 return true;
             }
             else{
