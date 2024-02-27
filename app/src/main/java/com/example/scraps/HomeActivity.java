@@ -112,6 +112,7 @@ public class HomeActivity extends AppCompatActivity {
     /**
      * Written weirdly for testing purposes, ideally the current user should be accessible from the activity but for now I'm using a test user defined in scope.
      * Currently picks a random FoodItem from the array until I decide how I want to sort the items.
+     * @param currentUser
      */
     private void UpdateExpiryTextView(){
         // TEST CODE
