@@ -35,7 +35,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 //                Registration registration = new Registration();
-//                registration.registerUserAndCreateHousehold("Jack", "jack1234@gmail.com", "urmomisgayhalol", new Registration.DatabaseOperationCallback() {
+//                registration.registerUserAndCreateHousehold("Jack", "jack1234@gmail.com", "urmom", new Registration.DatabaseOperationCallback() {
 //                    @Override
 //                    public void onSuccess(String houseID) {
 //                        System.out.println("Registration and household creation successful. House ID: " + houseID);
@@ -48,7 +48,7 @@ public class RegistrationActivity extends AppCompatActivity {
 //                });
 
                 Login login = new Login();
-                login.loginUserWithEmail("jack1234@gmail.com", "urmomisgayhalol", new Login.UserDetailsCallback() {
+                login.loginUserWithEmail("jack1234@gmail.com", "urmom", new Login.UserDetailsCallback() {
                     @Override
                     public void onSuccess(Users user) {
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,7 +74,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 //                Login login = new Login();
-//                login.loginUserWithEmail(firebaseUser.getEmail(), "urmomisgayhalol", new Login.UserDetailsCallback() {
+//                login.loginUserWithEmail(firebaseUser.getEmail(), "urmom", new Login.UserDetailsCallback() {
 //                    @Override
 //                    public void onSuccess(Users user) {
 //                        // Handle successful login and fetched user details
