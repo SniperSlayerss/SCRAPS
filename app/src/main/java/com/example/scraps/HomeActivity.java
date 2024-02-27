@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -38,6 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setSupportActionBar(findViewById(R.id.my_toolbar));
+        UpdateExpiryTextView();
     }
 
     // Method to handle button click and open the settings activity
@@ -88,16 +90,56 @@ public class HomeActivity extends AppCompatActivity {
      * @return
      */
     private ArrayList<FoodItem> GetExpiringFoodItems(Users currentUser, Integer numberOfDays){
-        ArrayList<FoodItem> foodItems = new ArrayList((currentUser.getFoodItems()).values());
-        IntDate desiredDate = new IntDate();
-        desiredDate.AddDays(numberOfDays);
-        for (FoodItem f : foodItems){
-            IntDate expiryDate = new IntDate(f.getExpiryDate());
-            if (IntDate.LessThanEqualTo(expiryDate, desiredDate) && IntDate.GreaterThanEqualTo(expiryDate, IntDate.CurrentDate())){
-                foodItems.add(f);
-            }
+        if (currentUser.getFoodItems().isEmpty()){
+            return new ArrayList<FoodItem>();
         }
-        return foodItems;
+        else{
+            ArrayList<FoodItem> foodItems = new ArrayList((currentUser.getFoodItems()).values());
+            ArrayList<FoodItem> output = new ArrayList<>();
+            IntDate desiredDate = new IntDate();
+            desiredDate.AddDays(numberOfDays);
+            for (FoodItem f : foodItems){
+                IntDate expiryDate = new IntDate(f.getExpiryDate());
+                if (IntDate.LessThanEqualTo(expiryDate, desiredDate) && IntDate.GreaterThanEqualTo(expiryDate, IntDate.CurrentDate())){
+                    output.add(f);
+                }
+            }
+            return output;
+        }
+
+    }
+
+    /**
+     * Written weirdly for testing purposes, ideally the current user should be accessible from the activity but for now I'm using a test user defined in scope.
+     * Currently picks a random FoodItem from the array until I decide how I want to sort the items.
+     * @param currentUser
+     */
+    private void UpdateExpiryTextView(){
+        // TEST CODE
+        Users testUser = new Users("Mr. Test", "someone@example.com", "p@ssW0rd123", "2394");
+        testUser.TESTMETHOD(new FoodItem("Eggs", "27/02/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
+        testUser.TESTMETHOD(new FoodItem("Fish", "28/02/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
+        testUser.TESTMETHOD(new FoodItem("Milk", "29/02/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
+        testUser.TESTMETHOD(new FoodItem("Bread", "01/03/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
+        testUser.TESTMETHOD(new FoodItem("Canned Tuna", "02/03/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
+        // TEST CODE END
+        TextView expiryReminder = findViewById(R.id.expiryReminder);
+        ArrayList<FoodItem> expiring = GetExpiringFoodItems(testUser, 3);
+        if (expiring.isEmpty()){
+            expiryReminder.setText("Nothing expiring soon");
+        }
+        else{
+            Random rnd = new Random();
+            StringBuilder sb = new StringBuilder();
+            sb.append("Your '");
+            sb.append(expiring.get(rnd.nextInt(expiring.size())).getFoodName());
+            sb.append("' item is expiring on ");
+            Date date = new Date();
+            DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH);
+            sb.append(dateFormatter.format(date));
+            expiryReminder.setText(sb.toString());
+        }
+
     }
 
 
