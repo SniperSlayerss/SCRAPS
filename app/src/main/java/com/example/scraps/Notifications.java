@@ -14,16 +14,25 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+
+import org.w3c.dom.Text;
 
 public class Notifications extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private LinearLayout navigationMenuLayout;
     NavigationView navigationView;
 
-    private TextView notifsToggleState;
+    private TextView notification1;
+    private SwitchCompat notifsToggle;
+    private TextView notification2;
+
+    private SwitchCompat foodExpiry_Switch;
+    private TextView foodExpiry1;
+    private TextView foodExpiry2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,26 +67,50 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
         });
 
 
-        SwitchCompat notifsToggle = findViewById(R.id.notifications_switch);
-        notifsToggleState = findViewById(R.id.on_off_label);
+        notifsToggle = findViewById(R.id.notifications_switch);
+        notification1 = findViewById(R.id.notification_1);
+        notification2 = findViewById(R.id.notification_2);
+        foodExpiry_Switch = findViewById(R.id.FoodExpiry_switch);
+        foodExpiry1 = findViewById(R.id.FoodExpiry1);
+        foodExpiry2 = findViewById(R.id.FoodExpiry2);
+
 
         notifsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    notifsToggleState.setText("ON");
+                    notification2.setText("ON");
+                    hideOptions(false);
                 }
                 else {
-                    notifsToggleState.setText("OFF");
+                    notification2.setText("OFF");
+                    hideOptions(true);
                 }
             }
         });
 
 
 
+
+
+
+
     }
 
+    private void hideOptions (boolean bool1) {
+        if (bool1) {
+            foodExpiry1.setVisibility(View.GONE);
+            foodExpiry2.setVisibility(View.GONE);
+            foodExpiry_Switch.setChecked(false);
+            foodExpiry_Switch.setVisibility(View.GONE);
+        }
+        else {
+            foodExpiry1.setVisibility(View.VISIBLE);
+            foodExpiry2.setVisibility(View.VISIBLE);
 
+            foodExpiry_Switch.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
