@@ -19,7 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
 import android.widget.TextView;
-import android.widget.Toolbar;
+
 
 import com.example.scraps.DBModels.FoodItem;
 import com.example.scraps.DBModels.Users;
@@ -195,11 +195,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void UpdateExpiryTextView(){
         // TEST CODE
         Users testUser = new Users("Mr. Test", "someone@example.com", "p@ssW0rd123", "2394");
-        testUser.TESTMETHOD(new FoodItem("Eggs", "27/02/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
-        testUser.TESTMETHOD(new FoodItem("Fish", "28/02/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
-        testUser.TESTMETHOD(new FoodItem("Milk", "29/02/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
-        testUser.TESTMETHOD(new FoodItem("Bread", "01/03/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
-        testUser.TESTMETHOD(new FoodItem("Canned Tuna", "02/03/2024", "23/02/2024", 3.50, "Testing food", false, "Mr. Test"));
+        testUser.TESTMETHOD(new FoodItem("Eggs", "27/02/2024", "23/02/2024", 3.50, "Testing food", false));
+        testUser.TESTMETHOD(new FoodItem("Fish", "28/02/2024", "23/02/2024", 3.50, "Testing food", false));
+        testUser.TESTMETHOD(new FoodItem("Milk", "29/02/2024", "23/02/2024", 3.50, "Testing food", false));
+        testUser.TESTMETHOD(new FoodItem("Bread", "01/03/2024", "23/02/2024", 3.50, "Testing food", false));
+        testUser.TESTMETHOD(new FoodItem("Canned Tuna", "02/03/2024", "23/02/2024", 3.50, "Testing food", false));
         // TEST CODE END
         TextView expiryReminder = findViewById(R.id.expiryReminder);
         ArrayList<FoodItem> expiring = GetExpiringFoodItems(testUser, 2);
