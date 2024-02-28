@@ -20,7 +20,7 @@
             android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.SCRAPS">
@@ -29,6 +29,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
         <activity
             android:name=".FoodDatabaseScreenActivity"
             android:exported="false" />
