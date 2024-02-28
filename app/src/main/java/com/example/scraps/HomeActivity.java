@@ -65,12 +65,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 drawerLayout.openDrawer(GravityCompat.END);
             }
         });
-
-
-
     }
-
-
 
     // Method to handle button click and open the settings activity
     public void openSettingsActivity(View view) {
