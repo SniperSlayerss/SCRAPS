@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
+            android:fontFamily="@font/arvobold"
             android:layout_toEndOf="@id/left_icon"
             android:text="SCRAPS"
             android:textColor="@color/white"
