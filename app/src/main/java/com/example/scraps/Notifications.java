@@ -1,25 +1,26 @@
 package com.example.scraps;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+        import androidx.annotation.NonNull;
+        import androidx.appcompat.app.AppCompatActivity;
+        import androidx.appcompat.widget.SwitchCompat;
+        import androidx.appcompat.widget.Toolbar;
+        import androidx.core.view.GravityCompat;
+        import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Switch;
-import android.widget.TextView;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.os.Bundle;
+        import android.view.MenuItem;
+        import android.view.View;
+        import android.widget.CompoundButton;
+        import android.widget.ImageView;
+        import android.widget.LinearLayout;
+        import android.widget.Switch;
+        import android.widget.TextView;
 
-import com.google.android.material.navigation.NavigationView;
+        import com.google.android.material.navigation.NavigationView;
 
-import org.w3c.dom.Text;
+        import org.w3c.dom.Text;
 
 public class Notifications extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -33,6 +34,12 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
     private SwitchCompat foodExpiry_Switch;
     private TextView foodExpiry1;
     private TextView foodExpiry2;
+    private SwitchCompat foodSharing;
+    private TextView foodSharing_1;
+    private TextView foodSharing_2;
+    private SwitchCompat thirdOption;
+    private TextView thirdOption_1;
+    private TextView thirdOption_2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +57,7 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
 
         navigationView.setNavigationItemSelectedListener(this);
         //navigationView.setCheckedItem(R.id.menu_settings);
+
 
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +81,18 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
         foodExpiry_Switch = findViewById(R.id.FoodExpiry_switch);
         foodExpiry1 = findViewById(R.id.FoodExpiry1);
         foodExpiry2 = findViewById(R.id.FoodExpiry2);
+        foodSharing = findViewById(R.id.FoodSharing_Switch);
+        foodSharing_1 = findViewById(R.id.FoodSharing_1);
+        foodSharing_2 = findViewById(R.id.FoodSharing_2);
+        thirdOption = findViewById(R.id.ThirdOptionSwitch);
+        thirdOption_1 = findViewById(R.id.ThirdOption_1);
+        thirdOption_2 = findViewById(R.id.ThirdOption_2);
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        notifsToggle.setChecked(preferences.getBoolean("notificationsSwitch", false));
+        foodExpiry_Switch.setChecked(preferences.getBoolean("foodExpirySwitch", false));
+        foodSharing.setChecked(preferences.getBoolean("foodSharingSwitch", false));
+        thirdOption.setChecked(preferences.getBoolean("thirdOptionSwitch", false));
+
 
 
         notifsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -86,6 +106,10 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
                     notification2.setText("OFF");
                     hideOptions(true);
                 }
+                SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("notificationsSwitch", isChecked);
+                editor.apply();
             }
         });
 
@@ -98,18 +122,42 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
     }
 
     private void hideOptions (boolean bool1) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
         if (bool1) {
             foodExpiry1.setVisibility(View.GONE);
             foodExpiry2.setVisibility(View.GONE);
-            foodExpiry_Switch.setChecked(false);
+            foodSharing_1.setVisibility(View.GONE);
+            foodSharing_2.setVisibility((View.GONE));
+            thirdOption_1.setVisibility(View.GONE);
+            thirdOption_2.setVisibility(View.GONE);
+
+            //foodExpiry_Switch.setChecked(false);
             foodExpiry_Switch.setVisibility(View.GONE);
+            //foodSharing.setChecked(false);
+            foodSharing.setVisibility(View.GONE);
+            //thirdOption.setChecked(false);
+            thirdOption.setVisibility(View.GONE);
+
+            editor.putBoolean("NotificationSwitch", notifsToggle.isChecked());
+            editor.putBoolean("foodExpirySwitch", foodExpiry_Switch.isChecked());
+            editor.putBoolean("foodSharingSwitch", foodSharing.isChecked());
+            editor.putBoolean("ThirdOption", thirdOption.isChecked());
+
         }
         else {
             foodExpiry1.setVisibility(View.VISIBLE);
             foodExpiry2.setVisibility(View.VISIBLE);
+            foodSharing_1.setVisibility(View.VISIBLE);
+            foodSharing_2.setVisibility((View.VISIBLE));
+            thirdOption_1.setVisibility(View.VISIBLE);
+            thirdOption_2.setVisibility(View.VISIBLE);
 
             foodExpiry_Switch.setVisibility(View.VISIBLE);
+            foodSharing.setVisibility(View.VISIBLE);
+            thirdOption.setVisibility(View.VISIBLE);
         }
+        editor.apply();
     }
 
     @Override

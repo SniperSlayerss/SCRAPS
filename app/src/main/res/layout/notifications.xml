@@ -18,6 +18,42 @@
 
 
         <!-- Include your toolbar layout -->
+
+        <TextView
+            android:id="@+id/ThirdOption_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/off"
+            app:layout_constraintStart_toEndOf="@+id/ThirdOptionSwitch"
+            app:layout_constraintTop_toBottomOf="@+id/FoodSharing_2"
+            android:visibility="gone"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/FoodSharing_Switch"
+            android:layout_width="48dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="25dp"
+            app:layout_constraintEnd_toStartOf="@+id/FoodSharing_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/FoodExpiry_switch"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/FoodSharing_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="115dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="24dp"
+            android:text="Food Sharing "
+            app:layout_constraintEnd_toStartOf="@+id/FoodSharing_Switch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/FoodExpiry1"
+            android:visibility="gone"/>
+
         <include android:id="@+id/include2" layout="@layout/toolbar" />
 
         <TextView
@@ -58,7 +94,7 @@
             android:id="@+id/notification_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="66dp"
             android:text="@string/off"
             app:layout_constraintStart_toEndOf="@+id/notifications_switch"
@@ -68,8 +104,8 @@
             android:id="@+id/FoodExpiry1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginStart="98dp"
+            android:layout_marginTop="60dp"
             android:text="Food Expiry Dates"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/notification_1"
@@ -80,7 +116,7 @@
             android:layout_width="48dp"
             android:layout_height="30dp"
             android:layout_marginStart="14dp"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="12dp"
             app:layout_constraintEnd_toStartOf="@+id/FoodExpiry2"
             app:layout_constraintStart_toEndOf="@+id/FoodExpiry1"
@@ -91,11 +127,43 @@
             android:id="@+id/FoodExpiry2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="60dp"
             android:text="OFF"
             app:layout_constraintStart_toEndOf="@+id/FoodExpiry_switch"
             app:layout_constraintTop_toBottomOf="@+id/notification_1"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/ThirdOption_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="121dp"
+            android:layout_marginTop="40dp"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/FoodSharing_1"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/FoodSharing_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/off"
+            app:layout_constraintStart_toEndOf="@+id/FoodSharing_Switch"
+            app:layout_constraintTop_toBottomOf="@+id/FoodExpiry2"
+            android:visibility="gone"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/ThirdOptionSwitch"
+            android:layout_width="48dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="46dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintStart_toEndOf="@+id/ThirdOption_1"
+            app:layout_constraintTop_toBottomOf="@+id/FoodSharing_Switch"
             android:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

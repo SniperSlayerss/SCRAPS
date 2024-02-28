@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/menu_green"
+    android:background="?attr/colorPrimary"
     android:elevation="4dp"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
@@ -22,20 +23,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:fontFamily="@font/arvobold"
+
             android:layout_toEndOf="@id/left_icon"
-            android:text="SCRAPS"
+            android:layout_centerVertical="true"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:text="SCRAPS" />
 
         <ImageView
             android:id="@+id/right_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
             android:src="@drawable/baseline_align_horizontal_right_24" />
     </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>
