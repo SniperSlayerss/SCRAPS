@@ -93,6 +93,19 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
         foodSharing.setChecked(preferences.getBoolean("foodSharingSwitch", false));
         thirdOption.setChecked(preferences.getBoolean("thirdOptionSwitch", false));
 
+        if (notifsToggle.isChecked()) {
+            notification2.setText("ON");
+        }
+        if (foodExpiry_Switch.isChecked()) {
+            foodExpiry2.setText("ON");
+        }
+        if (foodSharing.isChecked()) {
+            foodSharing_2.setText("ON");
+        }
+        if (thirdOption.isChecked()) {
+            thirdOption_2.setText("ON");
+        }
+
 
 
         notifsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -106,10 +119,49 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
                     notification2.setText("OFF");
                     hideOptions(true);
                 }
-                SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("notificationsSwitch", isChecked);
-                editor.apply();
+
+            }
+        });
+
+        foodSharing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    foodSharing_2.setText("ON");
+
+                }
+                else {
+                    foodSharing_2.setText("OFF");
+
+                }
+            }
+        });
+
+        foodExpiry_Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    foodExpiry2.setText("ON");
+
+                }
+                else {
+                    foodExpiry2.setText("OFF");
+
+                }
+            }
+        });
+
+        thirdOption.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    thirdOption_2.setText("ON");
+
+                }
+                else {
+                    thirdOption_2.setText("OFF");
+
+                }
             }
         });
 
