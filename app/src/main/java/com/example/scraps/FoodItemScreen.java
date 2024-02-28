@@ -100,6 +100,11 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         }
         UseBy.setText(String.format("Use By: %s", UseByDate));
 
+        Button shareButton = findViewById((R.id.share));
+        shareButton.setOnClickListener(view -> {
+
+        });
+
         Button removeButton = findViewById(R.id.remove);
         removeButton.setOnClickListener(view -> {
             //Alert dialog to confirm the user wants to remove
