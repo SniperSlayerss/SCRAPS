@@ -4,7 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_green"
+
     tools:context=".RegistrationActivity">
+
+    <CheckBox
+        android:id="@+id/checkbox_create_or_join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create new household"
+        android:textColor="@color/button_green"
+        android:buttonTint="@color/button_green"
+        android:fontFamily="@font/arvoregular"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.569" />
 
     <EditText
         android:id="@+id/password_input"
@@ -12,47 +29,83 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/hint_green"
+        android:backgroundTint="@color/button_green"
+        android:fontFamily="@font/arvoregular"
+        android:hint="Password"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.395" />
+
+    <EditText
+        android:id="@+id/householdIdInput"
+        android:layout_width="241dp"
+        android:layout_height="73dp"
+        android:ems="10"
+        android:hint="Enter email of household"
+        android:fontFamily="@font/arvoregular"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/hint_green"
+        android:backgroundTint="@color/button_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.452" />
+        app:layout_constraintVertical_bias="0.48" />
 
     <EditText
         android:id="@+id/email_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Email"
         android:inputType="text"
-        android:text="Email"
+        android:fontFamily="@font/arvoregular"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/hint_green"
+        android:backgroundTint="@color/button_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.395" />
+        app:layout_constraintVertical_bias="0.326" />
 
     <EditText
         android:id="@+id/username_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Username"
         android:inputType="text"
-        android:text="Username"
+        android:fontFamily="@font/arvoregular"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/hint_green"
+        android:backgroundTint="@color/button_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.338" />
+        app:layout_constraintVertical_bias="0.26" />
 
     <Button
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="52dp"
+        android:backgroundTint="@color/button_green"
+        android:textColor="@color/text_green"
+        android:fontFamily="@font/arvobold"
         android:onClick="openLoginActivityScreen"
         android:text="Login"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
@@ -60,6 +113,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="108dp"
         android:text="Back to login"
+        android:fontFamily="@font/arvoregular"
+        android:textColor="@color/button_green"
+        android:textColorHint="@color/button_green"
+        android:backgroundTint="@color/button_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -71,11 +128,13 @@
         android:layout_height="wrap_content"
         android:onClick="openLoginActivityScreen"
         android:text="Register"
+        android:fontFamily="@font/arvobold"
+        android:textColor="@color/text_green"
+        android:backgroundTint="@color/button_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.531" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_create_or_join"
+        app:layout_constraintVertical_bias="0.029" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

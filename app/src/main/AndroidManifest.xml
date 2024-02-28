@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -28,7 +29,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>/>
+        </activity>
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
@@ -44,6 +45,23 @@
         <activity
             android:name=".FoodItemScreen"
             android:exported="false" />
+        <activity
+            android:name=".Notifications"
+            android:exported="false"/>
+        <activity
+            android:name=".Household"
+            android:exported="false"/>
+        <activity
+            android:name=".Privacy"
+            android:exported="false"/>
+
+
+        <service android:name=".FirebaseMessaging"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

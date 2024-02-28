@@ -8,20 +8,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FoodItem implements Serializable {
-    private String foodName, expiryDate, type, purchaseDate, username;
+    private String foodName, expiryDate, type, purchaseDate;
     private double price;
     private boolean isShareable;
 
     public FoodItem() {}
 
-    public FoodItem(String foodName, String expiryDate, String purchaseDate, double price, String type, boolean isShareable, String username) {
+    public FoodItem(String foodName, String expiryDate, String purchaseDate, double price, String type, boolean isShareable) {
         this.foodName = foodName;
         this.expiryDate = expiryDate;
         this.price = price;
         this.type = type;
         this.isShareable = false;
         this.purchaseDate = purchaseDate;
-        this.username = username;
     }
 
     public Map<String, Object> toMap() {
@@ -32,13 +31,12 @@ public class FoodItem implements Serializable {
         result.put("type", type);
         result.put("isShareable", isShareable);
         result.put("purchaseDate", purchaseDate);
-        result.put("username", username);
         return result;
     }
 
     public void removeFoodItem() {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference foodItemsRef = database.child("users").child(this.username)
+        DatabaseReference foodItemsRef = database.child("Users")
                 .child("foodItems")
                 .child(foodName);
         foodItemsRef.removeValue(new DatabaseReference.CompletionListener() {
@@ -101,8 +99,5 @@ public class FoodItem implements Serializable {
         this.purchaseDate = purchaseDate;
     }
 
-    public String getUsername() {
-        return username;
-    }
 }
 

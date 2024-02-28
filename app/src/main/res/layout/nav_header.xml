@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="176dp"
+    android:background="@color/purple_200"
     android:gravity="bottom"
     android:padding="16dp"
-    android:background="@drawable/headerbkg"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:backgroundTint="@color/menu_green"
+    android:theme="@style/ThemeOverlay.AppCompat.Light"
+    android:layout_height="176dp">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/baseline_recycling_24"/>
-
+        android:src="@drawable/baseline_recycling_24" />
+    
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:fontFamily="@font/arvoregular"
         android:text="SCRAPS"
-        android:textColor="@color/black"
-        android:textStyle="bold"/>
+        android:textColor="@color/text_green"
+        android:textSize="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="whatever SCRAPS stands for"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:layout_marginBottom="16dp"/>
+        android:fontFamily="@font/arvoregular"
+        android:text="Sustainable Consumption and Resourceful Approach to Provision Surplus"
+        android:textSize="10dp"
+        android:textColor="@color/text_green" />
+
 
 </LinearLayout>

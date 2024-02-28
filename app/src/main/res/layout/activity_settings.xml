@@ -4,66 +4,97 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
+    android:background="@color/main_green"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start"
-    tools:context=".SettingsActivity">
+    tools:context=".HomeActivity"
+    >
 
-    <!-- ConstraintLayout (Main Content) -->
+
+    <!-- Main content view -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Include Toolbar -->
-        <include layout="@layout/toolbar"/>
 
-        <!-- Your Buttons -->
-        <Button
-            android:id="@+id/notificationsButton"
+        <!-- Include your toolbar layout -->
+        <include
+            android:id="@+id/include4"
+            layout="@layout/toolbar" />
+
+
+        <TextView
+            android:id="@+id/SettingsPageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="216dp"
-            android:text="Notifications"
-            android:onClick="openNotificationsActivity"
+            android:layout_marginTop="24dp"
+
+            android:text="App Settings"
+            android:textSize="24dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/include4" />
+        <!-- Button for Notifications -->
+        <Button
+            android:id="@+id/notificationsButton"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/button_green"
+            android:onClick="openNotificationsActivity"
+            android:text="Notifications"
+            android:textColor="@color/text_green"
+            android:textSize="24dp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SettingsPageTitle" />
 
         <Button
             android:id="@+id/houseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="144dp"
-            android:layout_marginTop="296dp"
-            android:text="Household"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/button_green"
             android:onClick="openHouseholdActivity"
+            android:text="Household"
+            android:textSize="24dp"
+            android:textColor="@color/text_green"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/notificationsButton" />
 
         <Button
             android:id="@+id/privacyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="152dp"
-            android:layout_marginTop="380dp"
-            android:text="Privacy"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/button_green"
             android:onClick="openPrivacyActivity"
+            android:text="Privacy"
+            android:textSize="24dp"
+            android:textColor="@color/text_green"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/houseButton" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- NavigationView (Drawer) -->
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
+        android:id="@+id/nav_view"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"/>
-
+        app:menu="@menu/drawer_menu"/>
 </androidx.drawerlayout.widget.DrawerLayout>
