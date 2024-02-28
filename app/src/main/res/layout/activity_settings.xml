@@ -19,61 +19,73 @@
 
 
         <!-- Include your toolbar layout -->
-        <include layout="@layout/toolbar" />
+        <include
+            android:id="@+id/include4"
+            layout="@layout/toolbar" />
 
 
         <TextView
             android:id="@+id/SettingsPageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="135dp"
-            android:text="App Settings"
+            android:layout_marginTop="24dp"
 
-            android:textSize="30dp"
+            android:text="App Settings"
+            android:textSize="24dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/include4" />
         <!-- Button for Notifications -->
         <Button
             android:id="@+id/notificationsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="216dp"
-            android:text="Notifications"
-            android:textColor="@color/text_green"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
             android:backgroundTint="@color/button_green"
             android:onClick="openNotificationsActivity"
+            android:text="Notifications"
+            android:textColor="@color/text_green"
+            android:textSize="24dp"
+            android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/SettingsPageTitle" />
 
         <Button
             android:id="@+id/houseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="144dp"
-            android:layout_marginTop="296dp"
-            android:textColor="@color/text_green"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:backgroundTint="@color/button_green"
-            android:text="Household"
             android:onClick="openHouseholdActivity"
+            android:text="Household"
+            android:textSize="24dp"
+            android:textColor="@color/text_green"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/notificationsButton" />
 
         <Button
             android:id="@+id/privacyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="152dp"
-            android:layout_marginTop="380dp"
-            android:text="Privacy"
-            android:textColor="@color/text_green"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:backgroundTint="@color/button_green"
             android:onClick="openPrivacyActivity"
+            android:text="Privacy"
+            android:textSize="24dp"
+            android:textColor="@color/text_green"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/houseButton" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
