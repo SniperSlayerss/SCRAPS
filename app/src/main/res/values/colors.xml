@@ -9,6 +9,7 @@
     <color name="button_green">#3A5A40</color>
     <color name="menu_green">#588157</color>
     <color name="text_green">#DAD7CD</color>
+    <color name="hint_green">#537852</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
