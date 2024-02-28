@@ -104,7 +104,7 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
                 String firebaseId = mAuth.getUid();
 
                 // Create FoodItem object
-                FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, price, type, false);
+                FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, firebaseId, username, price, type, false);
 
                 // Add food to user
                 // Create an instance of Users
