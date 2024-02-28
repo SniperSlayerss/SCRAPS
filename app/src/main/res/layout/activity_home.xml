@@ -17,11 +17,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    
+
         <!-- Include your toolbar layout -->
-        <include layout="@layout/toolbar" />
+        <include
+            android:id="@+id/include5"
+            layout="@layout/toolbar" />
 
         <!-- Your existing views (TextView, Buttons, etc.) here -->
+
+        <TextView
+            android:id="@+id/expiryReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include5" />
 
         <TextView
             android:id="@+id/title"
@@ -41,34 +53,36 @@
             android:id="@+id/newButtonId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="204dp"
             android:backgroundTint="@color/button_green"
-            android:textColor="@color/text_green"
             android:fontFamily="@font/arvobold"
             android:onClick="openSettingsActivity"
             android:text="@string/settings"
+            android:textColor="@color/text_green"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/expiryReminder" />
 
         <Button
             android:id="@+id/foodItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="112dp"
-            android:layout_marginTop="104dp"
-            android:fontFamily="@font/arvobold"
             android:backgroundTint="@color/button_green"
-            android:textColor="@color/text_green"
+            android:fontFamily="@font/arvobold"
             android:onClick="openFoodItemDatabase"
             android:text="@string/food_item_screen_test"
+            android:textColor="@color/text_green"
+            app:layout_constraintBottom_toTopOf="@+id/newButtonId"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/expiryReminder" />
 
         <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/fragment_container">
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="-46dp">
 
             <Button
                 android:id="@+id/foodAdd"
