@@ -72,6 +72,10 @@ public class Users {
             throw new NullPointerException("Couldn't generate a key for the food item.");
         }
 
+        // Add userID to the foodItem
+        foodItem.setUserID(firebaseID);
+        foodItem.setFoodID(key);
+        foodItem.setUsername(username);
         Map<String, Object> foodItemValues = foodItem.toMap();
 
         databaseReference.child("Users").child(firebaseID).child("foodItems").child(key).setValue(foodItemValues)
@@ -84,6 +88,7 @@ public class Users {
                     System.out.println("Failed to add food item: " + e.getMessage());
                 });
     }
+
 
 
     public void removeFoodItemFromDatabase(String foodItemId) {

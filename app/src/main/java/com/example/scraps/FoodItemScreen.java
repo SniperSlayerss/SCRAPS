@@ -17,14 +17,16 @@ import android.widget.TextView;
 
 import com.example.scraps.DBModels.FoodItem;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class FoodItemScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
-    NavigationView navigationView;
+    private FoodItem foodItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_item_screen);
 
@@ -35,7 +37,7 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
         }
@@ -56,7 +58,7 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         });
 
         Intent intent = getIntent();
-        FoodItem foodItem = (FoodItem) intent.getSerializableExtra("FoodItem");
+        foodItem = (FoodItem) intent.getSerializableExtra("FoodItem");
 
         // Update UI elements with food item details
         TextView itemNameTextView = findViewById(R.id.item);
@@ -68,12 +70,8 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
             itemNameTextView.setText(String.format("Item: %s", foodItem.getFoodName()));
             purchaseDateTextView.setText(String.format("Purchased: %s", foodItem.getPurchaseDate()));
             useByDateTextView.setText(String.format("Use By: %s", foodItem.getExpiryDate()));
+            userNameTextView.setText(String.format("Name: %s", foodItem.getUsername()));
         }
-
-        Button shareButton = findViewById((R.id.share));
-        shareButton.setOnClickListener(view -> {
-
-        });
 
         Button removeButton = findViewById(R.id.remove);
         removeButton.setOnClickListener(new View.OnClickListener() {
@@ -85,12 +83,7 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
                         .setMessage("Are you sure you want to remove this item?")
                         .setPositiveButton("Yes", (dialogInterface, i) -> {
                             // Perform removal action here
-                            if (foodItem != null) {
-                                foodItem.removeFoodItem();
-                            }
-                            // Return to the food database screen after removal
-                            Intent intent = new Intent(FoodItemScreen.this, FoodDatabaseScreenActivity.class);
-                            startActivity(intent);
+                            removeFoodItem();
                         })
                         .setNegativeButton("No", (dialogInterface, i) -> {
                             // Do nothing if "No" is clicked
@@ -101,6 +94,29 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         });
     }
 
+    public void removeFoodItem() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference foodItemsRef = database.child("Users")
+                .child(foodItem.getUserID()) // Assuming userID is a property of the FoodItem class
+                .child("foodItems")
+                .child(foodItem.getFoodID()); // Assuming foodName is a property of the FoodItem class
+
+        foodItemsRef.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    // Food item removed successfully
+                    System.out.println("Food item successfully removed from database.");
+                    // Return to the food database screen after removal
+                    Intent intent = new Intent(FoodItemScreen.this, FoodDatabaseScreenActivity.class);
+                    startActivity(intent);
+                } else {
+                    // An error occurred while removing the food item
+                    System.out.println("Failed to remove food item from database: " + databaseError.getMessage());
+                }
+            }
+        });
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -109,12 +125,10 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         if (itemID == R.id.menu_food_item) {
             Intent intent = new Intent(this, FoodDatabaseScreenActivity.class);
             startActivity(intent);
-        }
-        else if (itemID == R.id.menu_home) {
+        } else if (itemID == R.id.menu_home) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
-        }
-        else if (itemID == R.id.menu_settings) {
+        } else if (itemID == R.id.menu_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }
