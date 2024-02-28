@@ -81,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         if (itemID == R.id.menu_settings) {
             //since we are already on home page, do nothing and let window close
         } else if (itemID == R.id.menu_food_item) {
-            Intent intent = new Intent(this, FoodItemScreen.class); //v.context() lets you access current class
+            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class); //v.context() lets you access current class
             startActivity(intent);
         } else if (itemID == R.id.menu_home) {
             Intent intent = new Intent(this, HomeActivity.class); //v.context() lets you access current class

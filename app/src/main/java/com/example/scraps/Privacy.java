@@ -65,7 +65,7 @@ public class Privacy extends AppCompatActivity implements NavigationView.OnNavig
         if (itemID == R.id.menu_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
         } else if (itemID == R.id.menu_food_item) {
-            Intent intent = new Intent(this, FoodItemScreen.class); //v.context() lets you access current class
+            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class); //v.context() lets you access current class
             startActivity(intent);
         } else if (itemID == R.id.menu_home) {
             Intent intent = new Intent(this, HomeActivity.class); //v.context() lets you access current class
