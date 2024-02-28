@@ -37,7 +37,6 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity implements Nav
 
     List<FoodItem> foodItems = new ArrayList<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

@@ -83,6 +83,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
+    public void openAddFoodItem(View view) {
+        Intent intent = new Intent(this, FoodInputActivity.class);
+        startActivity(intent);
+    }
+
 
     // EXAMPLE METHODS TO INTERACT WITH FIREBASE REALTIME DATABASE
     private void readFromDatabase(){
