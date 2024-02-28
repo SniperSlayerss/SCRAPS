@@ -42,6 +42,15 @@
         <activity
             android:name=".FoodItemScreen"
             android:exported="false" />
+        <activity
+            android:name=".Notifications"
+            android:exported="false" />
+        <activity
+            android:name=".Privacy"
+            android:exported="false" />
+        <activity
+            android:name=".Household"
+            android:exported="false" />
     </application>
 
 </manifest>
