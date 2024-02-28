@@ -40,7 +40,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/arvoregular"
-            android:text="User: "
+            android:text="User: NAME"
             android:textColor="@color/button_green"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
