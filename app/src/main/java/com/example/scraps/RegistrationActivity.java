@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,6 +19,12 @@ public class RegistrationActivity extends AppCompatActivity {
     private CheckBox checkBoxCreateOrJoin;
     private EditText emailInput, passwordInput, usernameInput, householdIdInput;
     private FirebaseAuth mAuth;
+
+    public interface HouseholdOperationCallback {
+        void onHouseholdSuccess(String message);
+
+        void onHouseholdFailure(String errorMessage);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +59,83 @@ public class RegistrationActivity extends AppCompatActivity {
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
         String username = usernameInput.getText().toString().trim();
+        boolean isCreate = checkBoxCreateOrJoin.isChecked();
+
 
         if (!email.isEmpty() && !password.isEmpty() && !username.isEmpty()) {
             Registration registration = new Registration();
-            registration.registerUser(email, password, username, new Registration.DatabaseOperationCallback() {
+            if (isCreate) {
+                // Directly register the user and let them create a new household afterward
+                registration.registerUser(email, password, username, "",  new Registration.DatabaseOperationCallback() {
+                    @Override
+                    public void onSuccess(String message) {
+                        Toast.makeText(RegistrationActivity.this, "Registration successful.", Toast.LENGTH_SHORT).show();
+                        registration.createHousehold(mAuth.getCurrentUser().getUid(), email, new Registration.DatabaseOperationCallback() {
+                            @Override
+                            public void onSuccess(String householdMessage) {
+                                // Household creation successful
+                                Toast.makeText(RegistrationActivity.this, "Registration and household creation successful: " + householdMessage, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(String householdErrorMessage) {
+                                // Household creation failed
+                                Toast.makeText(RegistrationActivity.this, "Household creation failed: " + householdErrorMessage, Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        Toast.makeText(RegistrationActivity.this, "Registration failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                // Check if a household exists before proceeding with registration
+                registration.checkHouseholdExists(email, new Registration.DatabaseOperationCallback() {
+                    @Override
+                    public void onSuccess(String householdId) {
+                        // Household found, proceed with registration
+                        registration.registerUser(email, password, username, householdId, new Registration.DatabaseOperationCallback() {
+                            @Override
+                            public void onSuccess(String message) {
+                                // Associate the user with the householdId in your database
+                                Toast.makeText(RegistrationActivity.this, "Registration successful with household association.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                Toast.makeText(RegistrationActivity.this, "Registration failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        // No household associated, abort registration
+                        Toast.makeText(RegistrationActivity.this, "No existing household associated with this email. Cannot proceed with registration.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        } else {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+        private void handleHouseholdOperation (HouseholdOperationCallback householdOperationCallback)
+        {
+            String householdId = householdIdInput.getText().toString().trim();
+            boolean shouldCreateHousehold = checkBoxCreateOrJoin.isChecked();
+
+            Registration registration = new Registration();
+            registration.createOrJoinHousehold(householdId, shouldCreateHousehold, new Registration.DatabaseOperationCallback() {
                 @Override
                 public void onSuccess(String message) {
-                    Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                    // Now handle the household operation
-                    handleHouseholdOperation();
+                    Toast.makeText(RegistrationActivity.this, message, Toast.LENGTH_SHORT).show();
+                    // Redirect to another activity or update UI as needed
                 }
 
                 @Override
@@ -70,32 +143,10 @@ public class RegistrationActivity extends AppCompatActivity {
                     Toast.makeText(RegistrationActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
-        } else {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        }
+
+        public void openLoginScreenActivity () {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
     }
-
-    private void handleHouseholdOperation() {
-        String householdId = householdIdInput.getText().toString().trim();
-        boolean shouldCreateHousehold = checkBoxCreateOrJoin.isChecked();
-
-        Registration registration = new Registration();
-        registration.createOrJoinHousehold(householdId, shouldCreateHousehold, new Registration.DatabaseOperationCallback() {
-            @Override
-            public void onSuccess(String message) {
-                Toast.makeText(RegistrationActivity.this, message, Toast.LENGTH_SHORT).show();
-                // Redirect to another activity or update UI as needed
-            }
-
-            @Override
-            public void onFailure(String errorMessage) {
-                Toast.makeText(RegistrationActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void openLoginScreenActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-}

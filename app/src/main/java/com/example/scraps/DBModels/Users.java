@@ -29,7 +29,7 @@ public class Users {
 
     public void fetchUserData(String firebaseId, final UserDataCallback callback) {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
-                .child("users").child(firebaseId);
+                .child("Users").child(firebaseId);
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -66,18 +66,29 @@ public class Users {
 
     public void addFoodItemToUser(FoodItem foodItem) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        String key = databaseReference.child("households").child(houseID).child("users").child(this.firebaseID).child("foodItems").push().getKey();
+        String key = databaseReference.child("Users").child(firebaseID).child("foodItems").push().getKey();
+
+        if (key == null) {
+            throw new NullPointerException("Couldn't generate a key for the food item.");
+        }
+
         Map<String, Object> foodItemValues = foodItem.toMap();
 
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/households/" + houseID + "/users/" + this.firebaseID + "/foodItems/" + key, foodItemValues);
-
-        databaseReference.updateChildren(childUpdates);
+        databaseReference.child("Users").child(firebaseID).child("foodItems").child(key).setValue(foodItemValues)
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully added food item to user's list
+                    System.out.println("Food item added successfully.");
+                })
+                .addOnFailureListener(e -> {
+                    // Failed to add food item to user's list
+                    System.out.println("Failed to add food item: " + e.getMessage());
+                });
     }
+
 
     public void removeFoodItemFromDatabase(String foodItemId) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference foodItemsRef = database.child("users").child(this.username)
+        DatabaseReference foodItemsRef = database.child("Users").child(this.firebaseID)
                 .child("foodItems")
                 .child(foodItemId);
         foodItemsRef.removeValue(new DatabaseReference.CompletionListener() {
@@ -152,5 +163,13 @@ public class Users {
     }
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFirebaseID() {
+        return firebaseID;
+    }
+
+    public void setFirebaseID(String firebaseID) {
+        this.firebaseID = firebaseID;
     }
 }

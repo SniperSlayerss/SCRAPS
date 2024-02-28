@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Registration {
 
@@ -28,7 +29,7 @@ public class Registration {
         void onFailure(String errorMessage);
     }
 
-    public void registerUser(String userEmail, String userPassword, String userName, final DatabaseOperationCallback callback) {
+    public void registerUser(String userEmail, String userPassword, String userName, String houseID, final DatabaseOperationCallback callback) {
         mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -36,7 +37,7 @@ public class Registration {
                         if (firebaseUser != null) {
                             String firebaseAuthId = firebaseUser.getUid();
                             // After successful registration, store user details
-                            storeUserDetails(firebaseAuthId, userName, userEmail, callback);
+                            storeUserDetails(firebaseAuthId, userName, userEmail, houseID, callback);
                         }
                     } else {
                         callback.onFailure("Authentication failed: " + task.getException().getMessage());
@@ -44,14 +45,21 @@ public class Registration {
                 });
     }
 
-    private void storeUserDetails(String firebaseAuthId, String userName, String userEmail, final DatabaseOperationCallback callback) {
+    private void storeUserDetails(String firebaseAuthId, String userName, String userEmail, String houseID, final DatabaseOperationCallback callback) {
         DatabaseReference userRef = database.getReference("Users").child(firebaseAuthId);
         Map<String, Object> userDetails = new HashMap<>();
         userDetails.put("username", userName);
         userDetails.put("email", userEmail);
         userDetails.put("firebaseID", firebaseAuthId);
-        // Initially, users might not belong to any household
-        userDetails.put("houseID", "");
+        if (Objects.equals(houseID, ""))
+        {
+            userDetails.put("houseID", firebaseAuthId);
+        }
+        else
+        {
+            userDetails.put("houseID", houseID);
+        }
+
 
         userRef.setValue(userDetails)
                 .addOnSuccessListener(aVoid -> callback.onSuccess("User details stored successfully."))
@@ -113,6 +121,31 @@ public class Registration {
             }
         });
     }
+
+    public void checkHouseholdExists(String email, final DatabaseOperationCallback callback) {
+        DatabaseReference householdsRef = database.getReference("households");
+        Query query = householdsRef.orderByChild("email").equalTo(email);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String householdId = snapshot.getKey();
+                        return;
+                    }
+                } else {
+                    callback.onFailure("No household found with the provided email.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailure("Failed to find household: " + databaseError.getMessage());
+            }
+        });
+    }
+
+
     private void joinHousehold(String houseID, String firebaseAuthId, final DatabaseOperationCallback callback) {
         DatabaseReference userRef = database.getReference("households").child(houseID).child("userIDs").child(firebaseAuthId);
         userRef.setValue(true)
