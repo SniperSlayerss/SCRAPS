@@ -110,7 +110,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@drawable/scrapslogotransparent" />
 
         <TextView
             android:id="@+id/purchased"
@@ -155,7 +155,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            tools:srcCompat="@drawable/banana-1368111328MGo-639023483.jpg" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
