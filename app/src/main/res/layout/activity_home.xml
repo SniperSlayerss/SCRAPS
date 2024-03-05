@@ -25,20 +25,11 @@
 
         <!-- Your existing views (TextView, Buttons, etc.) here -->
 
-        <TextView
-            android:id="@+id/expiryReminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include5" />
-
         <Button
             android:id="@+id/newButtonId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="85dp"
             android:backgroundTint="@color/button_green"
             android:fontFamily="@font/arvobold"
             android:onClick="openSettingsActivity"
@@ -46,8 +37,10 @@
             android:textColor="@color/text_green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.811"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/expiryReminder" />
+            app:layout_constraintTop_toBottomOf="@+id/foodItem"
+            app:layout_constraintVertical_bias="0.483" />
 
         <Button
             android:id="@+id/foodItem"
@@ -58,33 +51,59 @@
             android:onClick="openFoodItemDatabase"
             android:text="@string/food_item_screen_test"
             android:textColor="@color/text_green"
-            app:layout_constraintBottom_toTopOf="@+id/newButtonId"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/expiry"
+            app:layout_constraintVertical_bias="0.159" />
+
+        <Button
+            android:id="@+id/foodAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="85dp"
+            android:backgroundTint="@color/button_green"
+            android:fontFamily="@font/arvobold"
+            android:onClick="openAddFoodItem"
+            android:text="add food item"
+            android:textColor="@color/text_green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/newButtonId"
+            app:layout_constraintHorizontal_bias="0.017"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/foodItem"
+            app:layout_constraintVertical_bias="0.483" />
+
+        <TextView
+            android:id="@+id/expiryReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_marginHorizontal="5mm"
+            android:text="TextView"
+            android:textSize="20dp"
+            android:fontFamily="@font/arvobold"
+            android:textColor="@color/button_green"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/expiry"
+            android:layout_width="129dp"
+            android:layout_height="247dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/expiryReminder" />
+            app:layout_constraintTop_toBottomOf="@+id/expiryReminder"
+            app:layout_constraintVertical_bias="0.047">
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="-46dp">
+        </androidx.recyclerview.widget.RecyclerView>
 
-            <Button
-                android:id="@+id/foodAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="112dp"
-                android:layout_marginLeft="112dp"
-                android:layout_marginTop="300dp"
-                android:backgroundTint="@color/button_green"
-                android:fontFamily="@font/arvobold"
-                android:onClick="openAddFoodItem"
-                android:text="add food item"
-                android:textColor="@color/text_green"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Navigation drawer view -->

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,11 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
-
-import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.scraps.DBModels.FoodItem;
+import com.example.scraps.DBModels.FoodItemAdapter;
 import com.example.scraps.DBModels.Users;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,31 +32,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private LinearLayout navigationMenuLayout;
     NavigationView navigationView;
-
+    private RecyclerView expiry;
+    private FoodItemAdapter adapter;
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        mAuth = FirebaseAuth.getInstance();
-        UpdateExpiryTextView();
 
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
@@ -67,6 +62,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.menu_home);
+
+        expiry = findViewById(R.id.expiry);
+        expiry.setLayoutManager(new LinearLayoutManager(this));
+        expiry.setHasFixedSize(true);
+
+        mAuth = FirebaseAuth.getInstance();
+        UpdateExpiryList();
 
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,26 +202,35 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
      * Written weirdly for testing purposes, ideally the current user should be accessible from the activity but for now I'm using a test user defined in scope.
      * Currently picks a random FoodItem from the array until I decide how I want to sort the items.
      */
-    private void UpdateExpiryTextView(){
+    private void UpdateExpiryList(){
+        int numberOfDays = 2;
         TextView expiryReminder = findViewById(R.id.expiryReminder);
         Users currentUser = new Users();
+        Context context = this;
         currentUser.fetchUserData(mAuth.getUid(), new Users.UserDataCallback(){
             @Override
             public void onUserDataReceived(Users user) {
-                ArrayList<FoodItem> expiring = GetExpiringFoodItems(user, 2); // Number of days can be changed, potentially as a setting
+                ArrayList<FoodItem> expiring = GetExpiringFoodItems(user, numberOfDays); // Number of days can be changed, potentially as a setting
                 if (expiring.isEmpty()){
                     expiryReminder.setText("Nothing expiring soon");
                 }
                 else{
                     Random rnd = new Random();
                     StringBuilder sb = new StringBuilder();
-                    sb.append("Your '");
-                    sb.append(expiring.get(rnd.nextInt(expiring.size())).getFoodName()); // Uses a random food item instead of the first one. This is to show the user something different every time to encourage them to cook new things
-                    sb.append("' item is expiring on ");
-                    Date date = new Date();
-                    DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH);
-                    sb.append(dateFormatter.format(date));
+                    sb.append("Your food items expiring in ");
+                    sb.append(numberOfDays);
+                    sb.append(" days:");
                     expiryReminder.setText(sb.toString());
+
+                    adapter = new FoodItemAdapter(context, expiring, new FoodItemAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(FoodItem foodItem) {
+                            Intent detailIntent = new Intent(HomeActivity.this, FoodItemScreen.class);
+                            detailIntent.putExtra("FoodItem", foodItem); // foodItem must be Serializable
+                            startActivity(detailIntent);
+                        }
+                    });
+                    expiry.setAdapter(adapter);
                 }
             }
 
