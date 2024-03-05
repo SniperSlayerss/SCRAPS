@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -13,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SCRAPS.NoActionBar"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        >
         <activity
             android:name=".FoodInputActivity"
             android:exported="false" />
@@ -56,12 +59,23 @@
             android:exported="false"/>
 
 
-        <service android:name=".FirebaseMessaging"
+        <service android:name=".PushNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_scrapslogotransparent" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/text_green" />
     </application>
 
 </manifest>

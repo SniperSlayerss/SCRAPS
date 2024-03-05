@@ -1,7 +1,9 @@
 package com.example.scraps;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -29,11 +31,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class FoodInputActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
-
+    private MyEditTextDatePicker expiryDatePicker, purchaseDatePicker;
     private EditText foodNameEditText, expiryDateEditText, purchaseDateEditText, priceEditText, typeEditText;
     private Button submitButton;
     private FirebaseAuth mAuth;
@@ -73,21 +76,12 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         });
 
         foodNameEditText = findViewById(R.id.food_name_editText);
-        expiryDateEditText = findViewById(R.id.expiry_date_editText);
-        purchaseDateEditText = findViewById(R.id.purchase_date_editText);
+        expiryDatePicker = new MyEditTextDatePicker(this, R.id.expiry_date_editText);
+        purchaseDatePicker = new MyEditTextDatePicker(this, R.id.purchase_date_editText);
         priceEditText = findViewById(R.id.price_editText);
-        typeEditText = findViewById(R.id.type_editText);
         submitButton = findViewById(R.id.submit_button);
 
         mAuth = FirebaseAuth.getInstance();
-
-        findViewById(R.id.pickDate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getSupportFragmentManager(), "datePicker");
-            }
-        });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,16 +89,15 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
                 // Get input values
                 String foodName = foodNameEditText.getText().toString().trim();
-                String expiryDate = expiryDateEditText.getText().toString().trim();
-                String purchaseDate = purchaseDateEditText.getText().toString().trim();
+                String expiryDate = expiryDatePicker._editText.getText().toString().trim();
+                String purchaseDate = purchaseDatePicker._editText.getText().toString().trim();
                 double price = Double.parseDouble(priceEditText.getText().toString().trim());
-                String type = typeEditText.getText().toString().trim();
                 String username = "";
 
                 String firebaseId = mAuth.getUid();
 
                 // Create FoodItem object
-                FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, firebaseId, username, price, type, false);
+                FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, firebaseId, username, price, false);
 
                 // Add food to user
                 // Create an instance of Users
@@ -129,8 +122,6 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
                 // Clear input fields
                 foodNameEditText.setText("");
-                expiryDateEditText.setText("");
-                purchaseDateEditText.setText("");
                 priceEditText.setText("");
                 typeEditText.setText("");
 
@@ -138,28 +129,45 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
             }
         });
     }
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
+    public static class MyEditTextDatePicker  implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
+        EditText _editText;
+        private int _day;
+        private int _month;
+        private int _birthYear;
+        private Context _context;
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default values for the picker.
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it.
-            return new DatePickerDialog(getActivity(), this, year, month, day);
+        public MyEditTextDatePicker(Context context, int editTextViewID)
+        {
+            Activity act = (Activity)context;
+            this._editText = (EditText)act.findViewById(editTextViewID);
+            this._editText.setOnClickListener(this);
+            this._context = context;
         }
 
-        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            // Handle the date set event
-            // Update the relevant EditText or perform any other actions
-            String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
-            // Update the EditText with the selected date
-            // For example: (assuming expiryDateEditText is the corresponding EditText)
-            // expiryDateEditText.setText(selectedDate);
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            _birthYear = year;
+            _month = monthOfYear;
+            _day = dayOfMonth;
+            updateDisplay();
+        }
+        @Override
+        public void onClick(View v) {
+            Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+
+            DatePickerDialog dialog = new DatePickerDialog(_context, this,
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH));
+            dialog.show();
+
+        }
+
+        // updates the date in the birth date EditText
+        private void updateDisplay() {
+
+            _editText.setText(new StringBuilder()
+                    // Month is 0 based so add 1
+                    .append(_day).append("-").append(_month + 1).append("-").append(_birthYear).append(" "));
         }
     }
 

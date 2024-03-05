@@ -24,16 +24,6 @@
 
         <!-- Food Name EditText -->
 
-        <Button
-            android:id="@+id/pickDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="128dp"
-            android:text="Pick date"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/type_editText" />
-
         <!-- Expiry Date EditText -->
 
         <!-- Purchase Date EditText -->
@@ -64,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/food_name_editText"
+            android:focusable="false"
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/button_green"
             android:fontFamily="@font/arvoregular"
@@ -79,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/expiry_date_editText"
+            android:focusable="false"
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/button_green"
             android:fontFamily="@font/arvoregular"
@@ -105,37 +97,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/purchase_date_editText" />
 
-        <EditText
-            android:id="@+id/type_editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/price_editText"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/button_green"
-            android:fontFamily="@font/arvoregular"
-            android:hint="Type"
-            android:textColor="@color/button_green"
-            android:textColorHint="@color/hint_green"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/price_editText" />
-
         <Button
             android:id="@+id/submit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/type_editText"
+            android:layout_below="@id/price_editText"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="154dp"
-            android:layout_marginTop="36dp"
             android:layout_marginEnd="155dp"
             android:backgroundTint="@color/button_green"
             android:fontFamily="@font/arvobold"
             android:text="Submit"
             android:textColor="@color/text_green"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/type_editText" />
+            app:layout_constraintTop_toBottomOf="@+id/price_editText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
