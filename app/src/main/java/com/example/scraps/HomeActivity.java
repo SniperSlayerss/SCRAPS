@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.scraps.DBModels.FoodItem;
 import com.example.scraps.DBModels.Users;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,11 +45,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayout navigationMenuLayout;
     NavigationView navigationView;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         UpdateExpiryTextView(); // TODO: NEEDS DATABASE IMPLEMENTATION (internal function currently utilises an instance of the Users class, so either put user data into one of those or rewrite with database queries
+
+        mAuth = FirebaseAuth.getInstance();
 
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
