@@ -42,7 +42,7 @@ public class PushNotificationService extends FirebaseMessagingService {
     }
 
     private void sendMessage(String title, String body) {
-        Intent intent = new Intent(this, FoodDatabaseScreenActivity.class); // Change MainActivity.class to the activity you want to open when the notification is clicked
+        Intent intent = new Intent(this, LoginActivity.class); // Change MainActivity.class to the activity you want to open when the notification is clicked
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
