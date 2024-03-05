@@ -27,7 +27,6 @@ public class Users {
         this.firebaseID = firebaseID;
     }
 
-
     public void fetchUserData(String firebaseId, final UserDataCallback callback) {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users").child(firebaseId);
