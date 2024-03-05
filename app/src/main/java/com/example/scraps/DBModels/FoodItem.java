@@ -9,17 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FoodItem implements Serializable {
-    private String foodName, expiryDate, type, purchaseDate, userID, foodID, username;
+    private String foodName, expiryDate, purchaseDate, userID, foodID, username;
     private double price;
     private boolean isShareable;
     private FirebaseAuth mAuth;
     public FoodItem() {}
 
-    public FoodItem(String foodName, String expiryDate, String purchaseDate, String userID, String username, double price, String type, boolean isShareable) {
+    public FoodItem(String foodName, String expiryDate, String purchaseDate, String userID, String username, double price, boolean isShareable) {
         this.foodName = foodName;
         this.expiryDate = expiryDate;
         this.price = price;
-        this.type = type;
         this.isShareable = false;
         this.purchaseDate = purchaseDate;
         this.userID = userID;
@@ -31,7 +30,6 @@ public class FoodItem implements Serializable {
         result.put("foodName", foodName);
         result.put("expiryDate", expiryDate);
         result.put("price", price);
-        result.put("type", type);
         result.put("isShareable", isShareable);
         result.put("purchaseDate", purchaseDate);
         result.put("foodID", foodID);
@@ -75,10 +73,6 @@ public class FoodItem implements Serializable {
         return price;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public void setFoodName(String foodName) {
         this.foodName = foodName;
     }
@@ -89,10 +83,6 @@ public class FoodItem implements Serializable {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public boolean isShareable() {
