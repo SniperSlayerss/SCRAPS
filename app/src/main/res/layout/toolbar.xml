@@ -14,10 +14,10 @@
 
         <ImageView
             android:id="@+id/left_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/baseline_recycling_24" />
+            android:src="@drawable/scrapslogotransparent" />
 
         <TextView
             android:id="@+id/title"
