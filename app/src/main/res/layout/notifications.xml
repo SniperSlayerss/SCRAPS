@@ -33,6 +33,7 @@
             android:layout_marginTop="35dp"
             android:layout_marginEnd="150dp"
             android:text="Notification Settings"
+            android:fontFamily="@font/arvobold"
             android:textSize="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,7 @@
             android:id="@+id/notifications_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="58dp"
             app:thumbTint="@color/button_green"
 
             app:trackTint="@color/menu_green"
@@ -58,6 +59,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="66dp"
             android:text="Notifications:"
+            android:fontFamily="@font/arvobold"
             android:textSize="23sp"
             app:layout_constraintEnd_toStartOf="@+id/notifications_switch"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,9 +70,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:layout_marginTop="67dp"
+            android:layout_marginTop="67.5dp"
             android:textSize="23sp"
             android:text="@string/off"
+            android:fontFamily="@font/arvobold"
             app:layout_constraintStart_toEndOf="@+id/notifications_switch"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -81,6 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="57dp"
+            android:fontFamily="@font/arvoregular"
             android:text="OFF"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/FoodExpiry_switch"
@@ -94,6 +98,7 @@
             android:layout_marginTop="56dp"
             android:text="Food Expiry Dates"
             android:visibility="gone"
+            android:fontFamily="@font/arvoregular"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/notification_1" />
 
@@ -102,12 +107,12 @@
             android:layout_width="48dp"
             android:layout_height="30dp"
             android:layout_marginStart="28dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="37dp"
             android:layout_marginEnd="12dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/FoodExpiry2"
             app:layout_constraintStart_toEndOf="@+id/FoodExpiry1"
             app:layout_constraintTop_toBottomOf="@+id/notifications_switch"
-            android:visibility="gone"
             app:thumbTint="@color/button_green"
             app:trackTint="@color/menu_green" />
 
@@ -118,6 +123,7 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="36dp"
             android:text="@string/off"
+            android:fontFamily="@font/arvoregular"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/FoodSharing_Switch"
             app:layout_constraintTop_toBottomOf="@+id/FoodExpiry2" />
@@ -130,9 +136,10 @@
             android:layout_marginTop="36dp"
             android:layout_marginEnd="24dp"
             android:text="Food Sharing "
+            android:visibility="gone"
+            android:fontFamily="@font/arvoregular"
             app:layout_constraintEnd_toStartOf="@+id/FoodSharing_Switch"
             app:layout_constraintHorizontal_bias="0.0"
-            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/FoodExpiry1" />
 
@@ -140,13 +147,13 @@
             android:id="@+id/FoodSharing_Switch"
             android:layout_width="48dp"
             android:layout_height="30dp"
-            android:layout_marginStart="204dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginStart="212dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
             app:layout_constraintEnd_toStartOf="@+id/FoodSharing_2"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/FoodExpiry_switch"
-            android:visibility="gone"
             app:thumbTint="@color/button_green"
             app:trackTint="@color/menu_green" />
 
@@ -158,6 +165,7 @@
             android:layout_marginTop="40dp"
             android:text="Third Notif Option"
             android:visibility="gone"
+            android:fontFamily="@font/arvoregular"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/FoodSharing_1" />
 
@@ -165,11 +173,11 @@
             android:id="@+id/ThirdOptionSwitch"
             android:layout_width="48dp"
             android:layout_height="30dp"
-            android:layout_marginStart="29dp"
+            android:layout_marginStart="21dp"
             android:layout_marginTop="27dp"
+            android:visibility="gone"
             app:thumbTint="@color/button_green"
             app:trackTint="@color/menu_green"
-            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/ThirdOption_1"
             app:layout_constraintTop_toBottomOf="@+id/FoodSharing_Switch" />
 
@@ -177,9 +185,10 @@
             android:id="@+id/ThirdOption_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="18dp"
             android:layout_marginTop="40dp"
             android:text="@string/off"
+            android:fontFamily="@font/arvoregular"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/ThirdOptionSwitch"
             app:layout_constraintTop_toBottomOf="@+id/FoodSharing_2" />
