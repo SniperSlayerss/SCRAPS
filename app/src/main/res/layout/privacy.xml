@@ -33,6 +33,8 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/arvobold"
+                android:textColor="@color/text_green"
                 android:text="@string/Terms"
                 android:textSize="20sp" />
 
@@ -54,6 +56,7 @@
             android:layout_marginBottom="16dp"
             android:onClick="goBackButton"
             android:backgroundTint="@color/button_green"
+            android:textColor="@color/text_green"
             android:text="Okay"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
