@@ -53,10 +53,9 @@
             android:textColor="@color/text_green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/expiry"
-            app:layout_constraintVertical_bias="0.159" />
+            app:layout_constraintVertical_bias="0.265" />
 
         <Button
             android:id="@+id/foodAdd"
@@ -80,17 +79,17 @@
             android:id="@+id/expiryReminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
             android:layout_marginHorizontal="5mm"
+            android:layout_marginTop="32dp"
             android:text="TextView"
-            android:textSize="20dp"
             android:fontFamily="@font/arvobold"
             android:textColor="@color/button_green"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/include5" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/expiry"
@@ -103,6 +102,24 @@
             app:layout_constraintVertical_bias="0.047">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/costText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/arvobold"
+            android:text="TextView"
+            android:textColor="@color/button_green"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/foodItem"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/expiry"
+            app:layout_constraintVertical_bias="0.225" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
