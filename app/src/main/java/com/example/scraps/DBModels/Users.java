@@ -27,9 +27,6 @@ public class Users {
         this.firebaseID = firebaseID;
     }
 
-    public void TESTMETHOD(FoodItem food){ // TEST METHOD TO POPULATE A USER WITH FOOD ITEMS, PLEASE IGNORE
-        foodItems.put(food.getFoodName(), food);
-    }
 
     public void fetchUserData(String firebaseId, final UserDataCallback callback) {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
