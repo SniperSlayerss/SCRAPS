@@ -32,10 +32,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -205,6 +207,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void UpdateExpiryList(){
         int numberOfDays = 2;
         TextView expiryReminder = findViewById(R.id.expiryReminder);
+        TextView costText = findViewById(R.id.costText);
         Users currentUser = new Users();
         Context context = this;
         currentUser.fetchUserData(mAuth.getUid(), new Users.UserDataCallback(){
@@ -213,6 +216,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 ArrayList<FoodItem> expiring = GetExpiringFoodItems(user, numberOfDays); // Number of days can be changed, potentially as a setting
                 if (expiring.isEmpty()){
                     expiryReminder.setText("Nothing expiring soon");
+                    costText.setText("");
                 }
                 else{
                     Random rnd = new Random();
@@ -221,6 +225,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     sb.append(numberOfDays);
                     sb.append(" days:");
                     expiryReminder.setText(sb.toString());
+
+                    sb = new StringBuilder();
+                    sb.append("Which is ");
+                    double cost = 0.0;
+                    for (FoodItem f : expiring){
+                        cost = cost + f.getPrice();
+                    }
+                    NumberFormat toCurrency = NumberFormat.getCurrencyInstance(Locale.UK);
+                    sb.append(toCurrency.format(cost));
+                    sb.append(" of potential food waste!");
+                    costText.setText(sb.toString());
 
                     adapter = new FoodItemAdapter(context, expiring, new FoodItemAdapter.OnItemClickListener() {
                         @Override
