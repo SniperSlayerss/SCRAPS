@@ -45,7 +45,6 @@
             android:backgroundTint="@color/button_green"
             android:textColor="@color/text_green"
             android:fontFamily="@font/arvobold"
-            android:onClick="openSettingsActivity"
             android:text="@string/settings"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +59,6 @@
             android:fontFamily="@font/arvobold"
             android:backgroundTint="@color/button_green"
             android:textColor="@color/text_green"
-            android:onClick="openFoodItemDatabase"
             android:text="@string/food_item_screen_test"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -79,7 +77,6 @@
                 android:layout_marginTop="300dp"
                 android:backgroundTint="@color/button_green"
                 android:fontFamily="@font/arvobold"
-                android:onClick="openAddFoodItem"
                 android:text="add food item"
                 android:textColor="@color/text_green"
                 app:layout_constraintStart_toStartOf="parent"
