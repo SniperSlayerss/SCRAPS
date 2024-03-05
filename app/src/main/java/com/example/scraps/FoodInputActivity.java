@@ -79,7 +79,6 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         expiryDatePicker = new MyEditTextDatePicker(this, R.id.expiry_date_editText);
         purchaseDatePicker = new MyEditTextDatePicker(this, R.id.purchase_date_editText);
         priceEditText = findViewById(R.id.price_editText);
-        typeEditText = findViewById(R.id.type_editText);
         submitButton = findViewById(R.id.submit_button);
 
         mAuth = FirebaseAuth.getInstance();

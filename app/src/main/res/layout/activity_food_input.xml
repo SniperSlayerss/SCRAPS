@@ -101,9 +101,9 @@
             android:id="@+id/submit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/type_editText"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="154dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="155dp"
             android:backgroundTint="@color/button_green"
             android:fontFamily="@font/arvobold"
@@ -111,7 +111,7 @@
             android:textColor="@color/text_green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="376dp" />
+            app:layout_constraintTop_toBottomOf="@+id/price_editText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
