@@ -22,7 +22,7 @@
         <activity
             android:name=".HomeActivity"
             android:exported="true"
-            android:label="@string/title_activity_home"
+            android:label="@string/scraps"
             android:theme="@style/Theme.SCRAPS">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
