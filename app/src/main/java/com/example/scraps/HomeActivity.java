@@ -17,27 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
-import android.widget.TextView;
-
-
-import com.example.scraps.DBModels.FoodItem;
-import com.example.scraps.DBModels.Users;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -48,7 +33,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        UpdateExpiryTextView(); // TODO: NEEDS DATABASE IMPLEMENTATION (internal function currently utilises an instance of the Users class, so either put user data into one of those or rewrite with database queries
 
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
@@ -143,71 +127,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.END);
         return true;
-    }
-
-    /**
-     * Gets all food items attached to a user that are set to expire between the current day and a specified number of days in the future.
-     * @param currentUser
-     * @param numberOfDays
-     * @return
-     */
-    private ArrayList<FoodItem> GetExpiringFoodItems(Users currentUser, Integer numberOfDays){
-        if (currentUser.getFoodItems().isEmpty()){
-            return new ArrayList<FoodItem>();
-        }
-        else{
-            DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
-            ArrayList<FoodItem> foodItems = new ArrayList((currentUser.getFoodItems()).values());
-            ArrayList<FoodItem> output = new ArrayList<>();
-            Date desiredDate = new Date();
-            int newDay = desiredDate.getDate() + numberOfDays.intValue();
-            desiredDate.setDate(newDay);
-            Date currentDate = new Date();
-            Boolean exceptionCaught = false;
-            for (FoodItem f : foodItems){
-                try{
-                    Date expiryDate = dateFormatter.parse(f.getExpiryDate());
-                    if (expiryDate.compareTo(desiredDate) <= 0 && expiryDate.compareTo(currentDate) >= 0){
-                        output.add(f);
-                    }
-                }
-                catch (ParseException e){
-                    exceptionCaught = true;
-                    break;
-                }
-            }
-            if (exceptionCaught){
-                return new ArrayList<FoodItem>();
-            }
-            else{
-                return output;
-            }
-        }
-
-    }
-
-    /**
-     * Written weirdly for testing purposes, ideally the current user should be accessible from the activity but for now I'm using a test user defined in scope.
-     * Currently picks a random FoodItem from the array until I decide how I want to sort the items.
-     */
-    private void UpdateExpiryTextView(){
-        TextView expiryReminder = findViewById(R.id.expiryReminder);
-        Users testUser = new Users(); // TODO: Replace with current user
-        ArrayList<FoodItem> expiring = GetExpiringFoodItems(testUser, 2); // Number of days can be changed, potentially as a setting
-        if (expiring.isEmpty()){
-            expiryReminder.setText("Nothing expiring soon");
-        }
-        else{
-            Random rnd = new Random();
-            StringBuilder sb = new StringBuilder();
-            sb.append("Your '");
-            sb.append(expiring.get(rnd.nextInt(expiring.size())).getFoodName()); // Uses a random food item instead of the first one. This is to show the user something different every time to encourage them to cook new things
-            sb.append("' item is expiring on ");
-            Date date = new Date();
-            DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH);
-            sb.append(dateFormatter.format(date));
-            expiryReminder.setText(sb.toString());
-        }
-
     }
 }
