@@ -21,34 +21,6 @@
         <!-- Include your toolbar layout -->
 
 
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/FoodSharing_Switch"
-            android:layout_width="48dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="25dp"
-            app:thumbTint="@color/button_green"
-            app:trackTint="@color/menu_green"
-            android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@+id/FoodSharing_2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/FoodExpiry_switch" />
-
-        <TextView
-            android:id="@+id/FoodSharing_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="115dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="24dp"
-            android:text="Food Sharing "
-            android:textColor="@color/button_green"
-            android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@+id/FoodSharing_Switch"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/FoodExpiry1" />
-
         <include
             android:id="@+id/include2"
             layout="@layout/toolbar" />
@@ -58,12 +30,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="150dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="35dp"
             android:layout_marginEnd="150dp"
             android:text="Notification Settings"
-            android:textColor="@color/button_green"
-            android:textSize="24dp"
-            android:textStyle="bold"
+            android:textSize="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/include2" />
@@ -72,7 +42,7 @@
             android:id="@+id/notifications_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="60dp"
             app:thumbTint="@color/button_green"
 
             app:trackTint="@color/menu_green"
@@ -85,10 +55,10 @@
             android:id="@+id/notification_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="66dp"
             android:text="Notifications:"
-            android:textColor="@color/button_green"
+            android:textSize="23sp"
             app:layout_constraintEnd_toStartOf="@+id/notifications_switch"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -97,20 +67,31 @@
             android:id="@+id/notification_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:textColor="@color/button_green"
-            android:layout_marginTop="66dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="67dp"
+            android:textSize="23sp"
             android:text="@string/off"
             app:layout_constraintStart_toEndOf="@+id/notifications_switch"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+        <TextView
+            android:id="@+id/FoodExpiry2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="57dp"
+            android:text="OFF"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/FoodExpiry_switch"
+            app:layout_constraintTop_toBottomOf="@+id/notification_1" />
 
         <TextView
             android:id="@+id/FoodExpiry1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="98dp"
-            android:layout_marginTop="60dp"
-            android:textColor="@color/button_green"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="56dp"
             android:text="Food Expiry Dates"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
@@ -120,48 +101,61 @@
             android:id="@+id/FoodExpiry_switch"
             android:layout_width="48dp"
             android:layout_height="30dp"
-            android:layout_marginStart="14dp"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="12dp"
-            app:thumbTint="@color/button_green"
-            app:trackTint="@color/menu_green"
-            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/FoodExpiry2"
             app:layout_constraintStart_toEndOf="@+id/FoodExpiry1"
-            app:layout_constraintTop_toBottomOf="@+id/notifications_switch" />
-
-        <TextView
-            android:id="@+id/FoodExpiry2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="60dp"
-            android:textColor="@color/button_green"
-            android:text="OFF"
+            app:layout_constraintTop_toBottomOf="@+id/notifications_switch"
             android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@+id/FoodExpiry_switch"
-            app:layout_constraintTop_toBottomOf="@+id/notification_1" />
-
+            app:thumbTint="@color/button_green"
+            app:trackTint="@color/menu_green" />
 
         <TextView
             android:id="@+id/FoodSharing_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
-            android:textColor="@color/button_green"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="36dp"
             android:text="@string/off"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/FoodSharing_Switch"
             app:layout_constraintTop_toBottomOf="@+id/FoodExpiry2" />
 
         <TextView
+            android:id="@+id/FoodSharing_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="24dp"
+            android:text="Food Sharing "
+            app:layout_constraintEnd_toStartOf="@+id/FoodSharing_Switch"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/FoodExpiry1" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/FoodSharing_Switch"
+            android:layout_width="48dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="204dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="25dp"
+            app:layout_constraintEnd_toStartOf="@+id/FoodSharing_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/FoodExpiry_switch"
+            android:visibility="gone"
+            app:thumbTint="@color/button_green"
+            app:trackTint="@color/menu_green" />
+
+        <TextView
             android:id="@+id/ThirdOption_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="63dp"
             android:layout_marginTop="40dp"
-            android:textColor="@color/button_green"
             android:text="Third Notif Option"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
@@ -171,8 +165,8 @@
             android:id="@+id/ThirdOptionSwitch"
             android:layout_width="48dp"
             android:layout_height="30dp"
-            android:layout_marginStart="46dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginTop="27dp"
             app:thumbTint="@color/button_green"
             app:trackTint="@color/menu_green"
             android:visibility="gone"
@@ -185,7 +179,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"
-            android:textColor="@color/button_green"
             android:text="@string/off"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/ThirdOptionSwitch"
@@ -201,4 +194,3 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu"/>
 </androidx.drawerlayout.widget.DrawerLayout>
-
