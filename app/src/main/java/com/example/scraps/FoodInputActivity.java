@@ -105,9 +105,7 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        // The image was captured successfully, process it here
-                        // You can access the image URI that you passed to the camera intent
-                        // Do something with the photo saved at currentPhotoPath
+
                         Log.e("CameraActivity", "Image capture was successfully");
                     }
                 }
@@ -116,6 +114,8 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("CameraButton", "Button clicked!");
+                Toast.makeText(FoodInputActivity.this, "Camera button clicked!", Toast.LENGTH_SHORT).show();
                 dispatchTakePictureIntent();
             }
         });
@@ -181,24 +181,36 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
 
     private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                Log.e("CameraError", "Error occurred while creating the image file", ex);
-            }
+        try {
+            Log.d("CameraIntent", "Dispatching camera intent.");
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                    Log.d("CameraIntent", "File created: " + photoFile.getAbsolutePath());
+                } catch (IOException ex) {
+                    Log.e("CameraError", "Error occurred while creating the image file", ex);
+                }
 
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        getApplicationContext().getPackageName() + ".fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                mTakePicture.launch(takePictureIntent);
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            getApplicationContext().getPackageName() + ".fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    mTakePicture.launch(takePictureIntent);
+                } else {
+                    Log.d("CameraIntent", "Photo file is null.");
+                }
+            } else {
+                Log.d("CameraIntent", "No activity can handle the camera intent.");
             }
+        } catch (Exception e) {
+            Log.e("CameraIntent", "Exception in dispatchTakePictureIntent", e);
         }
     }
+
+
 
 
     private File createImageFile() throws IOException {
