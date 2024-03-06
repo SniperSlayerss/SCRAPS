@@ -1,10 +1,14 @@
 package com.example.scraps.DBModels;
+import android.net.Uri;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.security.MessageDigest;
 import java.math.BigInteger;
@@ -12,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Users {
     private String username, password, email, houseID, firebaseID;
@@ -64,27 +69,50 @@ public class Users {
         void onFailure(String message);
     }
 
-    public void addFoodItemToUser(FoodItem foodItem) {
+    public void addFoodItemToUser(FoodItem foodItem, Uri filePath) {
+        if (filePath != null) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            StorageReference foodImagesRef = storageReference.child("food_images/" + UUID.randomUUID().toString());
+
+            // Upload the file to Firebase Storage
+            foodImagesRef.putFile(filePath)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Get a URL to the uploaded content
+                        foodImagesRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> {
+                            // Update the foodItem object with the image URL before saving
+                            foodItem.setImageURL(downloadUrl.toString());
+                            saveFoodItemToDatabase(foodItem);
+                        });
+                    })
+                    .addOnFailureListener(exception -> {
+                        // Handle unsuccessful uploads
+                        System.out.println("Failed to upload image: " + exception.getMessage());
+                    });
+        } else {
+            // Proceed to save the food item if there is no image to upload
+            saveFoodItemToDatabase(foodItem);
+        }
+    }
+
+    private void saveFoodItemToDatabase(FoodItem foodItem) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        String key = databaseReference.child("Users").child(firebaseID).child("foodItems").push().getKey();
+        String key = databaseReference.child("Users").child(foodItem.getUserID()).child("foodItems").push().getKey();
 
         if (key == null) {
             throw new NullPointerException("Couldn't generate a key for the food item.");
         }
 
-        // Add userID to the foodItem
-        foodItem.setUserID(firebaseID);
+        // Set the key to the food item
         foodItem.setFoodID(key);
-        foodItem.setUsername(username);
+
         Map<String, Object> foodItemValues = foodItem.toMap();
 
-        databaseReference.child("Users").child(firebaseID).child("foodItems").child(key).setValue(foodItemValues)
+        // Save the food item, now including the image URL, to Firebase Database
+        databaseReference.child("Users").child(foodItem.getUserID()).child("foodItems").child(key).setValue(foodItemValues)
                 .addOnSuccessListener(aVoid -> {
-                    // Successfully added food item to user's list
-                    System.out.println("Food item added successfully.");
+                    System.out.println("Food item added successfully with image.");
                 })
                 .addOnFailureListener(e -> {
-                    // Failed to add food item to user's list
                     System.out.println("Failed to add food item: " + e.getMessage());
                 });
     }

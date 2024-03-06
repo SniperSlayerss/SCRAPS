@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FoodItem implements Serializable {
-    private String foodName, expiryDate, purchaseDate, userID, foodID, username;
+    private String foodName, expiryDate, purchaseDate, userID, foodID, username, imageURL;
     private double price;
     private boolean isShareable;
     private FirebaseAuth mAuth;
     public FoodItem() {}
 
-    public FoodItem(String foodName, String expiryDate, String purchaseDate, String userID, String username, double price, boolean isShareable) {
+    public FoodItem(String foodName, String expiryDate, String purchaseDate, String userID, String username, double price, String imageURL, boolean isShareable) {
         this.foodName = foodName;
         this.expiryDate = expiryDate;
         this.price = price;
@@ -23,6 +23,7 @@ public class FoodItem implements Serializable {
         this.purchaseDate = purchaseDate;
         this.userID = userID;
         this.username = username;
+        this.imageURL = imageURL;
     }
 
     public Map<String, Object> toMap() {
@@ -123,6 +124,13 @@ public class FoodItem implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+    public String getImageURL() {
+        return imageURL;
     }
 }
 
