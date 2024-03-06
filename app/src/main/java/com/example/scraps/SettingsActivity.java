@@ -14,6 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.scraps.DBModels.Users;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -23,6 +30,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     private DrawerLayout drawerLayout;
     private LinearLayout navigationMenuLayout;
     NavigationView navigationView;
+
+    private TextView usernameTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +66,34 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 drawerLayout.openDrawer(GravityCompat.END);
             }
         });
+
+
+
+        usernameTextView = findViewById(R.id.usernameView_settings);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            String currentUserID = currentUser.getUid();
+
+
+            Users currentUserData = new Users();
+            currentUserData.fetchUserData(currentUserID, new Users.UserDataCallback() {
+                @Override
+                public void onUserDataReceived(Users user) {
+                    // Set the retrieved username to the TextView
+                    usernameTextView.setText(user.getUsername());
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    usernameTextView.setText("CANNOT RETRIEVE USER INFO");
+                }
+            });
+
+        }
+        else {
+            usernameTextView.setText("USER NOT LOGGED IN G");
+        }
     }
 
     public void openNotificationsActivity(View view) {
@@ -71,6 +108,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
     public void openPrivacyActivity(View view) {
         Intent intent = new Intent(this, Privacy.class);
+        startActivity(intent);
+    }
+
+    public void logoutUser(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
 
+import com.example.scraps.DBModels.Login;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -89,6 +90,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
+
     // EXAMPLE METHODS TO INTERACT WITH FIREBASE REALTIME DATABASE
     private void readFromDatabase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -136,4 +139,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.END);
         return true;
     }
+
+
 }
