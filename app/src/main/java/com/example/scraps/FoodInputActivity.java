@@ -199,6 +199,7 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
             File photoFile = null;
             try {
                 photoFile = createImageFile();
+                Log.e("Photo", "Created PhOTOOTO");
             } catch (IOException ex) {
                 Log.e("CameraError", "Error occurred while creating the image file", ex);
             }
