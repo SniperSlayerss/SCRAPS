@@ -62,7 +62,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        settingsButton = findViewById(R.id.newButtonId);
         addFoodButton = findViewById(R.id.foodAdd);
         foodDatabaseButton = findViewById(R.id.foodItem);
 
@@ -70,15 +69,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.menu_home);
-
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), SettingsActivity.class); //v.context() lets you access current class
-                startActivity(intent);
-            }
-        });
 
         addFoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,12 +110,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 drawerLayout.openDrawer(GravityCompat.END);
             }
         });
-    }
-
-    // Method to handle button click and open the settings activity
-    public void openSettingsActivity(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
     }
 
     public void openFoodItemDatabase(View view) {

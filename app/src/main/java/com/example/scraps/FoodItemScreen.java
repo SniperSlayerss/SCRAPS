@@ -20,6 +20,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 public class FoodItemScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -32,7 +33,7 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
 
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
-
+        ImageView foodImageView = findViewById(R.id.imageView3);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -40,6 +41,13 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         NavigationView navigationView = findViewById(R.id.nav_view);
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
+        }
+
+        String imageUrl = foodItem.getImageURL();
+
+        // Load the image into the ImageView using Picasso
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+
         }
 
         leftIcon.setOnClickListener(new View.OnClickListener() {
