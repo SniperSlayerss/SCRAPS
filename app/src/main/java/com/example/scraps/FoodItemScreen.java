@@ -43,13 +43,6 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
             navigationView.setNavigationItemSelectedListener(this);
         }
 
-        String imageUrl = foodItem.getImageURL();
-
-        // Load the image into the ImageView using Picasso
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-
-        }
-
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +73,9 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
             useByDateTextView.setText(String.format("Use By: %s", foodItem.getExpiryDate()));
             userNameTextView.setText(String.format("Name: %s", foodItem.getUsername()));
         }
+
+        String imageUrl = foodItem.getImageURL();
+        Picasso.get().load(imageUrl).into(foodImageView);
 
         Button removeButton = findViewById(R.id.remove);
         removeButton.setOnClickListener(new View.OnClickListener() {
