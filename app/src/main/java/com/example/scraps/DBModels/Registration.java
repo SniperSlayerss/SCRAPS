@@ -1,5 +1,9 @@
 package com.example.scraps.DBModels;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.example.scraps.DBModels.Households;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -7,7 +11,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -46,25 +52,39 @@ public class Registration {
     }
 
     private void storeUserDetails(String firebaseAuthId, String userName, String userEmail, String houseID, final DatabaseOperationCallback callback) {
+        // Reference to the new user
         DatabaseReference userRef = database.getReference("Users").child(firebaseAuthId);
+
+        // Prepare user details
         Map<String, Object> userDetails = new HashMap<>();
         userDetails.put("username", userName);
         userDetails.put("email", userEmail);
         userDetails.put("firebaseID", firebaseAuthId);
-        if (Objects.equals(houseID, ""))
-        {
-            userDetails.put("houseID", firebaseAuthId);
-        }
-        else
-        {
-            userDetails.put("houseID", houseID);
-        }
+        userDetails.put("houseID", houseID.isEmpty() ? firebaseAuthId : houseID);
 
-
-        userRef.setValue(userDetails)
-                .addOnSuccessListener(aVoid -> callback.onSuccess("User details stored successfully."))
-                .addOnFailureListener(e -> callback.onFailure("Failed to store user details: " + e.getMessage()));
+        // Update user details
+        userRef.setValue(userDetails).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // If a houseID is provided, also add this user under that household's userIDs
+                if (!houseID.isEmpty()) {
+                    DatabaseReference householdUserRef = database.getReference("households").child(houseID).child("userIDs").child(firebaseAuthId);
+                    householdUserRef.setValue(true) // or some other value if necessary
+                            .addOnSuccessListener(aVoid -> callback.onSuccess("User details stored successfully and added to household."))
+                            .addOnFailureListener(e -> callback.onFailure("Failed to add user to household: " + e.getMessage()));
+                } else {
+                    callback.onSuccess("User details stored successfully without a household.");
+                }
+            } else {
+                if (task.getException() != null) {
+                    callback.onFailure("Failed to store user details: " + task.getException().getMessage());
+                } else {
+                    callback.onFailure("Failed to store user details for an unknown reason.");
+                }
+            }
+        });
     }
+
+
     public void createOrJoinHousehold(String householdEmail, boolean createHousehold, final DatabaseOperationCallback callback) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
@@ -122,28 +142,49 @@ public class Registration {
         });
     }
 
-    public void checkHouseholdExists(String email, final DatabaseOperationCallback callback) {
+    public void checkHouseholdExists(final String email, final DatabaseOperationCallback callback) {
         DatabaseReference householdsRef = database.getReference("households");
-        Query query = householdsRef.orderByChild("email").equalTo(email);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        householdsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String householdId = snapshot.getKey();
-                        return;
+                boolean found = false;
+                Log.d("FirebaseDebug", "Checking households. Total count: " + dataSnapshot.getChildrenCount());
+
+                for (DataSnapshot householdSnapshot : dataSnapshot.getChildren()) {
+                    String emailValue = householdSnapshot.child("email").getValue(String.class);
+                    Log.d("FirebaseDebug", "Household " + householdSnapshot.getKey() + " email: '" + emailValue + "'");
+
+                    // Additional logging to check for equality
+                    if (emailValue != null) {
+                        Log.d("FirebaseDebug", "Comparing '" + email + "' with '" + emailValue.trim() + "'");
                     }
-                } else {
+
+                    // Using trim() to remove any leading or trailing white spaces that might be present
+                    if (emailValue != null && email.trim().equalsIgnoreCase(emailValue.trim())) {
+                        found = true;
+                        String householdId = householdSnapshot.getKey();
+                        Log.d("FirebaseDebug", "Matching email found in household: " + householdId);
+                        callback.onSuccess(householdId);
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    Log.d("FirebaseDebug", "No matching email found in any household.");
                     callback.onFailure("No household found with the provided email.");
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.d("FirebaseDebug", "DatabaseError: " + databaseError.getMessage());
                 callback.onFailure("Failed to find household: " + databaseError.getMessage());
             }
         });
     }
+
+
+
 
 
     private void joinHousehold(String houseID, String firebaseAuthId, final DatabaseOperationCallback callback) {
