@@ -165,24 +165,28 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
     private void uploadImageAndSaveData(String foodName, String expiryDate, String purchaseDate, double price) {
         if (currentPhotoPath == null) {
-            // Handle the case where no image is available, you may want to alert the user or just log
             Toast.makeText(FoodInputActivity.this, "No image captured!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Assuming we have the path, we proceed to upload
-        Uri fileUri = Uri.fromFile(new File(currentPhotoPath));
+        try {
+            Uri fileUri = Uri.fromFile(new File(currentPhotoPath));
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference imageRef = storageRef.child("images/" + fileUri.getLastPathSegment());
 
         imageRef.putFile(fileUri).addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
             String imageUrl = downloadUri.toString();
+            // Now save all data including the image URL to Firebase Database
             saveDataToDatabase(foodName, expiryDate, purchaseDate, price, imageUrl);
         })).addOnFailureListener(e -> {
             Log.e("FirebaseStorage", "Upload failed: " + e.getLocalizedMessage());
             Toast.makeText(FoodInputActivity.this, "Upload failed: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         });
+        } catch (Exception e){
+            Log.d("RAWR",  currentPhotoPath);
+        }
     }
+
 
     private boolean checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -279,46 +283,56 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
     private void takePhoto(ImageCapture imageCapture) {
         File photoFile = createImageFile();
 
-        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(photoFile).build();
+        if (photoFile == null) {
+            Toast.makeText(this, "Error creating image file", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ImageCapture.OutputFileOptions outputFileOptions =
+                new ImageCapture.OutputFileOptions.Builder(photoFile).build();
+
         imageCapture.takePicture(
                 outputFileOptions,
                 ContextCompat.getMainExecutor(this),
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                        // Uri contentUri = outputFileResults.getSavedUri(); // If you want to use the saved Uri directly.
                         runOnUiThread(() -> Toast.makeText(FoodInputActivity.this, "Photo capture succeeded: " + photoFile.getAbsolutePath(), Toast.LENGTH_SHORT).show());
                         currentPhotoPath = photoFile.getAbsolutePath();
                     }
 
                     @Override
                     public void onError(@NonNull ImageCaptureException exception) {
-                        runOnUiThread(() -> Toast.makeText(FoodInputActivity.this, "Photo capture failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show());
+                        Log.e("CameraXApp", "Photo capture failed: " + exception.getMessage(), exception);
                     }
                 }
         );
     }
 
+
     private File createImageFile() {
+        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = null;
 
+        File image = null;
         try {
             image = File.createTempFile(
-                    imageFileName,
-                    ".jpg",
-                    storageDir
+                    imageFileName,  /* prefix */
+                    ".jpg",         /* suffix */
+                    storageDir      /* directory */
             );
+            // Save a file path for use with ACTION_VIEW intents
+            currentPhotoPath = image.getAbsolutePath();
         } catch (IOException e) {
             Log.e("createImageFile", "Error while creating file: " + e.getMessage());
         }
 
-        if (image != null) {
-            currentPhotoPath = image.getAbsolutePath();
-        }
         return image;
     }
+
 
     public static class MyEditTextDatePicker  implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
         EditText _editText;
