@@ -187,6 +187,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
      * @return
      */
     private ArrayList<FoodItem> GetExpiringFoodItems(Users currentUser, Integer numberOfDays){
+        if (currentUser.getFoodItems() == null){
+            return new ArrayList<FoodItem>();
+        }
         if (currentUser.getFoodItems().isEmpty()){
             return new ArrayList<FoodItem>();
         }
