@@ -23,6 +23,12 @@ import com.google.android.material.navigation.NavigationView;
 import org.w3c.dom.Text;
 
 public class Notifications extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String PREF_NAME = "NotificationPreferences";
+    private static final String NOTIFICATION_TOGGLE_KEY = "notificationToggle";
+    private static final String FOOD_SHARING_TOGGLE_KEY = "foodSharingToggle";
+    private static final String FOOD_EXPIRY_TOGGLE_KEY = "foodExpiryToggle";
+    private static final String THIRD_OPTION_TOGGLE_KEY = "thirdOptionToggle";
+
     private DrawerLayout drawerLayout;
     private LinearLayout navigationMenuLayout;
     NavigationView navigationView;
@@ -40,6 +46,7 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
     private SwitchCompat thirdOption;
     private TextView thirdOption_1;
     private TextView thirdOption_2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,13 +63,11 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
         navigationView = findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(this);
-        //navigationView.setCheckedItem(R.id.menu_settings);
-
 
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), HomeActivity.class); //v.context() lets you access current class
+                Intent intent = new Intent(v.getContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -73,7 +78,6 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
                 drawerLayout.openDrawer(GravityCompat.END);
             }
         });
-
 
         notifsToggle = findViewById(R.id.notifications_switch);
         notification1 = findViewById(R.id.notification_1);
@@ -87,39 +91,52 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
         thirdOption = findViewById(R.id.ThirdOptionSwitch);
         thirdOption_1 = findViewById(R.id.ThirdOption_1);
         thirdOption_2 = findViewById(R.id.ThirdOption_2);
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        notifsToggle.setChecked(preferences.getBoolean("notificationsSwitch", false));
-        foodExpiry_Switch.setChecked(preferences.getBoolean("foodExpirySwitch", false));
-        foodSharing.setChecked(preferences.getBoolean("foodSharingSwitch", false));
-        thirdOption.setChecked(preferences.getBoolean("thirdOptionSwitch", false));
+
+
+
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        notifsToggle.setChecked(preferences.getBoolean(NOTIFICATION_TOGGLE_KEY, false));
+        foodSharing.setChecked(preferences.getBoolean(FOOD_SHARING_TOGGLE_KEY, false));
+        foodExpiry_Switch.setChecked(preferences.getBoolean(FOOD_EXPIRY_TOGGLE_KEY, false));
+        thirdOption.setChecked(preferences.getBoolean(THIRD_OPTION_TOGGLE_KEY, false));
 
         if (notifsToggle.isChecked()) {
             notification2.setText("ON");
+
+            hideOptions(false);
+        } else {
+            notification2.setText("OFF");
+            hideOptions(true);
         }
-        if (foodExpiry_Switch.isChecked()) {
-            foodExpiry2.setText("ON");
-        }
+
         if (foodSharing.isChecked()) {
             foodSharing_2.setText("ON");
+        } else {
+            foodSharing_2.setText("OFF");
         }
+
+        if (foodExpiry_Switch.isChecked()) {
+            foodExpiry2.setText("ON");
+        } else {
+            foodExpiry2.setText("OFF");
+        }
+
         if (thirdOption.isChecked()) {
             thirdOption_2.setText("ON");
+        } else {
+            thirdOption_2.setText("OFF");
         }
-
-
-
         notifsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     notification2.setText("ON");
                     hideOptions(false);
-                }
-                else {
+                } else {
                     notification2.setText("OFF");
                     hideOptions(true);
                 }
-
+                saveNotificationState(isChecked);
             }
         });
 
@@ -134,6 +151,7 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
                     foodSharing_2.setText("OFF");
 
                 }
+                saveFoodSharingState(isChecked);
             }
         });
 
@@ -148,6 +166,7 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
                     foodExpiry2.setText("OFF");
 
                 }
+                saveFoodExpiryState(isChecked);
             }
         });
 
@@ -162,16 +181,16 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
                     thirdOption_2.setText("OFF");
 
                 }
+                saveThirdOptionState(isChecked);
             }
         });
 
 
-
-
-
-
-
     }
+
+
+
+
 
     private void hideOptions (boolean bool1) {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -212,17 +231,48 @@ public class Notifications extends AppCompatActivity implements NavigationView.O
         editor.apply();
     }
 
+
+    private void saveNotificationState(boolean isChecked) {
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(NOTIFICATION_TOGGLE_KEY, isChecked);
+        editor.apply();
+    }
+
+    private void saveFoodSharingState(boolean isChecked) {
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(FOOD_SHARING_TOGGLE_KEY, isChecked);
+        editor.apply();
+    }
+
+    private void saveFoodExpiryState(boolean isChecked) {
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(FOOD_EXPIRY_TOGGLE_KEY, isChecked);
+        editor.apply();
+    }
+
+    private void saveThirdOptionState(boolean isChecked) {
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(THIRD_OPTION_TOGGLE_KEY, isChecked);
+        editor.apply();
+    }
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
 
         if (itemID == R.id.menu_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         } else if (itemID == R.id.menu_food_item) {
-            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class); //v.context() lets you access current class
+            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class);
             startActivity(intent);
         } else if (itemID == R.id.menu_home) {
-            Intent intent = new Intent(this, HomeActivity.class); //v.context() lets you access current class
+            Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }
         drawerLayout.closeDrawer(GravityCompat.END);
