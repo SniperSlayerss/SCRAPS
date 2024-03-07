@@ -160,13 +160,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void writeToDatabase(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Users").child("user1").child("name");
-
-        myRef.setValue("joe");
-    }
-
     //Copy below into java files for toolbar functionality
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
