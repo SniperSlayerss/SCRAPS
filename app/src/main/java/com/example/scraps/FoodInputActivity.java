@@ -201,7 +201,7 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
 
         // Adjust this path as needed for your application's data structure
-        DatabaseReference usersRef = databaseRef.child("users").child(firebaseId);
+        DatabaseReference usersRef = databaseRef.child("Users").child(firebaseId);
 
         // Create unique key for each food item
         String foodItemId = usersRef.child("foodItems").push().getKey();
