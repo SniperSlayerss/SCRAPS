@@ -220,24 +220,43 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
+//    private void dispatchTakePictureIntent() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//        File photoFile = null;
+//        try {
+//            photoFile = createImageFile();
+//        } catch (IOException ex) {
+//            Log.e("CameraError", "Error occurred while creating the File", ex);
+//        }
+//
+//        if (photoFile != null) {
+//                Uri photoURI = FileProvider.getUriForFile(this,
+//                        "com.example.android.fileprovider",  // Adjust the authority as per your application's requirement
+//                        photoFile);
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                mTakePicture.launch(takePictureIntent);  // Assuming mTakePicture is your ActivityResultLauncher
+//            }
+//    }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                Log.e("CameraError", "Error occurred while creating the File", ex);
+                // Error occurred while creating the File
             }
+            // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.scraps.fileprovider",
+                        "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                mTakePicture.launch(takePictureIntent);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
-        } else {
-            Log.e("CameraIntent", "No application can handle the intent");
         }
     }
 
