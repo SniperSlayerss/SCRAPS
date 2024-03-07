@@ -26,80 +26,69 @@
         <!-- Your existing views (TextView, Buttons, etc.) here -->
 
         <Button
-            android:id="@+id/newButtonId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="85dp"
-            android:backgroundTint="@color/button_green"
-            android:fontFamily="@font/arvobold"
-            android:onClick="openSettingsActivity"
-            android:text="@string/settings"
-            android:textColor="@color/text_green"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.811"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/foodItem"
-            app:layout_constraintVertical_bias="0.483" />
-
-        <Button
             android:id="@+id/foodItem"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:backgroundTint="@color/button_green"
             android:fontFamily="@font/arvobold"
             android:onClick="openFoodItemDatabase"
             android:text="@string/food_item_screen_test"
             android:textColor="@color/text_green"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/expiry"
-            app:layout_constraintVertical_bias="0.265" />
+            app:layout_constraintTop_toBottomOf="@+id/costText" />
 
         <Button
             android:id="@+id/foodAdd"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="85dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:backgroundTint="@color/button_green"
             android:fontFamily="@font/arvobold"
             android:onClick="openAddFoodItem"
-            android:text="add food item"
+            android:text="Add food item"
             android:textColor="@color/text_green"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/newButtonId"
-            app:layout_constraintHorizontal_bias="0.017"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/foodItem"
-            app:layout_constraintVertical_bias="0.483" />
+            app:layout_constraintTop_toBottomOf="@+id/foodItem" />
 
         <TextView
             android:id="@+id/expiryReminder"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5mm"
-            android:layout_marginTop="32dp"
-            android:text="TextView"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/arvobold"
+            android:text="TextView"
+            android:textAlignment="center"
             android:textColor="@color/button_green"
-            android:textSize="20dp"
+            android:textSize="24dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/include5" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/expiry"
-            android:layout_width="129dp"
-            android:layout_height="247dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/expiryReminder"
-            app:layout_constraintVertical_bias="0.047">
+            app:layout_constraintTop_toBottomOf="@+id/expiryReminder">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -107,19 +96,18 @@
             android:id="@+id/costText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/arvobold"
             android:text="TextView"
+            android:textAlignment="textStart"
             android:textColor="@color/button_green"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/foodItem"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/expiry"
-            app:layout_constraintVertical_bias="0.225" />
+            app:layout_constraintTop_toBottomOf="@+id/expiry" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

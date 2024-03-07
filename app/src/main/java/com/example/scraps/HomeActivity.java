@@ -62,7 +62,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        settingsButton = findViewById(R.id.newButtonId);
         addFoodButton = findViewById(R.id.foodAdd);
         foodDatabaseButton = findViewById(R.id.foodItem);
 
@@ -70,15 +69,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.menu_home);
-
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), SettingsActivity.class); //v.context() lets you access current class
-                startActivity(intent);
-            }
-        });
 
         addFoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,12 +112,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    // Method to handle button click and open the settings activity
-    public void openSettingsActivity(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
-    }
-
     public void openFoodItemDatabase(View view) {
         Intent intent = new Intent(this, FoodDatabaseScreenActivity.class);
         startActivity(intent);
@@ -160,13 +144,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void writeToDatabase(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Users").child("user1").child("name");
-
-        myRef.setValue("joe");
-    }
-
     //Copy below into java files for toolbar functionality
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -194,6 +171,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
      * @return
      */
     private ArrayList<FoodItem> GetExpiringFoodItems(Users currentUser, Integer numberOfDays){
+        if (currentUser.getFoodItems() == null){
+            return new ArrayList<FoodItem>();
+        }
         if (currentUser.getFoodItems().isEmpty()){
             return new ArrayList<FoodItem>();
         }

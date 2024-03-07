@@ -20,6 +20,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 public class FoodItemScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -32,7 +33,7 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
 
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
-
+        ImageView foodImageView = findViewById(R.id.imageView3);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -72,6 +73,9 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
             useByDateTextView.setText(String.format("Use By: %s", foodItem.getExpiryDate()));
             userNameTextView.setText(String.format("Name: %s", foodItem.getUsername()));
         }
+
+        String imageUrl = foodItem.getImageURL();
+        Picasso.get().load(imageUrl).into(foodImageView);
 
         Button removeButton = findViewById(R.id.remove);
         removeButton.setOnClickListener(new View.OnClickListener() {
