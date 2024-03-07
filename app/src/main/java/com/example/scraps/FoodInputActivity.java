@@ -205,15 +205,27 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
         // Create unique key for each food item
         String foodItemId = usersRef.child("foodItems").push().getKey();
-        FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, firebaseId, "", price, imageUrl, false);
 
-        // Assuming "foodItems" is a node under each user where their food items are stored
-        usersRef.child("foodItems").child(foodItemId).setValue(foodItem).addOnSuccessListener(aVoid -> {
-            Toast.makeText(FoodInputActivity.this, "Data saved successfully!", Toast.LENGTH_SHORT).show();
-        }).addOnFailureListener(e -> {
-            Log.e("FirebaseDatabase", "Data saving failed: " + e.getLocalizedMessage());
-            Toast.makeText(FoodInputActivity.this, "Data saving failed!", Toast.LENGTH_SHORT).show();
-        });
+        Users currentUser = new Users();
+        currentUser.fetchUserData(mAuth.getUid(), new Users.UserDataCallback() {
+                    @Override
+                    public void onUserDataReceived(Users user) {
+                        FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, firebaseId, user.getUsername(), price, imageUrl, false);
+
+                        // Assuming "foodItems" is a node under each user where their food items are stored
+                        usersRef.child("foodItems").child(foodItemId).setValue(foodItem).addOnSuccessListener(aVoid -> {
+                            Toast.makeText(FoodInputActivity.this, "Data saved successfully!", Toast.LENGTH_SHORT).show();
+                        }).addOnFailureListener(e -> {
+                            Log.e("FirebaseDatabase", "Data saving failed: " + e.getLocalizedMessage());
+                            Toast.makeText(FoodInputActivity.this, "Data saving failed!", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                    @Override
+
+                    public void onFailure(String message) {
+                        Log.e("UserData", "Error retrieving user data: " + message);
+                    }
+                });
     }
 
     private void requestCameraPermission() {
