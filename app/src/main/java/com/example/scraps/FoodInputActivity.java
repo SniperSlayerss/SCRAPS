@@ -205,7 +205,6 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
         // Create unique key for each food item
         String foodItemId = usersRef.child("foodItems").push().getKey();
-
         FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, firebaseId, "", price, imageUrl, false);
 
         // Assuming "foodItems" is a node under each user where their food items are stored
