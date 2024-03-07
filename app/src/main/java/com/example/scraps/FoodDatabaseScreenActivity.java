@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.scraps.DBModels.FoodItem;
 import com.example.scraps.DBModels.FoodItemAdapter;
+import com.example.scraps.DBModels.Users;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,10 +32,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
+
 
 public class FoodDatabaseScreenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,8 +61,18 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity implements Nav
         recyclerView.setHasFixedSize(true);
         mAuth = FirebaseAuth.getInstance();
 
+        Users userData = new Users();
+        userData.fetchUserData(mAuth.getUid(), new Users.UserDataCallback(){
+            @Override
+            public void onUserDataReceived(Users user) {
+                readFoodItemsForHousehold(user.getHouseID(), user.getFirebaseID());
+            }
 
-        readFoodItemsForHousehold(mAuth.getUid());
+            @Override
+            public void onFailure(String message) {
+                Log.e("UserData", "Error retrieving user data: " + message);
+            }
+        });
 
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
@@ -112,15 +127,14 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity implements Nav
         }
     }
 
-    private void readFoodItemsForHousehold(String householdId) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private void readFoodItemsForHousehold(String householdId, String currentUserId) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference householdRef = database.getReference("households").child(householdId).child("userIDs");
 
         householdRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This map will hold all the food items from all users in the household
+                // This map will hold all the relevant food items from users in the household
                 Map<String, FoodItem> householdFoodItems = new HashMap<>();
 
                 for (DataSnapshot userIdSnapshot : dataSnapshot.getChildren()) {
@@ -132,11 +146,14 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity implements Nav
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot foodItemSnapshot : dataSnapshot.getChildren()) {
-                                // Assuming FoodItem has a constructor that accepts a DataSnapshot
                                 FoodItem foodItem = foodItemSnapshot.getValue(FoodItem.class);
-                                householdFoodItems.put(foodItemSnapshot.getKey(), foodItem);
+
+                                // Check if the item is shareable or belongs to the current user
+                                if (userId.equals(currentUserId) || (foodItem != null && foodItem.isShareable())) {
+                                    householdFoodItems.put(foodItemSnapshot.getKey(), foodItem);
+                                }
                             }
-                            // Call a method to update the UI with household food items
+                            // Update UI method called outside the loop, ensuring aggregation of all items
                             updateFoodList(householdFoodItems);
                         }
 
@@ -154,6 +171,7 @@ public class FoodDatabaseScreenActivity extends AppCompatActivity implements Nav
             }
         });
     }
+
 
 
     @Override

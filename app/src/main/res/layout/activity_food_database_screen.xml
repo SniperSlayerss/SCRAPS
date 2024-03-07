@@ -9,6 +9,12 @@
     android:layout_height="match_parent"
     tools:context=".FoodDatabaseScreenActivity">
 
+    <ImageView
+        android:id="@+id/foodItemImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -128,7 +128,7 @@ public class Users {
 
         // Set the key to the food item
         foodItem.setFoodID(key);
-
+        foodItem.setUsername(username);
         Map<String, Object> foodItemValues = foodItem.toMap();
 
         // Save the food item, now including the image URL, to Firebase Database
