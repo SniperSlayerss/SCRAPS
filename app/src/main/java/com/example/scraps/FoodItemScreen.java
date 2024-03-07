@@ -21,6 +21,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import com.squareup.picasso.Transformation;
 
 public class FoodItemScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -75,7 +78,10 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         }
 
         String imageUrl = foodItem.getImageURL();
-        Picasso.get().load(imageUrl).into(foodImageView);
+        Picasso.get()
+                .load(imageUrl)
+                .transform(new RotateTransformation(90)) // Adjust the rotation degrees as needed
+                .into(foodImageView);
 
         Button removeButton = findViewById(R.id.remove);
         removeButton.setOnClickListener(new View.OnClickListener() {
@@ -101,9 +107,9 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
     public void removeFoodItem() {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         DatabaseReference foodItemsRef = database.child("Users")
-                .child(foodItem.getUserID()) // Assuming userID is a property of the FoodItem class
+                .child(foodItem.getUserID())
                 .child("foodItems")
-                .child(foodItem.getFoodID()); // Assuming foodName is a property of the FoodItem class
+                .child(foodItem.getFoodID());
 
         foodItemsRef.removeValue(new DatabaseReference.CompletionListener() {
             @Override
@@ -138,5 +144,33 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         }
         drawerLayout.closeDrawer(GravityCompat.END);
         return true;
+    }
+
+    public class RotateTransformation implements Transformation {
+
+        private final float rotationDegrees;
+
+        public RotateTransformation(float rotationDegrees) {
+            this.rotationDegrees = rotationDegrees;
+        }
+
+        @Override
+        public Bitmap transform(Bitmap source) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotationDegrees);
+
+            Bitmap rotatedBitmap = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+
+            if (rotatedBitmap != source) {
+                source.recycle();
+            }
+
+            return rotatedBitmap;
+        }
+
+        @Override
+        public String key() {
+            return "rotate" + rotationDegrees;
+        }
     }
 }
