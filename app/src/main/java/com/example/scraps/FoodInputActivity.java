@@ -26,6 +26,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -37,6 +43,7 @@ import com.example.scraps.R;
 import com.example.scraps.DBModels.FoodItem;
 import com.example.scraps.DBModels.Users;
 import com.google.android.material.navigation.NavigationView;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -50,6 +57,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
 
 import android.Manifest;
 
@@ -64,6 +72,9 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
     private String currentPhotoPath;
     private ActivityResultLauncher<Intent> mTakePicture;
+    private PreviewView mPreviewView;
+    private ImageCapture imageCapture = null;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +116,7 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         priceEditText = findViewById(R.id.price_editText);
         submitButton = findViewById(R.id.submit_button);
         cameraButton = findViewById(R.id.camera);
+        mPreviewView = findViewById(R.id.camera_preview_view);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -117,18 +129,21 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
                 }
         );
 
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkCameraPermission()) {
-                    dispatchTakePictureIntent();
-                } else {
-                    ActivityCompat.requestPermissions(FoodInputActivity.this,
-                            new String[]{Manifest.permission.CAMERA},
-                            CAMERA_PERMISSION_REQUEST_CODE);
-                }
+        if (checkCameraPermission()) {
+            startCamera();
+        } else {
+            requestCameraPermission();
+        }
+
+
+        cameraButton.setOnClickListener(v -> {
+            if (imageCapture != null) {
+                takePhoto(imageCapture);
+            } else {
+                Toast.makeText(FoodInputActivity.this, "Unable to capture photo", Toast.LENGTH_SHORT).show();
             }
         });
+
 
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -199,81 +214,109 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void requestCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (!checkCameraPermission()) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     CAMERA_PERMISSION_REQUEST_CODE);
-        } else {
-            dispatchTakePictureIntent();
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent();
+                startCamera();
             } else {
                 Toast.makeText(this, "Camera permission is required to use the camera.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-//    private void dispatchTakePictureIntent() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        File photoFile = null;
-//        try {
-//            photoFile = createImageFile();
-//        } catch (IOException ex) {
-//            Log.e("CameraError", "Error occurred while creating the File", ex);
-//        }
-//
-//        if (photoFile != null) {
-//                Uri photoURI = FileProvider.getUriForFile(this,
-//                        "com.example.android.fileprovider",  // Adjust the authority as per your application's requirement
-//                        photoFile);
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                mTakePicture.launch(takePictureIntent);  // Assuming mTakePicture is your ActivityResultLauncher
-//            }
-//    }
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
+
+    private void startCamera() {
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+
+        cameraProviderFuture.addListener(() -> {
             try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                bindCameraPreview(cameraProvider);
+            } catch (ExecutionException | InterruptedException e) {
+                Toast.makeText(this, "Error starting camera: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.android.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    private void bindCameraPreview(@NonNull ProcessCameraProvider cameraProvider) {
+        Preview preview = new Preview.Builder()
+                .build();
+
+        CameraSelector cameraSelector = new CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build();
+
+        // Use the global imageCapture variable
+        imageCapture = new ImageCapture.Builder()
+                .build();
+
+        // Make sure that the camera preview is assigned to the surface provider.
+        preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
+
+        // Bind the lifecycle of the camera to the activity
+        cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
+
+        // Set the OnClickListener for the camera button to trigger the takePhoto method
+        cameraButton.setOnClickListener(v -> {
+            if (imageCapture != null) {
+                takePhoto(imageCapture);
+            } else {
+                Toast.makeText(FoodInputActivity.this, "Camera not ready. Please wait.", Toast.LENGTH_SHORT).show();
             }
-        }
+        });
     }
 
 
+    private void takePhoto(ImageCapture imageCapture) {
+        File photoFile = createImageFile();
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
+        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(photoFile).build();
+        imageCapture.takePicture(
+                outputFileOptions,
+                ContextCompat.getMainExecutor(this),
+                new ImageCapture.OnImageSavedCallback() {
+                    @Override
+                    public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                        runOnUiThread(() -> Toast.makeText(FoodInputActivity.this, "Photo capture succeeded: " + photoFile.getAbsolutePath(), Toast.LENGTH_SHORT).show());
+                        currentPhotoPath = photoFile.getAbsolutePath();
+                    }
+
+                    @Override
+                    public void onError(@NonNull ImageCaptureException exception) {
+                        runOnUiThread(() -> Toast.makeText(FoodInputActivity.this, "Photo capture failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show());
+                    }
+                }
+        );
+    }
+
+    private File createImageFile() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
+        File image = null;
+
+        try {
+            image = File.createTempFile(
+                    imageFileName,
+                    ".jpg",
+                    storageDir
+            );
+        } catch (IOException e) {
+            Log.e("createImageFile", "Error while creating file: " + e.getMessage());
+        }
+
+        if (image != null) {
+            currentPhotoPath = image.getAbsolutePath();
+        }
         return image;
     }
 
