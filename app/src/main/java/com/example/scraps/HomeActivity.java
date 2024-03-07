@@ -38,7 +38,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,6 +52,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView expiry;
     private FoodItemAdapter adapter;
     private FirebaseAuth mAuth;
+    private List<FoodItem> foodItemsList = new ArrayList<>();
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,28 +125,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void openAddFoodItem(View view) {
         Intent intent = new Intent(this, FoodItemScreen.class);
         startActivity(intent);
-    }
-
-
-    // EXAMPLE METHODS TO INTERACT WITH FIREBASE REALTIME DATABASE
-    private void readFromDatabase(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Food").child("item").child("name");
-        // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
     }
 
     //Copy below into java files for toolbar functionality
@@ -231,7 +214,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     costText.setText("");
                 }
                 else{
-                    Random rnd = new Random();
                     StringBuilder sb = new StringBuilder();
                     sb.append("Your food items expiring in ");
                     sb.append(numberOfDays);
@@ -249,6 +231,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     sb.append(" of potential food waste!");
                     costText.setText(sb.toString());
 
+                    readFoodItemsForHousehold(user.getHouseID(), user.getFirebaseID());
                     adapter = new FoodItemAdapter(context, expiring, new FoodItemAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(FoodItem foodItem) {
@@ -264,6 +247,72 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onFailure(String message) {
                 Log.e("UserData", "Error retrieving user data: " + message);
+            }
+        });
+    }
+
+    private void updateFoodList(Map<String, FoodItem> foodItems) {
+        foodItemsList.clear();
+        foodItemsList.addAll(foodItems.values());
+
+        if (adapter == null) {
+            // Initialize the adapter if it hasn't been initialized yet
+            adapter = new FoodItemAdapter(this, foodItemsList, new FoodItemAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(FoodItem foodItem) {
+                    Intent detailIntent = new Intent(HomeActivity.this, FoodItemScreen.class);
+                    detailIntent.putExtra("FoodItem", foodItem); // foodItem must be Serializable
+                    startActivity(detailIntent);
+                }
+            });
+            recyclerView.setAdapter(adapter);
+        } else {
+            // Notify the adapter if it's already initialized
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void readFoodItemsForHousehold(String householdId, String currentUserId) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference householdRef = database.getReference("households").child(householdId).child("userIDs");
+
+        householdRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This map will hold all the relevant food items from users in the household
+                Map<String, FoodItem> householdFoodItems = new HashMap<>();
+
+                for (DataSnapshot userIdSnapshot : dataSnapshot.getChildren()) {
+                    // For each user ID, fetch the food items
+                    String userId = userIdSnapshot.getKey();
+                    DatabaseReference userFoodItemsRef = database.getReference("Users").child(userId).child("foodItems");
+
+                    userFoodItemsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot foodItemSnapshot : dataSnapshot.getChildren()) {
+                                FoodItem foodItem = foodItemSnapshot.getValue(FoodItem.class);
+
+                                // Check if the item is shareable or belongs to the current user
+                                if (userId.equals(currentUserId) || (foodItem != null && foodItem.isShareable())) {
+                                    householdFoodItems.put(foodItemSnapshot.getKey(), foodItem);
+                                }
+                            }
+                            // Update UI method called outside the loop, ensuring aggregation of all items
+                            updateFoodList(householdFoodItems);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("DatabaseError", "Error reading user food items: " + databaseError.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", "Error reading household users: " + databaseError.getMessage());
             }
         });
     }
