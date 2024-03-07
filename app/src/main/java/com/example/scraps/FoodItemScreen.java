@@ -146,7 +146,7 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         return true;
     }
 
-    public class RotateTransformation implements Transformation {
+    public static class RotateTransformation implements Transformation {
 
         private final float rotationDegrees;
 
