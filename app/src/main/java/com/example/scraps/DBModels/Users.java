@@ -1,5 +1,7 @@
 package com.example.scraps.DBModels;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -17,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import com.squareup.picasso.Picasso;
 
 public class Users {
     private String username, password, email, houseID, firebaseID;
@@ -93,7 +96,28 @@ public class Users {
             saveFoodItemToDatabase(foodItem);
         }
     }
+    public void fetchAndDisplayFoodItemImage(String foodItemId, ImageView imageView) {
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference foodItemRef = databaseRef.child("foodItems").child(foodItemId);
 
+        foodItemRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String imageUrl = dataSnapshot.child("imageUrl").getValue(String.class);
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    // Use Picasso or any other library to load the image
+                    Picasso.get().load(imageUrl).into(imageView);
+                } else {
+                    Log.e("fetchImage", "Image URL is null or empty for food item ID: " + foodItemId);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("fetchImage", "Database error while fetching image: " + databaseError.getMessage());
+            }
+        });
+    }
     private void saveFoodItemToDatabase(FoodItem foodItem) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String key = databaseReference.child("Users").child(foodItem.getUserID()).child("foodItems").push().getKey();
