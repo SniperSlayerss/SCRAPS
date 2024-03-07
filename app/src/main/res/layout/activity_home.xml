@@ -17,71 +17,98 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    
+
         <!-- Include your toolbar layout -->
-        <include layout="@layout/toolbar" />
+        <include
+            android:id="@+id/include5"
+            layout="@layout/toolbar" />
 
         <!-- Your existing views (TextView, Buttons, etc.) here -->
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/scraps"
-            android:fontFamily="@font/arvobold"
-            android:textColor="@color/text_green"
-            android:textAlignment="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <Button
-            android:id="@+id/newButtonId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="204dp"
-            android:backgroundTint="@color/button_green"
-            android:textColor="@color/text_green"
-            android:fontFamily="@font/arvobold"
-            android:text="@string/settings"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <Button
             android:id="@+id/foodItem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/button_green"
+            android:fontFamily="@font/arvobold"
+            android:onClick="openFoodItemDatabase"
+            android:text="@string/food_item_screen_test"
+            android:textColor="@color/text_green"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/costText" />
+
+        <Button
+            android:id="@+id/foodAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/button_green"
+            android:fontFamily="@font/arvobold"
+            android:onClick="openAddFoodItem"
+            android:text="Add food item"
+            android:textColor="@color/text_green"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/foodItem" />
+
+        <TextView
+            android:id="@+id/expiryReminder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5mm"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/arvobold"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@color/button_green"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include5" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/expiry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/expiryReminder">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/costText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="112dp"
-            android:layout_marginTop="104dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/arvobold"
-            android:backgroundTint="@color/button_green"
-            android:textColor="@color/text_green"
-            android:text="@string/food_item_screen_test"
+            android:text="TextView"
+            android:textAlignment="textStart"
+            android:textColor="@color/button_green"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/expiry" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/fragment_container">
-
-            <Button
-                android:id="@+id/foodAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="112dp"
-                android:layout_marginLeft="112dp"
-                android:layout_marginTop="300dp"
-                android:backgroundTint="@color/button_green"
-                android:fontFamily="@font/arvobold"
-                android:text="add food item"
-                android:textColor="@color/text_green"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Navigation drawer view -->
