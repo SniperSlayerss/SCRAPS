@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,20 +18,37 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.example.scraps.DBModels.FoodItem;
+import com.example.scraps.DBModels.FoodItemAdapter;
+import com.example.scraps.DBModels.Users;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private LinearLayout navigationMenuLayout;
     private Button settingsButton, addFoodButton, foodDatabaseButton;
     NavigationView navigationView;
+    private RecyclerView expiry;
+    private FoodItemAdapter adapter;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +96,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+
+        expiry = findViewById(R.id.expiry);
+        expiry.setLayoutManager(new LinearLayoutManager(this));
+        expiry.setHasFixedSize(true);
+
+        mAuth = FirebaseAuth.getInstance();
+        UpdateExpiryList();
 
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,5 +185,106 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.END);
         return true;
+    }
+
+    /**
+     * Gets all food items attached to a user that are set to expire between the current day and a specified number of days in the future.
+     * @param currentUser
+     * @param numberOfDays
+     * @return
+     */
+    private ArrayList<FoodItem> GetExpiringFoodItems(Users currentUser, Integer numberOfDays){
+        if (currentUser.getFoodItems().isEmpty()){
+            return new ArrayList<FoodItem>();
+        }
+        else{
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("d-M-yyyy");
+            ArrayList<FoodItem> foodItems = new ArrayList((currentUser.getFoodItems()).values());
+            ArrayList<FoodItem> output = new ArrayList<>();
+            Date desiredDate = new Date();
+            int newDay = desiredDate.getDate() + numberOfDays.intValue();
+            desiredDate.setDate(newDay);
+            Date yesterday = new Date();
+            yesterday.setDate(yesterday.getDate()-1);
+            yesterday.setHours(23);
+            yesterday.setMinutes(59);
+            yesterday.setSeconds(59);
+            Boolean exceptionCaught = false;
+            for (FoodItem f : foodItems){
+                try{
+                    Date expiryDate = dateFormatter.parse(f.getExpiryDate());
+                    if (expiryDate.compareTo(desiredDate) <= 0 && expiryDate.compareTo(yesterday) >= 0){
+                        output.add(f);
+                    }
+                }
+                catch (ParseException e){
+                    exceptionCaught = true;
+                    break;
+                }
+            }
+            if (exceptionCaught){
+                return new ArrayList<FoodItem>();
+            }
+            else{
+                return output;
+            }
+        }
+
+    }
+
+    /**
+     * Written weirdly for testing purposes, ideally the current user should be accessible from the activity but for now I'm using a test user defined in scope.
+     * Currently picks a random FoodItem from the array until I decide how I want to sort the items.
+     */
+    private void UpdateExpiryList(){
+        int numberOfDays = 2;
+        TextView expiryReminder = findViewById(R.id.expiryReminder);
+        TextView costText = findViewById(R.id.costText);
+        Users currentUser = new Users();
+        Context context = this;
+        currentUser.fetchUserData(mAuth.getUid(), new Users.UserDataCallback(){
+            @Override
+            public void onUserDataReceived(Users user) {
+                ArrayList<FoodItem> expiring = GetExpiringFoodItems(user, numberOfDays); // Number of days can be changed, potentially as a setting
+                if (expiring.isEmpty()){
+                    expiryReminder.setText("Nothing expiring soon");
+                    costText.setText("");
+                }
+                else{
+                    Random rnd = new Random();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Your food items expiring in ");
+                    sb.append(numberOfDays);
+                    sb.append(" days:");
+                    expiryReminder.setText(sb.toString());
+
+                    sb = new StringBuilder();
+                    sb.append("Which is ");
+                    double cost = 0.0;
+                    for (FoodItem f : expiring){
+                        cost = cost + f.getPrice();
+                    }
+                    NumberFormat toCurrency = NumberFormat.getCurrencyInstance(Locale.UK);
+                    sb.append(toCurrency.format(cost));
+                    sb.append(" of potential food waste!");
+                    costText.setText(sb.toString());
+
+                    adapter = new FoodItemAdapter(context, expiring, new FoodItemAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(FoodItem foodItem) {
+                            Intent detailIntent = new Intent(HomeActivity.this, FoodItemScreen.class);
+                            detailIntent.putExtra("FoodItem", foodItem); // foodItem must be Serializable
+                            startActivity(detailIntent);
+                        }
+                    });
+                    expiry.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Log.e("UserData", "Error retrieving user data: " + message);
+            }
+        });
     }
 }
