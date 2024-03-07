@@ -105,7 +105,6 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-
                         Log.e("CameraActivity", "Image capture was successfully");
                     }
                 }
@@ -184,29 +183,29 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         try {
             Log.d("CameraIntent", "Dispatching camera intent.");
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 File photoFile = null;
                 try {
                     photoFile = createImageFile();
-                    Log.d("CameraIntent", "File created: " + photoFile.getAbsolutePath());
+                    if (photoFile != null) {
+                        Uri photoURI = FileProvider.getUriForFile(this,
+                                getApplicationContext().getPackageName() + ".fileprovider",
+                                photoFile);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        mTakePicture.launch(takePictureIntent);
+                    } else {
+                        Log.e("CameraIntent", "Failed to create photo file.");
+                    }
                 } catch (IOException ex) {
                     Log.e("CameraError", "Error occurred while creating the image file", ex);
                 }
-
-                if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(this,
-                            getApplicationContext().getPackageName() + ".fileprovider",
-                            photoFile);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    mTakePicture.launch(takePictureIntent);
-                } else {
-                    Log.d("CameraIntent", "Photo file is null.");
-                }
             } else {
-                Log.d("CameraIntent", "No activity can handle the camera intent.");
+                Log.e("CameraIntent", "No activity can handle the camera intent.");
             }
         } catch (Exception e) {
             Log.e("CameraIntent", "Exception in dispatchTakePictureIntent", e);
+            e.printStackTrace();
         }
     }
 
