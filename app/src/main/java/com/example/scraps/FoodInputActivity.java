@@ -26,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -48,6 +50,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import android.Manifest;
 
 public class FoodInputActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -116,11 +120,16 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("CameraButton", "Button clicked!");
-                Toast.makeText(FoodInputActivity.this, "Camera button clicked!", Toast.LENGTH_SHORT).show();
-                dispatchTakePictureIntent();
+                if (checkCameraPermission()) {
+                    dispatchTakePictureIntent();
+                } else {
+                    ActivityCompat.requestPermissions(FoodInputActivity.this,
+                            new String[]{Manifest.permission.CAMERA},
+                            CAMERA_PERMISSION_REQUEST_CODE);
+                }
             }
         });
+
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +169,14 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         });
     }
 
+    private boolean checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        return true;
+    }
+
     private void saveDataToDatabase(String foodName, String expiryDate, String purchaseDate, double price, String imageUrl) {
         String firebaseId = mAuth.getUid();
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
@@ -180,15 +197,25 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
             Toast.makeText(FoodInputActivity.this, "Data saving failed!", Toast.LENGTH_SHORT).show();
         });
     }
+
+    private void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_REQUEST_CODE);
+        } else {
+            dispatchTakePictureIntent();
+        }
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Camera permission granted, continue with camera operations
                 dispatchTakePictureIntent();
             } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Camera permission is required to use the camera.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -199,19 +226,22 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-                Log.e("Photo", "Created PhOTOOTO");
             } catch (IOException ex) {
-                Log.e("CameraError", "Error occurred while creating the image file", ex);
+                Log.e("CameraError", "Error occurred while creating the File", ex);
             }
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        getApplicationContext().getPackageName() + ".fileprovider",
+                        "com.example.scraps.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 mTakePicture.launch(takePictureIntent);
             }
+        } else {
+            Log.e("CameraIntent", "No application can handle the intent");
         }
     }
+
+
 
     private File createImageFile() throws IOException {
         // Create an image file name
