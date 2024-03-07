@@ -1,6 +1,8 @@
 package com.example.scraps.DBModels;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.scraps.FoodItemScreen;
 import com.example.scraps.R;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
@@ -75,6 +79,7 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
             // Load the image using Picasso
             if (foodItem.getImageURL() != null) {
                 Picasso.get().load(foodItem.getImageURL())
+                        .transform(new FoodItemScreen.RotateTransformation(90)) // Adjust the rotation degrees as needed
                         .resize(100, 100)
                         .centerCrop()
                         .error(R.drawable.scrapslogo)  // Placeholder image in case of error.
