@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="16dp">
 
     <ImageView
@@ -11,21 +10,42 @@
         android:layout_height="100dp"
         android:scaleType="centerCrop" />
 
-    <!-- TextView for displaying the food name -->
-    <TextView
-        android:id="@+id/tvFoodName"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Food Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        android:orientation="vertical"
+        android:layout_marginStart="16dp">
 
-    <!-- TextView for displaying the expiry date -->
-    <TextView
-        android:id="@+id/tvExpiryDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Expiry Date"/>
+        <TextView
+            android:id="@+id/tvFoodName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arvobold"
+            android:text="Food Name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/button_green"
+            android:textSize="24sp" />
 
-    <!-- Add additional TextViews for other properties like price, purchase date etc. -->
+        <TextView
+            android:id="@+id/tvExpiryDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arvobold"
+            android:text="Expiry Date:"
+            android:textColor="@color/button_green"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvExpiryDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arvobold"
+            android:text="Expiry Date"
+            android:textColor="@color/button_green"
+            android:textSize="16sp" />
+
+        <!-- Add additional TextViews for other properties like price, purchase date etc. -->
+
+    </LinearLayout>
 
 </LinearLayout>
