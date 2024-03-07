@@ -16,7 +16,9 @@
         android:layout_height="match_parent">
 
         <!-- Include your toolbar layout -->
-        <include layout="@layout/toolbar" />
+        <include
+            android:id="@+id/include6"
+            layout="@layout/toolbar" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_horizontal"
@@ -66,16 +68,16 @@
         <Button
             android:id="@+id/remove"
             android:layout_width="0dp"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:backgroundTint="@color/button_green"
-            android:textColor="@color/text_green"
+            android:fontFamily="@font/arvobold"
             android:gravity="center_horizontal|center_vertical"
             android:text="Remove item"
-            android:fontFamily="@font/arvobold"
             android:textAllCaps="false"
+            android:textColor="@color/text_green"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -85,7 +87,7 @@
         <Button
             android:id="@+id/share"
             android:layout_width="0dp"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
@@ -110,7 +112,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            tools:srcCompat="@drawable/scrapslogotransparent" />
+            app:srcCompat="@drawable/scrapslogotransparent" />
 
         <TextView
             android:id="@+id/purchased"
@@ -147,9 +149,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:rotation="-90"
+            android:rotation="0"
             android:rotationX="0"
             android:rotationY="0"
             android:scaleType="centerCrop"
@@ -157,7 +159,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/include6" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
