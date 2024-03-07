@@ -59,13 +59,14 @@ public class RegistrationActivity extends AppCompatActivity {
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
         String username = usernameInput.getText().toString().trim();
+        String householdEmail = householdIdInput.getText().toString().trim();
         boolean isCreate = checkBoxCreateOrJoin.isChecked();
 
 
         if (!email.isEmpty() && !password.isEmpty() && !username.isEmpty()) {
             Registration registration = new Registration();
             if (isCreate) {
-                // Directly register the user and let them create a new household afterward
+                // Register the new user with a new household
                 registration.registerUser(email, password, username, "",  new Registration.DatabaseOperationCallback() {
                     @Override
                     public void onSuccess(String message) {
@@ -93,7 +94,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
             } else {
                 // Check if a household exists before proceeding with registration
-                registration.checkHouseholdExists(email, new Registration.DatabaseOperationCallback() {
+                registration.checkHouseholdExists(householdEmail, new Registration.DatabaseOperationCallback() {
                     @Override
                     public void onSuccess(String householdId) {
                         // Household found, proceed with registration
@@ -114,7 +115,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(String errorMessage) {
                         // No household associated, abort registration
-                        Toast.makeText(RegistrationActivity.this, "No existing household associated with this email. Cannot proceed with registration.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegistrationActivity.this, "No existing household associated with this email.", Toast.LENGTH_LONG).show();
                     }
                 });
             }
