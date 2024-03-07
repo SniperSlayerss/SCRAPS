@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ import java.util.Random;
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private LinearLayout navigationMenuLayout;
+    private Button settingsButton, addFoodButton, foodDatabaseButton;
     NavigationView navigationView;
     private RecyclerView expiry;
     private FoodItemAdapter adapter;
@@ -60,10 +62,40 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        settingsButton = findViewById(R.id.newButtonId);
+        addFoodButton = findViewById(R.id.foodAdd);
+        foodDatabaseButton = findViewById(R.id.foodItem);
+
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.menu_home);
+
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), SettingsActivity.class); //v.context() lets you access current class
+                startActivity(intent);
+            }
+        });
+
+        addFoodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), FoodInputActivity.class); //v.context() lets you access current class
+                startActivity(intent);
+            }
+        });
+
+        foodDatabaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), FoodDatabaseScreenActivity.class); //v.context() lets you access current class
+                startActivity(intent);
+            }
+        });
+
 
         expiry = findViewById(R.id.expiry);
         expiry.setLayoutManager(new LinearLayoutManager(this));
@@ -102,7 +134,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void openAddFoodItem(View view) {
-        Intent intent = new Intent(this, FoodInputActivity.class);
+        Intent intent = new Intent(this, FoodItemScreen.class);
         startActivity(intent);
     }
 
