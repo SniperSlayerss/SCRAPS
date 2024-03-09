@@ -59,6 +59,12 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
         return foodItemList.size();
     }
 
+    public void updateData(List<FoodItem> newFoodItemList) {
+        this.foodItemList.clear();
+        this.foodItemList.addAll(newFoodItemList);
+        notifyDataSetChanged();
+    }
+
     public class FoodItemViewHolder extends RecyclerView.ViewHolder {
         private TextView tvFoodName;
         private TextView tvExpiryDate;
@@ -90,12 +96,7 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
                 foodItemImage.setImageResource(R.drawable.scrapslogo);
             }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(foodItem);
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onItemClick(foodItem));
         }
     }
 }
