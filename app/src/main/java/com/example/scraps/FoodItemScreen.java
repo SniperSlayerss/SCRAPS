@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +18,16 @@ import android.widget.TextView;
 
 import com.example.scraps.DBModels.FoodItem;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.widget.Toast;
+
 import com.squareup.picasso.Transformation;
 
 public class FoodItemScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -100,6 +105,58 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
                         });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+            }
+        });
+
+        Button shareAndNotifyButton = findViewById(R.id.shareableToggle);
+        shareAndNotifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleShareable(foodItem);
+            }
+        });
+    }
+
+
+    public void toggleShareable(FoodItem foodItem) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference foodItemRef = database.child("Users").child(foodItem.getUserID())
+                .child("foodItems")
+                .child(foodItem.getFoodID())
+                .child("shareable");
+
+        // Read the current value of isShareable
+        foodItemRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get the current value and toggle it
+                Boolean isShareable = dataSnapshot.getValue(Boolean.class);
+                if (isShareable != null) {
+                    foodItemRef.setValue(!isShareable, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                foodItem.toggleShareable();
+                                if(foodItem.isShareable())
+                                {
+                                    Toast.makeText(FoodItemScreen.this, "Food is now being shared!", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(FoodItemScreen.this, "Food is now not shared!", Toast.LENGTH_SHORT).show();
+                                }
+
+                                System.out.println("Food item shareable status successfully toggled.");
+                            } else {
+                                System.out.println("Failed to toggle food item shareable status: " + databaseError.getMessage());
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Failed to read isShareable: " + databaseError.getMessage());
             }
         });
     }
