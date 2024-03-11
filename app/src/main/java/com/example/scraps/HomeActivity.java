@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,12 +39,14 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -53,7 +57,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FoodItemAdapter adapter;
     private FirebaseAuth mAuth;
     private List<FoodItem> foodItemsList = new ArrayList<>();
+    private Map<String, FoodItem> foodItemMap;
     private RecyclerView recyclerView;
+
+    public interface FoodItemsCallback {
+        void onCallback(Map<String, FoodItem> foodItems);
+    }
+
+    public interface ExpiringFoodItemsCallback {
+        void onCallback(ArrayList<FoodItem> expiringFoodItems);
+        void onError(String error);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,12 +149,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         if (itemID == R.id.menu_home) {
             //since we are already on home page, do nothing and let window close
-        }
-        else if (itemID == R.id.menu_food_item) {
+        } else if (itemID == R.id.menu_food_item) {
             Intent intent = new Intent(this, FoodDatabaseScreenActivity.class); //v.context() lets you access current class
             startActivity(intent);
-        }
-        else if (itemID == R.id.menu_settings) {
+        } else if (itemID == R.id.menu_settings) {
             Intent intent = new Intent(this, SettingsActivity.class); //v.context() lets you access current class
             startActivity(intent);
         }
@@ -147,109 +160,129 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    /**
-     * Gets all food items attached to a user that are set to expire between the current day and a specified number of days in the future.
-     * @param currentUser
-     * @param numberOfDays
-     * @return
-     */
-    private ArrayList<FoodItem> GetExpiringFoodItems(Users currentUser, Integer numberOfDays){
-        if (currentUser.getFoodItems() == null){
-            return new ArrayList<FoodItem>();
-        }
-        if (currentUser.getFoodItems().isEmpty()){
-            return new ArrayList<FoodItem>();
-        }
-        else{
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("d-M-yyyy");
-            ArrayList<FoodItem> foodItems = new ArrayList((currentUser.getFoodItems()).values());
-            ArrayList<FoodItem> output = new ArrayList<>();
-            Date desiredDate = new Date();
-            int newDay = desiredDate.getDate() + numberOfDays.intValue();
-            desiredDate.setDate(newDay);
-            Date yesterday = new Date();
-            yesterday.setDate(yesterday.getDate()-1);
-            yesterday.setHours(23);
-            yesterday.setMinutes(59);
-            yesterday.setSeconds(59);
-            Boolean exceptionCaught = false;
-            for (FoodItem f : foodItems){
-                try{
-                    Date expiryDate = dateFormatter.parse(f.getExpiryDate());
-                    if (expiryDate.compareTo(desiredDate) <= 0 && expiryDate.compareTo(yesterday) >= 0){
-                        output.add(f);
+    private void GetExpiringFoodItems(String householdId, String currentUserId, Integer numberOfDays, ExpiringFoodItemsCallback callback) {
+        getFoodItemsForHousehold(householdId, currentUserId, new FoodItemsCallback() {
+            @Override
+            public void onCallback(Map<String, FoodItem> foodItems) {
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
+                ArrayList<FoodItem> output = new ArrayList<>();
+                Calendar calendar = Calendar.getInstance();
+
+                // Set desiredDate to the end of the day numberOfDays ahead
+                calendar.add(Calendar.DATE, numberOfDays);
+                setEndOfDay(calendar);
+                Date desiredDate = calendar.getTime();
+
+                // Set yesterday to the end of the previous day
+                Calendar yesterdayCalendar = Calendar.getInstance();
+                setStartOfDay(yesterdayCalendar);
+                yesterdayCalendar.add(Calendar.DATE, -1);
+                Date yesterday = yesterdayCalendar.getTime();
+
+                for (FoodItem f : foodItems.values()) {
+                    if (f.getExpiryDate() == null || f.getExpiryDate().isEmpty()) {
+                        continue; // Skip if the date is null or empty
+                    }
+                    try {
+                        Date expiryDate = dateFormatter.parse(f.getExpiryDate());
+                        // Assuming you've set 'yesterday' and 'desiredDate' correctly as before
+                        if (expiryDate != null && expiryDate.after(yesterday) && !expiryDate.before(desiredDate)) {
+                            output.add(f);
+                        }
+                    } catch (ParseException e) {
+                        Log.e("DateParseError", "Error parsing the expiry date: " + f.getExpiryDate(), e);
                     }
                 }
-                catch (ParseException e){
-                    exceptionCaught = true;
-                    break;
-                }
+                callback.onCallback(output);
             }
-            if (exceptionCaught){
-                return new ArrayList<FoodItem>();
-            }
-            else{
-                return output;
-            }
-        }
-
+        });
     }
 
-    /**
-     * Written weirdly for testing purposes, ideally the current user should be accessible from the activity but for now I'm using a test user defined in scope.
-     * Currently picks a random FoodItem from the array until I decide how I want to sort the items.
-     */
-    private void UpdateExpiryList(){
-        int numberOfDays = 2;
-        TextView expiryReminder = findViewById(R.id.expiryReminder);
-        TextView costText = findViewById(R.id.costText);
-        Users currentUser = new Users();
-        Context context = this;
-        currentUser.fetchUserData(mAuth.getUid(), new Users.UserDataCallback(){
+    private void setEndOfDay(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+    }
+
+    private void setStartOfDay(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+    }
+    private void UpdateExpiryList() {
+        final int numberOfDays = 5;
+        recyclerView = findViewById(R.id.expiry);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        mAuth = FirebaseAuth.getInstance();
+
+        Users user = new Users();
+        user.fetchUserData(mAuth.getUid(), new Users.UserDataCallback() {
             @Override
             public void onUserDataReceived(Users user) {
-                ArrayList<FoodItem> expiring = GetExpiringFoodItems(user, numberOfDays); // Number of days can be changed, potentially as a setting
-                if (expiring.isEmpty()){
-                    expiryReminder.setText("Nothing expiring soon");
-                    costText.setText("");
-                }
-                else{
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("Your food items expiring in ");
-                    sb.append(numberOfDays);
-                    sb.append(" days:");
-                    expiryReminder.setText(sb.toString());
-
-                    sb = new StringBuilder();
-                    sb.append("Which is ");
-                    double cost = 0.0;
-                    for (FoodItem f : expiring){
-                        cost = cost + f.getPrice();
-                    }
-                    NumberFormat toCurrency = NumberFormat.getCurrencyInstance(Locale.UK);
-                    sb.append(toCurrency.format(cost));
-                    sb.append(" of potential food waste!");
-                    costText.setText(sb.toString());
-
-                    readFoodItemsForHousehold(user.getHouseID(), user.getFirebaseID());
-                    adapter = new FoodItemAdapter(context, expiring, new FoodItemAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(FoodItem foodItem) {
-                            Intent detailIntent = new Intent(HomeActivity.this, FoodItemScreen.class);
-                            detailIntent.putExtra("FoodItem", foodItem); // foodItem must be Serializable
-                            startActivity(detailIntent);
-                        }
-                    });
-                    expiry.setAdapter(adapter);
-                }
+                fetchExpiringFoodItems(user.getHouseID(), user.getFirebaseID(), numberOfDays);
             }
 
             @Override
             public void onFailure(String message) {
-                Log.e("UserData", "Error retrieving user data: " + message);
+                showToast("Error retrieving user data: " + message);
             }
         });
     }
+
+    private void fetchExpiringFoodItems(String householdId, String currentUserId, int numberOfDays) {
+        GetExpiringFoodItems(householdId, currentUserId, numberOfDays, new ExpiringFoodItemsCallback() {
+            @Override
+            public void onCallback(ArrayList<FoodItem> expiringFoodItems) {
+                updateUIWithExpiringItems(expiringFoodItems, numberOfDays);
+            }
+
+            @Override
+            public void onError(String error) {
+                showToast("Error loading expiring items: " + error);
+            }
+        });
+    }
+
+    private void updateUIWithExpiringItems(ArrayList<FoodItem> expiringFoodItems, int numberOfDays) {
+        TextView expiryReminder = findViewById(R.id.expiryReminder);
+        TextView costText = findViewById(R.id.costText);
+
+        if (expiringFoodItems.isEmpty()) {
+            expiryReminder.setText("Nothing expiring soon");
+            costText.setText("");
+        } else {
+            String reminderText = String.format(Locale.UK, "Your food items expiring in %d days:", numberOfDays);
+            expiryReminder.setText(reminderText);
+
+            double cost = calculateTotalCost(expiringFoodItems);
+            String costTextString = String.format(Locale.UK, "Which is %s of potential food waste!", NumberFormat.getCurrencyInstance(Locale.UK).format(cost));
+            costText.setText(costTextString);
+
+            FoodItemAdapter adapter = new FoodItemAdapter(this, expiringFoodItems, foodItem -> {
+                Intent detailIntent = new Intent(this, FoodItemScreen.class);
+                detailIntent.putExtra("FoodItem", foodItem);
+                startActivity(detailIntent);
+            });
+            recyclerView.setAdapter(adapter);
+        }
+    }
+
+    private double calculateTotalCost(ArrayList<FoodItem> expiringFoodItems) {
+        double cost = 0.0;
+        for (FoodItem f : expiringFoodItems) {
+            cost += f.getPrice();
+        }
+        return cost;
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+
 
     private void updateFoodList(Map<String, FoodItem> foodItems) {
         foodItemsList.clear();
@@ -316,4 +349,54 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
+    private void getFoodItemsForHousehold(String householdId, String currentUserId, FoodItemsCallback callback) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference householdRef = database.getReference("households").child(householdId).child("userIDs");
+
+        householdRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This map will hold all the relevant food items from users in the household
+                Map<String, FoodItem> householdFoodItems = new HashMap<>();
+
+                AtomicInteger pendingRequests = new AtomicInteger((int) dataSnapshot.getChildrenCount());
+
+                for (DataSnapshot userIdSnapshot : dataSnapshot.getChildren()) {
+                    // For each user ID, fetch the food items
+                    String userId = userIdSnapshot.getKey();
+                    DatabaseReference userFoodItemsRef = database.getReference("Users").child(userId).child("foodItems");
+
+                    userFoodItemsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot foodItemSnapshot : dataSnapshot.getChildren()) {
+                                FoodItem foodItem = foodItemSnapshot.getValue(FoodItem.class);
+
+                                // Check if the item is shareable or belongs to the current user
+                                if (userId.equals(currentUserId) || (foodItem != null && foodItem.isShareable())) {
+                                    householdFoodItems.put(foodItemSnapshot.getKey(), foodItem);
+                                }
+                            }
+                            if (pendingRequests.decrementAndGet() == 0) {
+                                // Once all requests are completed, execute the callback
+                                callback.onCallback(householdFoodItems);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("DatabaseError", "Error reading user food items: " + databaseError.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", "Error reading household users: " + databaseError.getMessage());
+            }
+        });
+    }
+
 }

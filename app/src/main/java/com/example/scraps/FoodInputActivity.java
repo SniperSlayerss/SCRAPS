@@ -210,7 +210,7 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         currentUser.fetchUserData(mAuth.getUid(), new Users.UserDataCallback() {
                     @Override
                     public void onUserDataReceived(Users user) {
-                        FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, firebaseId, user.getUsername(), price, imageUrl, false);
+                        FoodItem foodItem = new FoodItem(foodName, expiryDate, purchaseDate, firebaseId, user.getUsername(), foodItemId, price, imageUrl, false);
 
                         // Assuming "foodItems" is a node under each user where their food items are stored
                         usersRef.child("foodItems").child(foodItemId).setValue(foodItem).addOnSuccessListener(aVoid -> {

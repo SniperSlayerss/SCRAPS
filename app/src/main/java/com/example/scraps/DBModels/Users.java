@@ -77,7 +77,7 @@ public class Users {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
             StorageReference foodImagesRef = storageReference.child("food_images/" + UUID.randomUUID().toString());
 
-            // Upload the file to Firebase Storage
+            // Upload the file to Firebase Storage/
             foodImagesRef.putFile(filePath)
                     .addOnSuccessListener(taskSnapshot -> {
                         // Get a URL to the uploaded content
@@ -159,6 +159,7 @@ public class Users {
             }
         });
     }
+
 
     public static String getSHA(String input) throws NoSuchAlgorithmException
     {

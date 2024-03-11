@@ -15,7 +15,7 @@ public class FoodItem implements Serializable {
     private FirebaseAuth mAuth;
     public FoodItem() {}
 
-    public FoodItem(String foodName, String expiryDate, String purchaseDate, String userID, String username, double price, String imageURL, boolean isShareable) {
+    public FoodItem(String foodName, String expiryDate, String purchaseDate, String userID, String username, String foodID, double price, String imageURL, boolean isShareable) {
         this.foodName = foodName;
         this.expiryDate = expiryDate;
         this.price = price;
@@ -24,6 +24,7 @@ public class FoodItem implements Serializable {
         this.userID = userID;
         this.username = username;
         this.imageURL = imageURL;
+        this.foodID = foodID;
     }
 
     public Map<String, Object> toMap() {
@@ -37,6 +38,10 @@ public class FoodItem implements Serializable {
         result.put("userID", userID);
         result.put("username", username);
         return result;
+    }
+
+    public void toggleShareable() {
+         isShareable = !isShareable;
     }
 
     public void removeFoodItem() {
