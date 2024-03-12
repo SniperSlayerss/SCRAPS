@@ -8,55 +8,106 @@
     android:background="@color/main_green"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Household"
+    tools:context=".Notifications"
     >
 
 
     <!-- Main content view -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
 
         <!-- Include your toolbar layout -->
-        <include layout="@layout/toolbar" />
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="150dp"
-        android:text="Your House"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2"/>
 
-    <!-- RecyclerView to display the list of house members -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewHouseMembers"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonAddMember" />
 
-    <!-- Button to add a new house member -->
-    <Button
-        android:id="@+id/buttonAddMember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Member"
-        android:backgroundTint="@color/button_green"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewHouseMembers"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <include
+            android:id="@+id/include2"
+            layout="@layout/toolbar" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="150dp"
+            android:text="Your House"
+            android:textColor="@color/button_green"
+            android:fontFamily="@font/arvobold"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- RecyclerView to display the list of house members -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewHouseMembers"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/buttonAddMember" />
+
+        <!-- Button to add a new house member -->
+        <Button
+            android:id="@+id/buttonAddMember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/button_green"
+            android:fontFamily="@font/arvoregular"
+            android:text="Add Member"
+            android:textColor="@color/text_green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewHouseMembers" />
+
+        <TextView
+            android:id="@+id/houseID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="80dp"
+            android:text="House ID:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2" />
+
+        <TextView
+            android:id="@+id/houseEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="36dp"
+            android:text="House Email:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/houseID" />
+
+        <TextView
+            android:id="@+id/houseIDNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="26dp"
+            android:text=""
+            app:layout_constraintStart_toEndOf="@+id/houseID"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/houseEmailVal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="81dp"
+            android:text=""
+            app:layout_constraintStart_toEndOf="@+id/houseEmail"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

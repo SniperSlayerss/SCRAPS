@@ -2,68 +2,74 @@ package com.example.scraps;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
+import com.example.scraps.DBModels.Households;
+import com.example.scraps.DBModels.Users;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import com.google.android.material.navigation.NavigationView;
+public class Household extends AppCompatActivity {
+    private TextView houseIdTextView;
+    private TextView emailTextView;
 
-public class Household extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    NavigationView navigationView;
-    private DrawerLayout drawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.household);
 
+        houseIdTextView = findViewById(R.id.houseIDNum);
+        emailTextView = findViewById(R.id.houseEmailVal);
 
-        ImageView leftIcon = findViewById(R.id.left_icon);
-        ImageView rightIcon = findViewById(R.id.right_icon);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String currentUserId = currentUser.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
+                    .child("Users").child(currentUserId);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            userRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Users user = dataSnapshot.getValue(Users.class);
+                        if (user != null) {
+                            String householdId = user.getHouseID();
+                            houseIdTextView.setText(householdId);
+                        }
+                    }
+                }
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle errors
+                }
+            });
 
-        navigationView.setNavigationItemSelectedListener(this);
+            DatabaseReference householdRef = FirebaseDatabase.getInstance().getReference()
+                    .child("Households").child(currentUserId);
 
-        leftIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-        });
+            householdRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Users household = dataSnapshot.getValue(Users.class);
+                        if (household != null) {
+                            String email = household.getEmail();
+                            emailTextView.setText(email);
+                        }
+                    }
+                }
 
-        rightIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.END);
-            }
-        });
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int itemID = item.getItemId();
-
-        if (itemID == R.id.menu_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class); //v.context() lets you access current class
-            startActivity(intent);
-        } else if (itemID == R.id.menu_food_item) {
-            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class); //v.context() lets you access current class
-            startActivity(intent);
-        } else if (itemID == R.id.menu_home) {
-            Intent intent = new Intent(this, HomeActivity.class); //v.context() lets you access current class
-            startActivity(intent);
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle errors
+                }
+            });
         }
-        drawerLayout.closeDrawer(GravityCompat.END);
-        return true;
     }
 }
