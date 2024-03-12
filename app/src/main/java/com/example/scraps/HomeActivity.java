@@ -186,7 +186,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         Date expiryDate = dateFormatter.parse(f.getExpiryDate());
                         // Assuming you've set 'yesterday' and 'desiredDate' correctly as before
-                        if (expiryDate != null && expiryDate.after(yesterday) && !expiryDate.before(desiredDate)) {
+                        if (expiryDate != null && expiryDate.after(yesterday) && expiryDate.before(desiredDate)) {
                             output.add(f);
                         }
                     } catch (ParseException e) {
