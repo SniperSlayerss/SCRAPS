@@ -141,8 +141,6 @@ public class Users {
                 });
     }
 
-
-
     public void removeFoodItemFromDatabase(String foodItemId) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         DatabaseReference foodItemsRef = database.child("Users").child(this.firebaseID)
