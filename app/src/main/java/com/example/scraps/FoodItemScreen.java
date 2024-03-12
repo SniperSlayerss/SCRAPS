@@ -97,11 +97,9 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
                 builder.setTitle("Confirmation")
                         .setMessage("Are you sure you want to remove this item?")
                         .setPositiveButton("Yes", (dialogInterface, i) -> {
-                            // Perform removal action here
                             removeFoodItem();
                         })
                         .setNegativeButton("No", (dialogInterface, i) -> {
-                            // Do nothing if "No" is clicked
                         });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
