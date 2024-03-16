@@ -117,8 +117,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(v.getContext(), HomeActivity.class); //v.context() lets you access current class
-                //startActivity(intent);
+                Intent intent = new Intent(v.getContext(), HomeActivity.class); //v.context() lets you access current class
+                startActivity(intent);
             }
         });
 
