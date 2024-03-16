@@ -30,6 +30,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Transformation;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class FoodItemScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private FoodItem foodItem;
@@ -74,12 +77,16 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         TextView userNameTextView = findViewById(R.id.user);
         TextView purchaseDateTextView = findViewById(R.id.purchased);
         TextView useByDateTextView = findViewById(R.id.useBy);
+        TextView priceTextView = findViewById(R.id.price);
 
         if (foodItem != null) {
             itemNameTextView.setText(String.format("Item: %s", foodItem.getFoodName()));
             purchaseDateTextView.setText(String.format("Purchased: %s", foodItem.getPurchaseDate()));
             useByDateTextView.setText(String.format("Use By: %s", foodItem.getExpiryDate()));
             userNameTextView.setText(String.format("Name: %s", foodItem.getUsername()));
+            double cost = foodItem.getPrice();
+            String costTextString = String.format(Locale.UK, "Price: %s", NumberFormat.getCurrencyInstance(Locale.UK).format(cost));
+            priceTextView.setText(costTextString);
         }
 
         String imageUrl = foodItem.getImageURL();
@@ -97,11 +104,9 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
                 builder.setTitle("Confirmation")
                         .setMessage("Are you sure you want to remove this item?")
                         .setPositiveButton("Yes", (dialogInterface, i) -> {
-                            // Perform removal action here
                             removeFoodItem();
                         })
                         .setNegativeButton("No", (dialogInterface, i) -> {
-                            // Do nothing if "No" is clicked
                         });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();

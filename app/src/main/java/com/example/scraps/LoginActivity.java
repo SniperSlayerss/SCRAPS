@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -83,5 +84,11 @@ public class LoginActivity extends AppCompatActivity {
     public void openHomeScreenActivity() {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+        // Do nothing to disable the back button
     }
 }
