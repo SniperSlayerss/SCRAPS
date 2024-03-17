@@ -51,13 +51,16 @@
 
         <TextView
             android:id="@+id/item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="265dp"
+            android:layout_height="56dp"
+            android:ellipsize="end"
             android:fontFamily="@font/arvoregular"
             android:gravity="center_vertical"
+            android:maxEms="8"
+            android:maxLines="2"
             android:text="ITEM"
             android:textColor="@color/button_green"
-            android:textSize="34sp"
+            android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/user"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.007"
@@ -102,19 +105,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/user"
-            app:layout_constraintDimensionRatio="h,1:1"
-            app:layout_constraintEnd_toEndOf="@+id/guideline_vertical"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            app:srcCompat="@drawable/scrapslogotransparent" />
 
         <TextView
             android:id="@+id/purchased"
@@ -238,15 +228,15 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:fontFamily="@font/arvobold"
             android:text="Item:  "
             android:textColor="@color/button_green"
-            android:textSize="34sp"
+            android:layout_marginStart="30dp"
+            android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/user"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            app:layout_constraintVertical_bias="0.493" />
+            app:layout_constraintVertical_bias="0.485" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
