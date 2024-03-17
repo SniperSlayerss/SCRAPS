@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class PushNotificationService extends FirebaseMessagingService {
-    private static final String CHANNEL_ID = "scraps_food_expiry";
+    private static final String CHANNEL_ID = "CHANNEL_ID";
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
