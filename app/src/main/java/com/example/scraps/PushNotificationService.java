@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class PushNotificationService extends FirebaseMessagingService {
-    private static final String CHANNEL_ID = "CHANNEL_ID";
+    private static final String CHANNEL_ID = "Your_CHANNEL_ID";
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -54,7 +54,8 @@ public class PushNotificationService extends FirebaseMessagingService {
                         .setContentText(body)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
+                        .setContentIntent(pendingIntent)
+                        .setPriority(NotificationCompat.PRIORITY_MAX);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
