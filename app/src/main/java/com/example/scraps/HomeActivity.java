@@ -255,7 +255,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             expiryReminder.setText("Nothing expiring soon");
             costText.setText("");
         } else {
-            String reminderText = String.format(Locale.UK, "Your food items expiring in %d days:", numberOfDays);
+            String reminderText = String.format(Locale.UK, "Your food items expiring within %d days:", numberOfDays);
             expiryReminder.setText(reminderText);
 
             double cost = calculateTotalCost(expiringFoodItems);
