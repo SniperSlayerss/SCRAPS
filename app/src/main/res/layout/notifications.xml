@@ -184,7 +184,7 @@
             android:fontFamily="@font/arvobold"
             android:textColor="@color/button_green"
             android:textStyle="bold"
-            android:text="Third Notif Option"
+            android:text="Household info"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/FoodSharing_1" />

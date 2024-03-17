@@ -58,6 +58,7 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
             }
         });
@@ -80,12 +81,12 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         TextView priceTextView = findViewById(R.id.price);
 
         if (foodItem != null) {
-            itemNameTextView.setText(String.format("Item: %s", foodItem.getFoodName()));
-            purchaseDateTextView.setText(String.format("Purchased: %s", foodItem.getPurchaseDate()));
-            useByDateTextView.setText(String.format("Use By: %s", foodItem.getExpiryDate()));
-            userNameTextView.setText(String.format("Name: %s", foodItem.getUsername()));
+            itemNameTextView.setText(String.format(foodItem.getFoodName()));
+            purchaseDateTextView.setText(String.format(foodItem.getPurchaseDate()));
+            useByDateTextView.setText(String.format(foodItem.getExpiryDate()));
+            userNameTextView.setText(String.format(foodItem.getUsername()));
             double cost = foodItem.getPrice();
-            String costTextString = String.format(Locale.UK, "Price: %s", NumberFormat.getCurrencyInstance(Locale.UK).format(cost));
+            String costTextString = String.format(Locale.UK, NumberFormat.getCurrencyInstance(Locale.UK).format(cost));
             priceTextView.setText(costTextString);
         }
 
