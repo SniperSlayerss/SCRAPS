@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.scraps.DBModels.Households;
 import com.example.scraps.DBModels.Users;
 import com.google.android.material.navigation.NavigationView;
@@ -23,24 +24,35 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class Household extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+import java.util.List;
+
+public class Household extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private TextView houseIdTextView;
     private TextView emailTextView;
+    private TextView housematesTextView;
 
     private DrawerLayout drawerLayout;
-    NavigationView navigationView;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.household);
 
+        initializeViews();
+        fetchUserData();
+        setupNavigationDrawer();
+    }
+
+    private void initializeViews() {
         houseIdTextView = findViewById(R.id.houseIDNum);
         emailTextView = findViewById(R.id.houseEmailVal);
+        housematesTextView = findViewById(R.id.housemate);
+    }
 
+    private void fetchUserData() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-
             String currentUserId = currentUser.getUid();
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
                     .child("Users").child(currentUserId);
@@ -55,6 +67,8 @@ public class Household extends AppCompatActivity implements NavigationView.OnNav
                             houseIdTextView.setText(householdId);
                             String emailID = user.getEmail();
                             emailTextView.setText(emailID);
+
+                            fetchHouseholdData(householdId, emailID);
                         }
                     }
                 }
@@ -64,14 +78,41 @@ public class Household extends AppCompatActivity implements NavigationView.OnNav
                     // Handle errors
                 }
             });
-
         }
+    }
 
+    private void fetchHouseholdData(String householdId, String emailID) {
+        DatabaseReference householdRef = FirebaseDatabase.getInstance().getReference()
+                .child("Households").child(householdId);
 
-        ImageView leftIcon = findViewById(R.id.left_icon);
-        ImageView rightIcon = findViewById(R.id.right_icon);
-        TextView title = findViewById(R.id.title);
+        householdRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Households household = snapshot.getValue(Households.class);
+                    if (household != null) {
+                        String emailOfHousehold = household.getHouseEmail();
+                        emailTextView.setText(emailOfHousehold);
+                        List<Users> usersWithEmail = household.getUsersByEmail(emailID);
 
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (Users user : usersWithEmail) {
+                            stringBuilder.append(user.getUsername()).append("\n");
+                        }
+                        String housematesString = stringBuilder.toString();
+                        housematesTextView.setText(housematesString);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle errors
+            }
+        });
+    }
+
+    private void setupNavigationDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -79,25 +120,25 @@ public class Household extends AppCompatActivity implements NavigationView.OnNav
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.menu_home);
+
+        ImageView leftIcon = findViewById(R.id.left_icon);
+        ImageView rightIcon = findViewById(R.id.right_icon);
+        TextView title = findViewById(R.id.title);
+
         leftIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), HomeActivity.class); //v.context() lets you access current class
+                Intent intent = new Intent(v.getContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
 
         rightIcon.setOnClickListener(new View.OnClickListener() {
-            //button to open menu
             @Override
             public void onClick(View v) {
-                //Toast.makeText(v.getContext(), "MENU TOGGLE CLICKED", Toast.LENGTH_SHORT).show();
                 drawerLayout.openDrawer(GravityCompat.END);
             }
         });
-
-
-
     }
 
     @Override
@@ -108,10 +149,10 @@ public class Household extends AppCompatActivity implements NavigationView.OnNav
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         } else if (itemID == R.id.menu_food_item) {
-            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class); //v.context() lets you access current class
+            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class);
             startActivity(intent);
         } else if (itemID == R.id.menu_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class); //v.context() lets you access current class
+            Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }
         drawerLayout.closeDrawer(GravityCompat.END);
