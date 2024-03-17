@@ -61,7 +61,7 @@
             android:layout_marginBottom="18dp"
             android:backgroundTint="@color/button_green"
             android:onClick="goBackButton"
-            android:text="Okay"
+            android:text="Accept"
             android:textColor="@color/text_green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
