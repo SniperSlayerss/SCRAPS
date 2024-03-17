@@ -58,8 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/button_green"
-            android:fontFamily="@font/arvobold"
-            android:text="ADD MEMBER"
+            android:fontFamily="@font/arvoregular"
+            android:text="Add Member"
             android:textColor="@color/text_green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +71,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/arvobold"
-            android:textColor="@color/button_green"
             android:layout_marginStart="35dp"
             android:layout_marginTop="80dp"
             android:text="House ID:"
@@ -82,7 +81,6 @@
             android:id="@+id/houseEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/button_green"
             android:fontFamily="@font/arvobold"
             android:layout_marginStart="10dp"
             android:layout_marginTop="36dp"
@@ -97,8 +95,7 @@
             android:layout_marginStart="14dp"
             android:layout_marginTop="80dp"
             android:fontFamily="@font/arvoregular"
-            android:textColor="@color/button_green"
-            android:text="Loading..."
+            android:text="..."
             app:layout_constraintStart_toEndOf="@+id/houseID"
             app:layout_constraintTop_toBottomOf="@+id/include2" />
 
@@ -106,13 +103,35 @@
             android:id="@+id/houseEmailVal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="36dp"
             android:fontFamily="@font/arvoregular"
-            android:textColor="@color/button_green"
-            android:text="Loading..."
+            android:text="..."
             app:layout_constraintStart_toEndOf="@+id/houseEmail"
             app:layout_constraintTop_toBottomOf="@+id/houseIDNum" />
+
+        <TextView
+            android:id="@+id/housematesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="157dp"
+            android:fontFamily="@font/arvobold"
+            android:layout_marginTop="126dp"
+            android:text="Housemates"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/housemate"
+            android:layout_width="122dp"
+            android:layout_height="203dp"
+            android:layout_marginTop="30dp"
+            android:text="..."
+            android:fontFamily="@font/arvoregular"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/housematesTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

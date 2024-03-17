@@ -1,5 +1,7 @@
 package com.example.scraps.DBModels;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Households {
@@ -37,11 +39,22 @@ public class Households {
     public void setUsers(HashMap<String, Users> users) {
         this.users = users;
     }
-
+    public String getHouseEmail() {return email;}
     public Users getAdminUser() {
         return adminUser;
     }
     public void setAdminUser(Users adminUser) {
         this.adminUser = adminUser;
     }
+
+    public List<Users> getUsersByEmail(String userEmail) {
+        List<Users> usersWithEmail = new ArrayList<>();
+        for (Users user : users.values()) {
+            if (user.getEmail().equals(userEmail)) {
+                usersWithEmail.add(user);
+            }
+        }
+        return usersWithEmail;
+    }
+
 }
