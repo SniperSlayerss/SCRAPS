@@ -56,7 +56,12 @@ public class Privacy extends AppCompatActivity implements NavigationView.OnNavig
     }
 
     public void goBackButton(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    public void declineAction(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
     @Override
