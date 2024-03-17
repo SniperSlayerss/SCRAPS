@@ -93,7 +93,7 @@ public class FoodItemScreen extends AppCompatActivity implements NavigationView.
         String imageUrl = foodItem.getImageURL();
         Picasso.get()
                 .load(imageUrl)
-                .transform(new RotateTransformation(90)) // Adjust the rotation degrees as needed
+                .transform(new RotateTransformation(90))
                 .into(foodImageView);
 
         Button removeButton = findViewById(R.id.remove);

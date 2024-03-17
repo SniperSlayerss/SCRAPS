@@ -63,7 +63,7 @@
             android:backgroundTint="@color/button_green"
             android:focusable="false"
             android:fontFamily="@font/arvoregular"
-            android:hint="Expiry Date (YYYY-MM-DD)"
+            android:hint="Expiry Date (DD-MM-YYYY)"
             android:textColor="@color/button_green"
             android:textColorHint="@color/hint_green"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,7 @@
             android:backgroundTint="@color/button_green"
             android:focusable="false"
             android:fontFamily="@font/arvoregular"
-            android:hint="Purchase Date (YYYY-MM-DD)"
+            android:hint="Purchase Date (DD-MM-YYYY)"
             android:textColor="@color/button_green"
             android:textColorHint="@color/hint_green"
             app:layout_constraintEnd_toEndOf="parent"
@@ -138,8 +138,8 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <RelativeLayout
-            android:layout_width="361dp"
-            android:layout_height="401dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
@@ -148,18 +148,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/price_editText">
+
             <androidx.camera.view.PreviewView
                 android:id="@+id/camera_preview_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
             </androidx.camera.view.PreviewView>
-            <ImageView
-                android:id="@+id/image_capture"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"
-                tools:srcCompat="@tools:sample/avatars"
-            />
+
         </RelativeLayout>
 
         <TextView
@@ -177,6 +173,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/include3" />
+
+        <ImageView
+            android:id="@+id/image_capture"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="invisible"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/camera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/price_editText"
+            tools:srcCompat="@tools:sample/avatars" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

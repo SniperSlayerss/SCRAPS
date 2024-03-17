@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -325,8 +326,11 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
                         runOnUiThread(() -> Toast.makeText(FoodInputActivity.this, "Photo capture succeeded: " + photoFile.getAbsolutePath(), Toast.LENGTH_SHORT).show());
                         currentPhotoPath = photoFile.getAbsolutePath();
                         Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(90);
+                        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                         ImageView imageView = findViewById(R.id.image_capture); // Assuming you have an ImageView with this ID
-                        imageView.setImageBitmap(bitmap);
+                        imageView.setImageBitmap(rotatedBitmap);
                         imageView.setVisibility(View.VISIBLE);
                     }
 
