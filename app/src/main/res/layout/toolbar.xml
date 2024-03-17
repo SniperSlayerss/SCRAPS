@@ -9,34 +9,36 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:padding="0dp"
+        android:translationX="-10dp">
 
         <ImageView
             android:id="@+id/left_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:src="@drawable/scrapslogotransparent" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/arvobold"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
             android:layout_toEndOf="@id/left_icon"
+            android:fontFamily="@font/arvobold"
+            android:gravity="center_vertical"
             android:text="SCRAPS"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="30dp" />
 
         <ImageView
             android:id="@+id/right_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="0dp"
             android:src="@drawable/baseline_align_horizontal_right_24" />
     </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>

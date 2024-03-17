@@ -36,41 +36,40 @@
 
         <TextView
             android:id="@+id/user"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="16dp"
             android:fontFamily="@font/arvoregular"
-            android:text="User: NAME"
+            android:text="NAME"
             android:textColor="@color/button_green"
-            android:textSize="20sp"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/shareableToggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/item" />
+            app:layout_constraintStart_toEndOf="@+id/user_tv"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            app:layout_constraintVertical_bias="0.38" />
 
         <TextView
             android:id="@+id/item"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="16dp"
             android:fontFamily="@font/arvoregular"
+            android:gravity="center_vertical"
             android:text="ITEM"
             android:textColor="@color/button_green"
-            android:textSize="30sp"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/user"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintHorizontal_bias="0.007"
+            app:layout_constraintStart_toEndOf="@+id/textView8"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            app:layout_constraintVertical_bias="0.506" />
 
         <Button
             android:id="@+id/remove"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:backgroundTint="@color/button_green"
             android:fontFamily="@font/arvobold"
@@ -79,6 +78,7 @@
             android:textAllCaps="false"
             android:textColor="@color/text_green"
             android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -89,8 +89,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="100dp"
             android:backgroundTint="@color/button_green"
             android:fontFamily="@font/arvobold"
             android:gravity="center_horizontal|center_vertical"
@@ -98,16 +98,17 @@
             android:textAllCaps="false"
             android:textColor="@color/text_green"
             android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/price" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/user"
             app:layout_constraintDimensionRatio="h,1:1"
             app:layout_constraintEnd_toEndOf="@+id/guideline_vertical"
             app:layout_constraintHorizontal_bias="0.0"
@@ -117,33 +118,33 @@
 
         <TextView
             android:id="@+id/purchased"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
             android:fontFamily="@font/arvoregular"
-            android:text="Purchased: DATE"
+            android:text="DATE"
             android:textColor="@color/button_green"
-            android:textSize="20sp"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/shareableToggle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/purchased_tv"
+            app:layout_constraintTop_toBottomOf="@+id/user"
+            app:layout_constraintVertical_bias="0.17" />
 
         <TextView
             android:id="@+id/useBy"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
             android:fontFamily="@font/arvoregular"
-            android:text="Use by: DATE"
+            android:text="DATE"
             android:textColor="@color/button_green"
-            android:textSize="20sp"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/shareableToggle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/purchased" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/useby_tv"
+            app:layout_constraintTop_toBottomOf="@+id/purchased"
+            app:layout_constraintVertical_bias="0.205" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -164,18 +165,88 @@
 
         <TextView
             android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arvoregular"
+            android:text="PRICE"
+            android:textColor="@color/button_green"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/shareableToggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/price_tv"
+            app:layout_constraintTop_toBottomOf="@+id/useBy"
+            app:layout_constraintVertical_bias="0.375" />
+
+        <TextView
+            android:id="@+id/user_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/arvoregular"
-            android:text="Price: PRICE"
+            android:layout_marginStart="30dp"
+            android:fontFamily="@font/arvobold"
+            android:text="Username:  "
             android:textColor="@color/button_green"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/shareableToggle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/useBy" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            app:layout_constraintVertical_bias="0.38" />
+
+        <TextView
+            android:id="@+id/purchased_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:fontFamily="@font/arvobold"
+            android:text="Purchased:  "
+            android:textColor="@color/button_green"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/shareableToggle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_tv"
+            app:layout_constraintVertical_bias="0.17" />
+
+        <TextView
+            android:id="@+id/useby_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:fontFamily="@font/arvobold"
+            android:text="Use By:  "
+            android:textColor="@color/button_green"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/shareableToggle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/purchased_tv"
+            app:layout_constraintVertical_bias="0.19" />
+
+        <TextView
+            android:id="@+id/price_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:fontFamily="@font/arvobold"
+            android:text="Price:  "
+            android:textColor="@color/button_green"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/shareableToggle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/useby_tv"
+            app:layout_constraintVertical_bias="0.38" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/arvobold"
+            android:text="Item:  "
+            android:textColor="@color/button_green"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/user"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            app:layout_constraintVertical_bias="0.493" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

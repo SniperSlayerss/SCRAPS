@@ -44,7 +44,7 @@
         <!-- RecyclerView for displaying the list of food items -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFoodList"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"

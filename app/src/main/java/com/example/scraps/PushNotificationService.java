@@ -29,20 +29,17 @@ import java.net.URL;
 import java.util.Objects;
 
 public class PushNotificationService extends FirebaseMessagingService {
-    private static final String CHANNEL_ID = "Your_Channel_ID"; // Unique ID for the notification channel
+    private static final String CHANNEL_ID = "scraps_food_expiry";
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
-        // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            // Create and display the notification
             sendMessage(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
     }
 
     private void sendMessage(String title, String body) {
-        Intent intent = new Intent(this, LoginActivity.class); // Change MainActivity.class to the activity you want to open when the notification is clicked
+        Intent intent = new Intent(this, LoginActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
@@ -50,7 +47,7 @@ public class PushNotificationService extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_stat_scrapslogotransparent) // Replace with your app's icon
+                        .setSmallIcon(R.drawable.ic_stat_scrapslogotransparent)
                         .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),
                                 R.mipmap.ic_launcher))
                         .setContentTitle(title)
@@ -62,7 +59,6 @@ public class PushNotificationService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Since Android Oreo notification channel is required.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     "Channel Name",

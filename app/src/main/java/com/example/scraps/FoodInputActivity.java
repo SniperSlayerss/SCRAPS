@@ -6,6 +6,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -155,12 +157,23 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
                 String purchaseDate = purchaseDatePicker._editText.getText().toString().trim();
                 try {
                     double price = Double.parseDouble(priceEditText.getText().toString().trim());
+                    Toast.makeText(FoodInputActivity.this, "Saving food...", Toast.LENGTH_SHORT).show();
                     uploadImageAndSaveData(foodName, expiryDate, purchaseDate, price);
                 } catch (NumberFormatException e) {
                     Toast.makeText(FoodInputActivity.this, "Invalid price", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void clearActivity(){
+        foodNameEditText.setText("");
+        expiryDatePicker._editText.setText("");
+        purchaseDatePicker._editText.setText("");
+        priceEditText.setText("");
+        currentPhotoPath = null;
+        ImageView imageView = findViewById(R.id.image_capture);
+        imageView.setVisibility(View.GONE);
     }
 
     private void uploadImageAndSaveData(String foodName, String expiryDate, String purchaseDate, double price) {
@@ -171,13 +184,13 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
         try {
             Uri fileUri = Uri.fromFile(new File(currentPhotoPath));
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference imageRef = storageRef.child("images/" + fileUri.getLastPathSegment());
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference imageRef = storageRef.child("images/" + fileUri.getLastPathSegment());
 
-        imageRef.putFile(fileUri).addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
-            String imageUrl = downloadUri.toString();
-            // Now save all data including the image URL to Firebase Database
-            saveDataToDatabase(foodName, expiryDate, purchaseDate, price, imageUrl);
+            imageRef.putFile(fileUri).addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                String imageUrl = downloadUri.toString();
+                // Now save all data including the image URL to Firebase Database
+                saveDataToDatabase(foodName, expiryDate, purchaseDate, price, imageUrl);
         })).addOnFailureListener(e -> {
             Log.e("FirebaseStorage", "Upload failed: " + e.getLocalizedMessage());
             Toast.makeText(FoodInputActivity.this, "Upload failed: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -214,7 +227,8 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
                         // Assuming "foodItems" is a node under each user where their food items are stored
                         usersRef.child("foodItems").child(foodItemId).setValue(foodItem).addOnSuccessListener(aVoid -> {
-                            Toast.makeText(FoodInputActivity.this, "Data saved successfully!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FoodInputActivity.this, "Food added successfully!", Toast.LENGTH_SHORT).show();
+                            clearActivity();
                         }).addOnFailureListener(e -> {
                             Log.e("FirebaseDatabase", "Data saving failed: " + e.getLocalizedMessage());
                             Toast.makeText(FoodInputActivity.this, "Data saving failed!", Toast.LENGTH_SHORT).show();
@@ -293,7 +307,6 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
     private void takePhoto(ImageCapture imageCapture) {
         File photoFile = createImageFile();
-
         if (photoFile == null) {
             Toast.makeText(this, "Error creating image file", Toast.LENGTH_SHORT).show();
             return;
@@ -311,6 +324,10 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
                         // Uri contentUri = outputFileResults.getSavedUri(); // If you want to use the saved Uri directly.
                         runOnUiThread(() -> Toast.makeText(FoodInputActivity.this, "Photo capture succeeded: " + photoFile.getAbsolutePath(), Toast.LENGTH_SHORT).show());
                         currentPhotoPath = photoFile.getAbsolutePath();
+                        Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                        ImageView imageView = findViewById(R.id.image_capture); // Assuming you have an ImageView with this ID
+                        imageView.setImageBitmap(bitmap);
+                        imageView.setVisibility(View.VISIBLE);
                     }
 
                     @Override
