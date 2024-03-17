@@ -63,7 +63,7 @@ public class PushNotificationService extends FirebaseMessagingService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     "Channel Name",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("Channel Description");
             channel.enableLights(true);
             channel.setLightColor(Color.RED);
