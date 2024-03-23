@@ -5,14 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.scraps.DBModels.HouseholdMemberAdapter;
 import com.example.scraps.DBModels.Households;
 import com.example.scraps.DBModels.Users;
 import com.google.android.material.navigation.NavigationView;
@@ -24,15 +27,26 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-public class Household extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+
+public class HouseholdActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private TextView houseIdTextView;
     private TextView emailTextView;
-    private TextView housematesTextView;
+    private RecyclerView rvHousemates;
+    private HouseholdMemberAdapter householdMemberAdapter;
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+
+    public interface UsersCallback {
+        void onCompleted(List<Users> usersList);
+        void onError(DatabaseError databaseError);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +61,22 @@ public class Household extends AppCompatActivity implements NavigationView.OnNav
     private void initializeViews() {
         houseIdTextView = findViewById(R.id.houseIDNum);
         emailTextView = findViewById(R.id.houseEmailVal);
-        housematesTextView = findViewById(R.id.housemate);
+        rvHousemates = findViewById(R.id.rvHousemembers);
+        rvHousemates.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize with an empty list
+        householdMemberAdapter = new HouseholdMemberAdapter(this, new ArrayList<>(), user -> {
+            // Handle user item clicks here
+        });
+        rvHousemates.setAdapter(householdMemberAdapter);
     }
+
 
     private void fetchUserData() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String currentUserId = currentUser.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
-                    .child("Users").child(currentUserId);
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId);
 
             userRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -64,11 +85,8 @@ public class Household extends AppCompatActivity implements NavigationView.OnNav
                         Users user = dataSnapshot.getValue(Users.class);
                         if (user != null) {
                             String householdId = user.getHouseID();
-                            houseIdTextView.setText(householdId);
-                            String emailID = user.getEmail();
-                            emailTextView.setText(emailID);
-
-                            fetchHouseholdData(householdId, emailID);
+                            houseIdTextView.setText(user.getHouseID());
+                            fetchHouseholdData(householdId);
                         }
                     }
                 }
@@ -81,27 +99,34 @@ public class Household extends AppCompatActivity implements NavigationView.OnNav
         }
     }
 
-    private void fetchHouseholdData(String householdId, String emailID) {
-        DatabaseReference householdRef = FirebaseDatabase.getInstance().getReference()
-                .child("Households").child(householdId);
-
+    private void fetchHouseholdData(String householdId) {
+        DatabaseReference householdRef = FirebaseDatabase.getInstance().getReference().child("households").child(householdId);
         householdRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     Households household = snapshot.getValue(Households.class);
                     if (household != null) {
-                        String emailOfHousehold = household.getHouseEmail();
-                        emailTextView.setText(emailOfHousehold);
-                        List<Users> usersWithEmail = household.getUsersByEmail(emailID);
-
-                        StringBuilder stringBuilder = new StringBuilder();
-                        for (Users user : usersWithEmail) {
-                            stringBuilder.append(user.getUsername()).append("\n");
-                        }
-                        String housematesString = stringBuilder.toString();
-                        housematesTextView.setText(housematesString);
+                        emailTextView.setText(household.getHouseEmail());
                     }
+                    household.usersToAdd(householdId, new UsersCallback() {
+                        @Override
+                        public void onCompleted(List<Users> usersList) {
+                            Log.d("HouseholdActivity", "Fetched users: " + usersList.size());
+                            runOnUiThread(() -> {
+                                householdMemberAdapter = new HouseholdMemberAdapter(HouseholdActivity.this, usersList, user -> {
+                                    // Implement on item click if needed.
+                                });
+                                rvHousemates.setAdapter(householdMemberAdapter);
+                                householdMemberAdapter.notifyDataSetChanged(); // Notify the adapter of the dataset change
+                            });
+                        }
+                        @Override
+                        public void onError(DatabaseError databaseError) {
+                            Log.e("DATABASE", databaseError.toString());
+                            // Handle errors, possibly by showing an error message to the user
+                        }
+                    });
                 }
             }
 
@@ -123,37 +148,24 @@ public class Household extends AppCompatActivity implements NavigationView.OnNav
 
         ImageView leftIcon = findViewById(R.id.left_icon);
         ImageView rightIcon = findViewById(R.id.right_icon);
-        TextView title = findViewById(R.id.title);
 
-        leftIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), HomeActivity.class);
-                startActivity(intent);
-            }
+        leftIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), HomeActivity.class);
+            startActivity(intent);
         });
 
-        rightIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.END);
-            }
-        });
+        rightIcon.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.END));
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
-
         if (itemID == R.id.menu_home) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, HomeActivity.class));
         } else if (itemID == R.id.menu_food_item) {
-            Intent intent = new Intent(this, FoodDatabaseScreenActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, FoodDatabaseScreenActivity.class));
         } else if (itemID == R.id.menu_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, SettingsActivity.class));
         }
         drawerLayout.closeDrawer(GravityCompat.END);
         return true;

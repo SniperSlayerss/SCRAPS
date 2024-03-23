@@ -126,18 +126,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <TextView
-            android:id="@+id/housemate"
-            android:layout_width="122dp"
-            android:layout_height="203dp"
-            android:layout_marginTop="30dp"
-            android:text="..."
-            android:textColor="@color/button_green"
-            android:fontFamily="@font/arvoregular"
-            android:textAlignment="center"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHousemembers"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonAddMember"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/housematesTitle" />
+            app:layout_constraintTop_toBottomOf="@id/housematesTitle" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
