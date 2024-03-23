@@ -95,7 +95,7 @@ public class RegistrationActivity extends AppCompatActivity {
             } else {
                 // Check if a household exists before proceeding with registration
                 registration.checkHouseholdExists(householdEmail, new Registration.DatabaseOperationCallback() {
-                    @Override
+                     @Override
                     public void onSuccess(String householdId) {
                         // Household found, proceed with registration
                         registration.registerUser(email, password, username, householdId, new Registration.DatabaseOperationCallback() {

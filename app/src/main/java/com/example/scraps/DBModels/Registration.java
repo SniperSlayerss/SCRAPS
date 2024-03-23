@@ -43,7 +43,7 @@ public class Registration {
                         if (firebaseUser != null) {
                             String firebaseAuthId = firebaseUser.getUid();
                             // After successful registration, store user details
-                            storeUserDetails(firebaseAuthId, userName, userEmail, houseID, callback);
+                            storeUserDetails(firebaseAuthId, userName, userEmail, houseID, false, callback);
                         }
                     } else {
                         callback.onFailure("Authentication failed: " + task.getException().getMessage());
@@ -51,7 +51,14 @@ public class Registration {
                 });
     }
 
-    private void storeUserDetails(String firebaseAuthId, String userName, String userEmail, String houseID, final DatabaseOperationCallback callback) {
+    private void addPendingUserToHousehold(String houseID, String firebaseAuthId, final DatabaseOperationCallback callback) {
+        DatabaseReference userRef = database.getReference("households").child(houseID).child("usersToAccept").child(firebaseAuthId);
+        userRef.setValue(false)
+                .addOnSuccessListener(aVoid -> callback.onSuccess("User added to household successfully."))
+                .addOnFailureListener(e -> callback.onFailure("Failed to add user to household: " + e.getMessage()));
+    }
+
+    private void storeUserDetails(String firebaseAuthId, String userName, String userEmail, String houseID, boolean isMember, final DatabaseOperationCallback callback) {
         // Reference to the new user
         DatabaseReference userRef = database.getReference("Users").child(firebaseAuthId);
 
@@ -68,7 +75,7 @@ public class Registration {
                 // If a houseID is provided, also add this user under that household's userIDs
                 if (!houseID.isEmpty()) {
                     DatabaseReference householdUserRef = database.getReference("households").child(houseID).child("userIDs").child(firebaseAuthId);
-                    householdUserRef.setValue(true) // or some other value if necessary
+                    householdUserRef.setValue(isMember)
                             .addOnSuccessListener(aVoid -> callback.onSuccess("User details stored successfully and added to household."))
                             .addOnFailureListener(e -> callback.onFailure("Failed to add user to household: " + e.getMessage()));
                 } else {
@@ -120,14 +127,14 @@ public class Registration {
 
     private void findHouseholdByEmail(String email, String firebaseAuthId, final DatabaseOperationCallback callback) {
         DatabaseReference householdsRef = database.getReference("households");
-        Query query = householdsRef.orderByChild("email").equalTo(email);
+        Query query = householdsRef.orderByChild("houseEmail").equalTo(email);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String householdId = snapshot.getKey();
-                        joinHousehold(householdId, firebaseAuthId, callback);
+                        addPendingUserToHousehold(householdId, firebaseAuthId, callback);
                         return;
                     }
                 } else {
@@ -148,40 +155,35 @@ public class Registration {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean found = false;
-                Log.d("FirebaseDebug", "Checking households. Total count: " + dataSnapshot.getChildrenCount());
+                Log.d("RegistrationDebug", "Checking households. Total count: " + dataSnapshot.getChildrenCount());
 
                 for (DataSnapshot householdSnapshot : dataSnapshot.getChildren()) {
-                    String emailValue = householdSnapshot.child("email").getValue(String.class);
-                    Log.d("FirebaseDebug", "Household " + householdSnapshot.getKey() + " email: '" + emailValue + "'");
+                    String emailValue = householdSnapshot.child("houseEmail").getValue(String.class);
+                    Log.d("RegistrationDebug", "Household " + householdSnapshot.getKey() + " email: '" + emailValue + "'");
 
-                    // Additional logging to check for equality
-                    if (emailValue != null) {
-                        Log.d("FirebaseDebug", "Comparing '" + email + "' with '" + emailValue.trim() + "'");
-                    }
-
-                    // Using trim() to remove any leading or trailing white spaces that might be present
                     if (emailValue != null && email.trim().equalsIgnoreCase(emailValue.trim())) {
                         found = true;
                         String householdId = householdSnapshot.getKey();
-                        Log.d("FirebaseDebug", "Matching email found in household: " + householdId);
+                        Log.d("RegistrationDebug", "Matching email found in household: " + householdId);
                         callback.onSuccess(householdId);
-                        break;
+                        return;
                     }
                 }
 
                 if (!found) {
-                    Log.d("FirebaseDebug", "No matching email found in any household.");
+                    Log.d("RegistrationDebug", "No matching email found in any household.");
                     callback.onFailure("No household found with the provided email.");
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("FirebaseDebug", "DatabaseError: " + databaseError.getMessage());
+                Log.d("RegistrationDebug", "DatabaseError: " + databaseError.getMessage());
                 callback.onFailure("Failed to find household: " + databaseError.getMessage());
             }
         });
     }
+
 
 
 
