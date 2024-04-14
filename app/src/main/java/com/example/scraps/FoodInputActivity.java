@@ -67,8 +67,7 @@ import android.Manifest;
 public class FoodInputActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
-    private MyEditTextDatePicker expiryDatePicker, purchaseDatePicker;
-    private EditText foodNameEditText, expiryDateEditText, purchaseDateEditText, priceEditText;
+    private EditText foodNameEditText, expiryDatePicker, purchaseDatePicker, priceEditText;
     private Button submitButton, cameraButton;
     private FirebaseAuth mAuth;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -114,8 +113,8 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
         });
 
         foodNameEditText = findViewById(R.id.food_name_editText);
-        expiryDatePicker = new MyEditTextDatePicker(this, R.id.expiry_date_editText);
-        purchaseDatePicker = new MyEditTextDatePicker(this, R.id.purchase_date_editText);
+        expiryDatePicker = findViewById(R.id.expiry_date_editText);
+        purchaseDatePicker = findViewById(R.id.purchase_date_editText);
         priceEditText = findViewById(R.id.price_editText);
         submitButton = findViewById(R.id.submit_button);
         cameraButton = findViewById(R.id.camera);
@@ -147,15 +146,13 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
             }
         });
 
-
-
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get input values
                 String foodName = foodNameEditText.getText().toString().trim();
-                String expiryDate = expiryDatePicker._editText.getText().toString().trim();
-                String purchaseDate = purchaseDatePicker._editText.getText().toString().trim();
+                String expiryDate = expiryDatePicker.getText().toString().trim();
+                String purchaseDate = purchaseDatePicker.getText().toString().trim();
                 try {
                     double price = Double.parseDouble(priceEditText.getText().toString().trim());
                     Toast.makeText(FoodInputActivity.this, "Saving food...", Toast.LENGTH_SHORT).show();
@@ -169,8 +166,8 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
     private void clearActivity(){
         foodNameEditText.setText("");
-        expiryDatePicker._editText.setText("");
-        purchaseDatePicker._editText.setText("");
+        expiryDatePicker.setText("");
+        purchaseDatePicker.setText("");
         priceEditText.setText("");
         currentPhotoPath = null;
         ImageView imageView = findViewById(R.id.image_capture);
@@ -364,50 +361,6 @@ public class FoodInputActivity extends AppCompatActivity implements NavigationVi
 
         return image;
     }
-
-
-    public static class MyEditTextDatePicker  implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
-        EditText _editText;
-        private int _day;
-        private int _month;
-        private int _birthYear;
-        private Context _context;
-
-        public MyEditTextDatePicker(Context context, int editTextViewID)
-        {
-            Activity act = (Activity)context;
-            this._editText = (EditText)act.findViewById(editTextViewID);
-            this._editText.setOnClickListener(this);
-            this._context = context;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            _birthYear = year;
-            _month = monthOfYear;
-            _day = dayOfMonth;
-            updateDisplay();
-        }
-        @Override
-        public void onClick(View v) {
-            Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-
-            DatePickerDialog dialog = new DatePickerDialog(_context, this,
-                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH));
-            dialog.show();
-
-        }
-
-        // updates the date in the birth date EditText
-        private void updateDisplay() {
-
-            _editText.setText(new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(_day).append("-").append(_month + 1).append("-").append(_birthYear).append(" "));
-        }
-    }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
